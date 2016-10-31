@@ -2,28 +2,14 @@
     STATIC LIBRARY : Bengine Project Overview
 ========================================================================
 
-AppWizard has created this Bengine library project for you.
+This is the main Game Engine that the game runs on.
 
-No source files were created as part of your project.
+This engine was completely created during a tutorial series by Ben Arnold and all credit for it goes to him.
 
+You can find Ben at:
+Twitter: https://twitter.com/ChillstepCoder
+Youtube Tutorial Series Channel: https://www.youtube.com/user/MakingGamesWithBen
 
-Bengine.vcxproj
-    This is the main project file for VC++ projects generated using an Application Wizard.
-    It contains information about the version of Visual C++ that generated the file, and
-    information about the platforms, configurations, and project features selected with the
-    Application Wizard.
-
-Bengine.vcxproj.filters
-    This is the filters file for VC++ projects generated using an Application Wizard. 
-    It contains information about the association between the files in your project 
-    and the filters. This association is used in the IDE to show grouping of files with
-    similar extensions under a specific node (for e.g. ".cpp" files are associated with the
-    "Source Files" filter).
-
-/////////////////////////////////////////////////////////////////////////////
-Other notes:
-
-AppWizard uses "TODO:" comments to indicate parts of the source code you
-should add to or customize.
-
-/////////////////////////////////////////////////////////////////////////////
+Ben is working on a game called "Seed Of Andromeda". You can find more info here:
+Seed Of Andromeda Channel: https://www.youtube.com/user/DubstepCoder
+Seed Of Andromeda Website: http://www.seedofandromeda.com/

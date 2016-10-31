@@ -4,7 +4,7 @@
 
 This is the main Game Engine that the game runs on.
 
-This engine was completely created during a tutorial series by Ben Arnold and all credit for it goes to him.
+This engine was completely created during a tutorial series by Benjamin Arnold and all credit for it goes to him.
 
 You can find Ben at:
 Twitter: https://twitter.com/ChillstepCoder

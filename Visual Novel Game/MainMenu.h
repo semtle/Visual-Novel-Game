@@ -14,6 +14,8 @@
 #include <Bengine/GLSLProgram.h>
 #include <Bengine/InputManager.h>
 
+#include "Character.h"
+
 enum class MenuState {MENU, NEWGAME, LOADGAME, QUIT};
 
 class MainMenu : public Scene
@@ -22,7 +24,7 @@ public:
 	MainMenu();
 	~MainMenu();
 
-	void init(Bengine::InputManager* manager, const int& screenWidth, const int& screenHeight) override;
+	void init(Bengine::InputManager* manager, const std::map<std::string, Character *>& characters, const int& screenWidth, const int& screenHeight) override;
 	void update() override;
 	void enterName(unsigned int keyID);
 	void drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* hudCamera, Bengine::GLSLProgram* shaderProgram, const int& screenWidth, const int& screenHeight) override;

@@ -13,6 +13,7 @@
 
 #include "yaml-cpp/yaml.h"
 #include "Dialogue.h"
+#include "Character.h"
 
 class Day : public Scene
 {
@@ -20,15 +21,28 @@ public:
 	Day();
 	~Day();
 
-	void init(Bengine::InputManager* manager, const int& screenWidth, const int& screenHeight) override;
+	void init(Bengine::InputManager* manager, const std::map<std::string, Character *>& characters, const int& screenWidth, const int& screenHeight) override;
 	void update() override;
 	void processInputs();
 	bool exitGame() override;
 	void setDay(std::string dayName);
 	void setPlayerName(std::string playerName);
 	std::string changeScene() override;
-	void drawTexts(Bengine::SpriteFont* spriteFont, Bengine::GLSLProgram* shaderProgram, const int& screenWidth, const int& screenHeight) override;
-	void drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* hudCamera, Bengine::GLSLProgram* shaderProgram, const int& screenWidth, const int& screenHeight) override;
+
+	void drawTexts(
+		Bengine::SpriteFont* spriteFont,
+		Bengine::GLSLProgram* shaderProgram,
+		const int& screenWidth,
+		const int& screenHeight
+	) override;
+
+	void drawImages(
+		Bengine::SpriteBatch& spriteBatch,
+		Bengine::Camera2D* hudCamera,
+		Bengine::GLSLProgram* shaderProgram,
+		const int& screenWidth,
+		const int& screenHeight
+	) override;
 
 private:
 	unsigned int currentDialogueID;
@@ -38,5 +52,6 @@ private:
 	std::string currentScene;
 	std::string currentDialogue;
 	std::vector<Dialogue *> dialogues;
+	std::map<std::string, Character *> characters;
 };
 

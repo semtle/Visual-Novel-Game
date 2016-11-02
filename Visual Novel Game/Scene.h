@@ -3,11 +3,14 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <map>
 #include <Bengine/SpriteBatch.h>
 #include <Bengine/InputManager.h>
 #include <Bengine/Camera2D.h>
 #include <Bengine/GLSLProgram.h>
 #include <Bengine/SpriteFont.h>
+
+#include "Character.h"
 
 class Scene
 {
@@ -15,7 +18,7 @@ public:
 	Scene();
 	virtual ~Scene();
 
-	virtual void init(Bengine::InputManager* manager, const int& screenWidth, const int& screenHeight) = 0;
+	virtual void init(Bengine::InputManager* manager, const std::map<std::string, Character *>& characters, const int& screenWidth, const int& screenHeight) = 0;
 	virtual void update() = 0;
 	virtual bool exitGame() = 0;
 	virtual std::string changeScene() = 0;

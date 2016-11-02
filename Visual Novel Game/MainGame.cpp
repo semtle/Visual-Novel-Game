@@ -68,7 +68,7 @@ void MainGame::initScenes()
 	this->currentScene = "menu";
 
 	// Create the menu
-	this->menuScene.init(&this->inputManager, this->screenWidth, this->screenHeight);
+	this->menuScene.init(&this->inputManager, this->characters, this->screenWidth, this->screenHeight);
 	this->scenes.emplace("menu", &this->menuScene);
 
 	// Boys
@@ -96,7 +96,7 @@ void MainGame::initDays()
 		std::string capitalized = dayName[0] + day.first.substr(1, day.first.size() - 1);
 		day.second->setDay(capitalized);
 		day.second->setPlayerName(this->menuScene.getPlayerName());
-		day.second->init(&this->inputManager, this->screenWidth, this->screenHeight);
+		day.second->init(&this->inputManager, this->characters, this->screenWidth, this->screenHeight);
 
 		this->scenes.emplace(capitalized, day.second);
 	}

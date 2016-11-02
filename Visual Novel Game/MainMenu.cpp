@@ -10,7 +10,7 @@ MainMenu::~MainMenu()
 }
 
 
-void MainMenu::init(Bengine::InputManager* manager, const int& screenWidth, const int& screenHeight)
+void MainMenu::init(Bengine::InputManager* manager, const std::map<std::string, Character *>& characters, const int& screenWidth, const int& screenHeight)
 {
 	this->fontBatch.init();
 	this->inputManager = manager;

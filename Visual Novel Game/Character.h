@@ -14,8 +14,10 @@ public:
 	Character(const std::string& name, float Influence = 0.0f);
 	~Character();
 
+	std::map<std::string, int> const getImages() { return this->images; }
+
 private:
 	std::string name;
 	float influence;
-	std::map<std::string, unsigned int> images;
+	std::map<std::string, int> images;
 };

@@ -98,7 +98,11 @@ void Day::processInputs()
 		}
 		// Handle the question boxes
 		else {
-
+			// Get the index of the option that was clicked
+			int idx = this->dialogues[0]->processQuestionInputs(this->inputManager);
+			if (idx != -1) {
+				std::cout << this->answers[abs(idx - 2)] << "\n";
+			}
 		}
 	}
 }
@@ -120,14 +124,14 @@ void Day::drawTexts(Bengine::SpriteFont* spriteFont, Bengine::GLSLProgram* shade
 		this->dialogues[0]->drawTexts(spriteFont, shaderProgram, &this->fontBatch, screenWidth, screenHeight);
 	}
 	else {
-		std::vector<std::string> answers;
+		this->answers.clear();
 		for (unsigned i = 1; i <= 3; i++) {
 			// Get the answer options to pass them on to the dialogue
-			answers.push_back(this->file[this->currentScene][this->currentDialogue]["Option " + std::to_string(i)]["text"].as<std::string>());
+			this->answers.push_back(this->file[this->currentScene][this->currentDialogue]["Option " + std::to_string(i)]["text"].as<std::string>());
 		}
 
 		// Draw the different options inside the option boxes
-		this->dialogues[0]->drawAnswerTexts(spriteFont, &this->fontBatch, answers, screenWidth, screenHeight);
+		this->dialogues[0]->drawAnswerTexts(spriteFont, &this->fontBatch, this->answers, screenWidth, screenHeight);
 	}
 }
 

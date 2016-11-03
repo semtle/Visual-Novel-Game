@@ -120,20 +120,27 @@ void Dialogue::drawAnswerBoxes(Bengine::SpriteBatch& spriteBatch, const int& scr
 	static const unsigned int greenBox = Bengine::ResourceManager::getTexture("Textures/Visuals/GreenOptionBoxSolo.png").id;
 	static const unsigned int redBox = Bengine::ResourceManager::getTexture("Textures/Visuals/RedOptionBoxSolo.png").id;
 
-	static const int BOX_WIDTH = 550;
-	static const int BOX_HEIGHT = 86;
 	static const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 	static const Bengine::ColorRGBA8 color(255, 255, 255, 255);
 
 	// Draw 3 blue boxes
 	for (int y = this->ANSWER_BOX_SPACE; y >= -this->ANSWER_BOX_SPACE; y -= this->ANSWER_BOX_SPACE) {
+		float x = -this->ANSWER_BOX_WIDTH / 2;
+
 		spriteBatch.draw(
-			glm::vec4(-BOX_WIDTH / 2, y - BOX_HEIGHT / 2, BOX_WIDTH, BOX_HEIGHT),
+			glm::vec4(x, y - this->ANSWER_BOX_HEIGHT / 2, this->ANSWER_BOX_WIDTH, this->ANSWER_BOX_HEIGHT),
 			uvRect,
 			blueBox,
 			0.0f,
 			color
 		);
+
+		if (this->answerBoxPositions.size() < 3) {
+			// Get the locations of the boxes and push them to the position vector
+			float xp = (screenWidth + x * 2) / 2;
+			float yp = screenHeight / 2 + y - this->ANSWER_BOX_HEIGHT / 2;
+			this->answerBoxPositions.push_back(glm::vec2(xp, yp));
+		}
 	}
 }
 
@@ -143,8 +150,6 @@ void Dialogue::drawAnswerTexts(Bengine::SpriteFont* spriteFont, Bengine::SpriteB
 	// The buffer that holds the texts
 	char buffer[256];
 
-	static const int BOX_WIDTH = 550;
-	static const int BOX_HEIGHT = 86;
 	static const float FONT_SCALE = 0.6f;
 	static const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 	static const Bengine::ColorRGBA8 color(0, 0, 0, 255);
@@ -154,7 +159,7 @@ void Dialogue::drawAnswerTexts(Bengine::SpriteFont* spriteFont, Bengine::SpriteB
 	// Draw the answers inside the boxes
 	unsigned i = 0;
 	for (int y = this->ANSWER_BOX_SPACE; y >= -this->ANSWER_BOX_SPACE; y -= this->ANSWER_BOX_SPACE) {
-		std::vector<std::string> wrappedText = getWrappedText(answers[i], spriteFont, BOX_WIDTH - 50, FONT_SCALE);
+		std::vector<std::string> wrappedText = getWrappedText(answers[i], spriteFont, this->ANSWER_BOX_WIDTH - 50, FONT_SCALE);
 
 		// If the answer has more than 1 lines
 		if (wrappedText.size() > 1) {
@@ -192,6 +197,24 @@ void Dialogue::drawAnswerTexts(Bengine::SpriteFont* spriteFont, Bengine::SpriteB
 
 	fontBatch->end();
 	fontBatch->renderBatch();
+}
+
+
+int Dialogue::processQuestionInputs(Bengine::InputManager* inputManager)
+{
+	glm::vec2 mouseCoords = inputManager->getMouseCoords();
+
+	std::cout << "Size: " << this->answerBoxPositions.size() << "\n";
+
+	for (unsigned i = 0; i < this->answerBoxPositions.size(); i++) {
+		if (mouseCoords.x > answerBoxPositions[i].x && mouseCoords.x < answerBoxPositions[i].x + this->ANSWER_BOX_WIDTH) {
+			if (mouseCoords.y > answerBoxPositions[i].y && mouseCoords.y < answerBoxPositions[i].y + this->ANSWER_BOX_HEIGHT) {
+				return i;
+			}
+		}
+	}
+	
+	return -1;
 }
 
 

@@ -51,6 +51,7 @@ private:
 	YAML::Node file;
 	std::string currentScene;
 	std::string currentDialogue;
+	std::vector<std::string> answers;
 	std::vector<Dialogue *> dialogues;
 	std::map<std::string, Character *> characters;
 };

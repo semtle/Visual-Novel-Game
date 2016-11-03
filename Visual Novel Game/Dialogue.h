@@ -10,6 +10,7 @@
 #include <Bengine/ResourceManager.h>
 #include <Bengine/Vertex.h>
 #include <Bengine/SpriteFont.h>
+#include <Bengine/InputManager.h>
 
 class Dialogue
 {
@@ -50,17 +51,15 @@ public:
 		const int& screenHeight
 	);
 
-	std::vector<glm::vec4> getAnswerBoxDimensions() const {
-		std::vector<glm::vec4> v;
-		for (int y = this->ANSWER_BOX_SPACE; y >= -this->ANSWER_BOX_SPACE; y -= this->ANSWER_BOX_SPACE) {
-			/* CONTINUE HERE, INPUT PROCESSING FOR OPTION BOXES */
-		}
-	}
+	int processQuestionInputs(Bengine::InputManager* inputManager);
 private:
 	std::string message;
 	std::string talker;
 	const float MESSAGE_SCALE = 0.55f;
 	const int ANSWER_BOX_SPACE = 160;
+	std::vector<glm::vec2> answerBoxPositions;
+	static const int ANSWER_BOX_WIDTH = 550;
+	static const int ANSWER_BOX_HEIGHT = 86;
 
 	std::vector<std::string> getWrappedText(std::string text, Bengine::SpriteFont* spriteFont, const float& maxLength, const float& fontScale);
 };

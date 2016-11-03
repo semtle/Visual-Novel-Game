@@ -49,6 +49,8 @@ private:
 	std::string playerName;
 	std::string day;
 	YAML::Node file;
+	int greenBoxIdx = -1;
+	int redBoxIdx = -1;
 	std::string currentScene;
 	std::string currentDialogue;
 	std::vector<std::string> answers;

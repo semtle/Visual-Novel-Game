@@ -113,7 +113,12 @@ void Dialogue::drawTexts(Bengine::SpriteFont* spriteFont, Bengine::GLSLProgram* 
 }
 
 
-void Dialogue::drawAnswerBoxes(Bengine::SpriteBatch& spriteBatch, const int& screenWidth, const int& screenHeight)
+void Dialogue::drawAnswerBoxes(
+	Bengine::SpriteBatch& spriteBatch,
+	const int& screenWidth,
+	const int& screenHeight,
+	int redBoxIdx,
+	int greenBoxIdx)
 {
 	// Load the boxes
 	static const unsigned int blueBox = Bengine::ResourceManager::getTexture("Textures/Visuals/BlueOptionBoxSolo.png").id;
@@ -123,17 +128,42 @@ void Dialogue::drawAnswerBoxes(Bengine::SpriteBatch& spriteBatch, const int& scr
 	static const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 	static const Bengine::ColorRGBA8 color(255, 255, 255, 255);
 
+
+	int idx = 0;
 	// Draw 3 blue boxes
 	for (int y = this->ANSWER_BOX_SPACE; y >= -this->ANSWER_BOX_SPACE; y -= this->ANSWER_BOX_SPACE) {
 		float x = -this->ANSWER_BOX_WIDTH / 2;
 
-		spriteBatch.draw(
-			glm::vec4(x, y - this->ANSWER_BOX_HEIGHT / 2, this->ANSWER_BOX_WIDTH, this->ANSWER_BOX_HEIGHT),
-			uvRect,
-			blueBox,
-			0.0f,
-			color
-		);
+		// Red box - bad influence
+		if (redBoxIdx == idx) {
+			spriteBatch.draw(
+				glm::vec4(x, y - this->ANSWER_BOX_HEIGHT / 2, this->ANSWER_BOX_WIDTH, this->ANSWER_BOX_HEIGHT),
+				uvRect,
+				redBox,
+				0.0f,
+				color
+			);
+		}
+		// Green box - good influence
+		else if (greenBoxIdx == idx) {
+			spriteBatch.draw(
+				glm::vec4(x, y - this->ANSWER_BOX_HEIGHT / 2, this->ANSWER_BOX_WIDTH, this->ANSWER_BOX_HEIGHT),
+				uvRect,
+				greenBox,
+				0.0f,
+				color
+			);
+		}
+		// Blue box - neutral influence
+		else {
+			spriteBatch.draw(
+				glm::vec4(x, y - this->ANSWER_BOX_HEIGHT / 2, this->ANSWER_BOX_WIDTH, this->ANSWER_BOX_HEIGHT),
+				uvRect,
+				blueBox,
+				0.0f,
+				color
+			);
+		}
 
 		if (this->answerBoxPositions.size() < 3) {
 			// Get the locations of the boxes and push them to the position vector
@@ -141,6 +171,8 @@ void Dialogue::drawAnswerBoxes(Bengine::SpriteBatch& spriteBatch, const int& scr
 			float yp = screenHeight / 2 + y - this->ANSWER_BOX_HEIGHT / 2;
 			this->answerBoxPositions.push_back(glm::vec2(xp, yp));
 		}
+
+		idx++;
 	}
 }
 

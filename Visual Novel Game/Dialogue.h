@@ -40,7 +40,9 @@ public:
 	void drawAnswerBoxes(
 		Bengine::SpriteBatch& spriteBatch,
 		const int& screenWidth,
-		const int& screenHeight
+		const int& screenHeight,
+		int redBoxIdx = -1,
+		int greenBoxIdx = -1
 	);
 
 	void drawAnswerTexts(

@@ -54,6 +54,11 @@ void Day::update()
 {
 	this->camera.update();
 	processInputs();
+
+	if (this->currentDialogue != "Question") {
+		this->greenBoxIdx = -1;
+		this->redBoxIdx = -1;
+	}
 }
 
 
@@ -101,7 +106,22 @@ void Day::processInputs()
 			// Get the index of the option that was clicked
 			int idx = this->dialogues[0]->processQuestionInputs(this->inputManager);
 			if (idx != -1) {
-				std::cout << this->answers[abs(idx - 2)] << "\n";
+				// Reverse the index
+				idx = abs(idx - 2);
+				// Put the current option into string to access it from the YAML file
+				std::string optionString = "Option " + std::to_string(idx + 1);
+				// Get the current option
+				YAML::Node currNode = this->file[this->currentScene][this->currentDialogue][optionString];
+				
+				int influence = currNode["influence"].as<int>() - 1;
+				std::cout << influence << "\n";
+
+				if (influence == -1) {
+					this->redBoxIdx = idx;
+				}
+				else if (influence == 1) {
+					this->greenBoxIdx = idx;
+				}
 			}
 		}
 	}
@@ -199,6 +219,6 @@ void Day::drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* hudCa
 		this->dialogues[0]->drawImages(spriteBatch, hudCamera, screenWidth, screenHeight, leftCharWidth, rightCharWidth, leftChar, rightChar);
 	}
 	else {
-		this->dialogues[0]->drawAnswerBoxes(spriteBatch, screenWidth, screenHeight);
+		this->dialogues[0]->drawAnswerBoxes(spriteBatch, screenWidth, screenHeight, this->redBoxIdx, this->greenBoxIdx);
 	}
 }

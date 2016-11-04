@@ -143,7 +143,7 @@ First time class:
         talking: player
         left: Teemu-kun, happy_uniform
         right: Makoto-kun, normal_uniform
-        message: See! Teemu-chan gets it, unlike certain someone... Oh well, What is done is done, so let's get over it, okey?
+        message: See! Teemu-kun gets it, unlike certain someone... Oh well, What is done is done, so let's get over it, okey?
         next: Makoto 2
 
     Makoto 2:
@@ -196,7 +196,7 @@ First time class:
             next: FirstChoice1
 
         Option 2:
-            text: Teemu-chan is right, you wouldn't have a chance with her.
+            text: Teemu-kun is right, you wouldn't have a chance with her.
             influence: 0 # - 1 Influence
             next: SecondChoice1
 

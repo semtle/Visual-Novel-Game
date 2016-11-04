@@ -24,6 +24,7 @@ public:
 	void init(Bengine::InputManager* manager, const std::map<std::string, Character *>& characters, const int& screenWidth, const int& screenHeight) override;
 	void update() override;
 	void processInputs();
+	void doFading() override;
 	bool exitGame() override;
 	void setDay(std::string dayName);
 	void setPlayerName(std::string playerName);
@@ -44,13 +45,19 @@ public:
 		const int& screenHeight
 	) override;
 
+	void waitAfterQuestion();
 private:
+	void changeDialogue();
+
 	unsigned int currentDialogueID;
 	std::string playerName;
 	std::string day;
 	YAML::Node file;
 	int greenBoxIdx = -1;
 	int redBoxIdx = -1;
+	bool wait = false;
+	std::string optionString;
+	bool inQuestion = false;
 	std::string currentScene;
 	std::string currentDialogue;
 	std::vector<std::string> answers;

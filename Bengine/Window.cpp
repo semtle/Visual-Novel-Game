@@ -66,7 +66,7 @@ int Window::create(std::string windowName, int screenWidth, int screenHeight, un
 	std::printf("***   OpenGL version: %s   ***\n", glGetString(GL_VERSION));
 
 	// Sets the background color that the window clears to
-	glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
 	// Set Vertical Synchronization (V-SYNC). 1 = ON, 0 = OFF
 	SDL_GL_SetSwapInterval(static_cast<int>(vSync));

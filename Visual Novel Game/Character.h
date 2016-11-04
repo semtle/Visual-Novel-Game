@@ -14,10 +14,14 @@ public:
 	Character(const std::string& name, float Influence = 0.0f);
 	~Character();
 
-	std::map<std::string, int> const getImages() { return this->images; }
+	// Setters
+	void addInfluence(int amount) { this->influence += amount; }
 
+	// Getters
+	int getInfluence() const { return this->influence; }
+	std::map<std::string, int> const getImages() { return this->images; }
 private:
 	std::string name;
-	float influence;
+	int influence;
 	std::map<std::string, int> images;
 };

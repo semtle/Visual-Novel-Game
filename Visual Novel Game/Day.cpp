@@ -52,9 +52,12 @@ void Day::setPlayerName(std::string playerName)
 
 void Day::update()
 {
+	if (this->wait) waitAfterQuestion();
+
 	this->camera.update();
 	processInputs();
 
+	// Reset the option box colors when not in question
 	if (this->currentDialogue != "Question") {
 		this->greenBoxIdx = -1;
 		this->redBoxIdx = -1;
@@ -74,32 +77,13 @@ void Day::processInputs()
 			if (this->file[this->currentScene][this->currentDialogue]["next"] == nullptr) {
 				this->currentScene = this->file[this->currentScene][this->currentDialogue]["next_scene"].as<std::string>();
 				this->currentDialogue = "Start";
-				std::cout << "Changed scene to " << this->currentScene << "\n";
-				std::cout << "Change dialog to " << this->currentDialogue << "\n";
 			}
 			// Go to next dialog
 			else {
 				this->currentDialogue = this->file[this->currentScene][this->currentDialogue]["next"].as<std::string>();
 			}
 
-			// Need to check if the message exists here, can't just pass it in because it can be null
-			if (this->file[this->currentScene][this->currentDialogue]["message"] != nullptr) {
-				this->dialogues.push_back(new Dialogue(this->playerName, this->file[this->currentScene][this->currentDialogue]["message"].as<std::string>()));
-			}
-			else {
-				this->dialogues.push_back(new Dialogue(this->playerName, ""));
-			}
-
-			// This probably shouldn't be done with a vector since we're only using one element
-			// unless later we want to be able to go back to the previous dialogues (maybe will on questions at least)
-			delete this->dialogues[0];
-			this->dialogues[0] = this->dialogues.back();
-			this->dialogues.pop_back();
-
-			// Dialog was not found
-			if (this->file[this->currentScene][this->currentDialogue] == nullptr) {
-				Bengine::fatalError("The dialogue '" + this->currentDialogue + "' in the scene '" + this->currentScene + "' could not be found.");
-			}
+			changeDialogue();
 		}
 		// Handle the question boxes
 		else {
@@ -109,9 +93,9 @@ void Day::processInputs()
 				// Reverse the index
 				idx = abs(idx - 2);
 				// Put the current option into string to access it from the YAML file
-				std::string optionString = "Option " + std::to_string(idx + 1);
+				this->optionString = "Option " + std::to_string(idx + 1);
 				// Get the current option
-				YAML::Node currNode = this->file[this->currentScene][this->currentDialogue][optionString];
+				YAML::Node currNode = this->file[this->currentScene][this->currentDialogue][this->optionString];
 				
 				int influence = currNode["influence"].as<int>() - 1;
 				std::cout << influence << "\n";
@@ -122,11 +106,25 @@ void Day::processInputs()
 				else if (influence == 1) {
 					this->greenBoxIdx = idx;
 				}
+
+				// Wait a bit after answering the question so the player sees how the answer influenced the character
+				this->wait = true;
+
+				// Get the name of the character who was asking the question
+				std::string asking = this->file[this->currentScene][this->currentDialogue]["asking"].as<std::string>();
+
+				// Add (or substract) the influence from the character
+				this->characters[asking]->addInfluence(influence);
 			}
 		}
 	}
 }
 
+
+void Day::doFading()
+{
+
+}
 
 bool Day::exitGame()
 {
@@ -157,6 +155,7 @@ void Day::drawTexts(Bengine::SpriteFont* spriteFont, Bengine::GLSLProgram* shade
 
 void Day::drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* hudCamera, Bengine::GLSLProgram* shaderProgram, const int& screenWidth, const int& screenHeight)
 {
+	static const unsigned int dayImage = Bengine::ResourceManager::getTexture("Textures/Backgrounds/Weekdays/" + this->day + ".png").id;
 	unsigned int background = Bengine::ResourceManager::getTexture("Textures/Backgrounds/" + this->file[this->currentScene]["Background"].as<std::string>() + ".png").id;
 	static const glm::vec4 destRect(-screenWidth / 2, -screenHeight / 2, screenWidth, screenHeight);
 	static const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
@@ -220,5 +219,50 @@ void Day::drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* hudCa
 	}
 	else {
 		this->dialogues[0]->drawAnswerBoxes(spriteBatch, screenWidth, screenHeight, this->redBoxIdx, this->greenBoxIdx);
+	}
+}
+
+
+void Day::waitAfterQuestion()
+{
+	Uint32 ticks = SDL_GetTicks();
+
+	while (SDL_GetTicks() - ticks < 2500) {
+		SDL_Event event;
+		while (SDL_PollEvent(&event)) {
+			switch (event.type) {
+			case SDL_QUIT:
+				std::cout << "Should quit lol\n";
+				break;
+			}
+		}
+	}
+
+	this->wait = false;
+	this->currentDialogue = this->file[this->currentScene][this->currentDialogue][this->optionString]["next"].as<std::string>();
+	
+	changeDialogue();
+}
+
+
+void Day::changeDialogue()
+{
+	// Need to check if the message exists here, can't just pass it in because it can be null
+	if (this->file[this->currentScene][this->currentDialogue]["message"] != nullptr) {
+		this->dialogues.push_back(new Dialogue(this->playerName, this->file[this->currentScene][this->currentDialogue]["message"].as<std::string>()));
+	}
+	else {
+		this->dialogues.push_back(new Dialogue(this->playerName, ""));
+	}
+
+	// This probably shouldn't be done with a vector since we're only using one element
+	// unless later we want to be able to go back to the previous dialogues (maybe will on questions at least)
+	delete this->dialogues[0];
+	this->dialogues[0] = this->dialogues.back();
+	this->dialogues.pop_back();
+
+	// Dialog was not found
+	if (this->file[this->currentScene][this->currentDialogue] == nullptr) {
+		Bengine::fatalError("The dialogue '" + this->currentDialogue + "' in the scene '" + this->currentScene + "' could not be found.");
 	}
 }

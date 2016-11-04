@@ -21,10 +21,13 @@ public:
 	virtual void init(Bengine::InputManager* manager, const std::map<std::string, Character *>& characters, const int& screenWidth, const int& screenHeight) = 0;
 	virtual void update() = 0;
 	virtual bool exitGame() = 0;
+	virtual void doFading() = 0;
 	virtual std::string changeScene() = 0;
 	virtual void drawTexts(Bengine::SpriteFont* spriteFont, Bengine::GLSLProgram* shaderProgram, const int& screenWidth, const int& screenHeight) = 0;
 	virtual void drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* hudCamera, Bengine::GLSLProgram* shaderProgram, const int& screenWidth, const int& screenHeight) = 0;
 protected:
+	int trasparency = 0;
+	bool fadingOut = false, fadingIn = true;
 	Bengine::SpriteBatch fontBatch;
 	std::string nextScene = "";
 	Bengine::Camera2D camera;

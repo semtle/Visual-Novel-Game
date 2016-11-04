@@ -26,6 +26,52 @@ void MainMenu::update()
 	this->camera.update();
 	if (this->currentState == MenuState::MENU) this->currentBackground = "menu";
 	else if (this->currentState == MenuState::NEWGAME) this->currentBackground = "newgame";
+
+	doFading();
+}
+
+
+void MainMenu::doFading()
+{
+	/*  
+		TODO: This is super ugly with the duplicated code. Can definitely do this better.
+		Better solution would probably to just have a public fading function for the whole game.
+		(Perhaps Bengine feature)
+	*/
+
+	if (this->fadingIn) {
+		if (this->trasparency != 255) {
+			Uint32 ticks = SDL_GetTicks();
+			while (SDL_GetTicks() - ticks < 6) {
+				SDL_Event event;
+				while (SDL_PollEvent(&event)) {
+
+				}
+			}
+
+			this->trasparency++;
+		}
+		else {
+			this->fadingIn = false;
+		}
+	}
+	else if (this->fadingOut) {
+		if (this->trasparency != 0) {
+			Uint32 ticks = SDL_GetTicks();
+			while (SDL_GetTicks() - ticks < 6) {
+				SDL_Event event;
+				while (SDL_PollEvent(&event)) {
+
+				}
+			}
+
+			this->trasparency--;
+		}
+		else {
+			this->fadingOut = false;
+			newGame();
+		}
+	}
 }
 
 
@@ -83,7 +129,7 @@ void MainMenu::drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* 
 	static const int newGameButton = Bengine::ResourceManager::getTexture("Textures/Visuals/newgame.png").id;
 	static const int backButton = Bengine::ResourceManager::getTexture("Textures/Visuals/backbutton.png").id;
 
-	static const Bengine::ColorRGBA8 color = Bengine::ColorRGBA8(255, 255, 255, 255);
+	Bengine::ColorRGBA8 color = Bengine::ColorRGBA8(255, 255, 255, this->trasparency);
 
 	static const glm::vec4 bgDestRect(-screenWidth / 2, -screenHeight / 2, screenWidth, screenHeight);
 	static const glm::vec4 backBtnDestRect(-51, -screenHeight / 2 + 46, 102, 26);
@@ -98,7 +144,11 @@ void MainMenu::drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* 
 			0.0f,
 			color
 		);
-		menuInputs();
+
+		// While fading in, only draw background
+		if (!this->fadingIn) {
+			menuInputs();
+		}
 	}
 	else if (this->currentState == MenuState::NEWGAME) {
 		// Background
@@ -110,28 +160,32 @@ void MainMenu::drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* 
 			color
 		);
 
-		// Back button
-		spriteBatch.draw(
-			backBtnDestRect,
-			uvRect,
-			backButton,
-			0.0f,
-			color
-		);
+		// While fading out, only draw background
+		if (!this->fadingOut) {
 
-		// Draw the new game button if the name is valid
-		if (this->playerName.length() >= 3) {
-			static const glm::vec2 NEWGAME_DIMENSIONS(195, 38);
-
-			static glm::vec4 newGameRect(-NEWGAME_DIMENSIONS.x / 2, -98, NEWGAME_DIMENSIONS);
-
+			// Back button
 			spriteBatch.draw(
-				newGameRect,
+				backBtnDestRect,
 				uvRect,
-				newGameButton,
+				backButton,
 				0.0f,
 				color
 			);
+
+			// Draw the new game button if the name is valid
+			if (this->playerName.length() >= 3) {
+				static const glm::vec2 NEWGAME_DIMENSIONS(195, 38);
+
+				static glm::vec4 newGameRect(-NEWGAME_DIMENSIONS.x / 2, -98, NEWGAME_DIMENSIONS);
+
+				spriteBatch.draw(
+					newGameRect,
+					uvRect,
+					newGameButton,
+					0.0f,
+					color
+				);
+			}
 		}
 
 		newGameInputs();
@@ -217,6 +271,7 @@ void MainMenu::newGameInputs()
 		// New game
 		if (mouseCoords.x > 302 && mouseCoords.x < 497) {
 			if (mouseCoords.y > 360 && mouseCoords.y < 398) {
+				if (this->trasparency != 0) this->fadingOut = true;
 				newGame();
 				this->inputManager->releaseKey(SDL_BUTTON_LEFT);
 			}
@@ -236,7 +291,10 @@ void MainMenu::newGameInputs()
 
 void MainMenu::newGame()
 {
-	if (this->playerName.length() >= 3) {
-		this->nextScene = "monday";
+	if (!this->fadingOut) {
+		if (this->playerName.length() >= 3) {
+			this->nextScene = "monday";
+			std::cout << "Set next scene.\n";
+		}
 	}
 }

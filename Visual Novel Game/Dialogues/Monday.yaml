@@ -189,6 +189,7 @@ First time class:
         next: Question
 
     Question:
+        asking: Makoto-kun
         Option 1:
             text: Well... if she would like some one a bit goofy like you, you might have a chance.
             influence: 2
@@ -214,14 +215,14 @@ First time class:
     FirstChoice2:
         talking: Teemu-kun
         left: Teemu-kun, angry_uniform
-        right: Makoto-kun, smiling_uniform
+        right: Makoto-kun, smiling_side_uniform
         message: Who are you calling nerd?! Want some of my sweet asswhooping boy?
         next: FirstChoice3
 
     FirstChoice3:
         talking: player
         left: Teemu-kun, angry_uniform
-        right: Makoto-kun, smiling_uniform
+        right: Makoto-kun, smiling_side_uniform
         message: There's only one way to solve this and we all know what that is, ROCK PAPER SCISSORS.
         next: FirstChoice4
 
@@ -241,10 +242,8 @@ First time class:
 
     SecondChoice2:
         talking: Makoto-kun
-        left: Teemu-kun
-        left_i: smiling_uniform
-        right: Makoto-kun
-        right_i: laughing_uniform
+        left: Teemu-kun, smiling_uniform
+        right: Makoto-kun, laughing_uniform
         message: That's not fair, I'll show you my seduction skills when I get the chance to prove them! At least I'm going after 3D girls unlike certain someone. *cough* nerd *cough*.
         next: SecondChoice3
 

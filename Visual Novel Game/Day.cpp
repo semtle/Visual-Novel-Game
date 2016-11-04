@@ -227,7 +227,7 @@ void Day::waitAfterQuestion()
 {
 	Uint32 ticks = SDL_GetTicks();
 
-	while (SDL_GetTicks() - ticks < 2500) {
+	while (SDL_GetTicks() - ticks < 1750) {
 		SDL_Event event;
 		while (SDL_PollEvent(&event)) {
 			switch (event.type) {

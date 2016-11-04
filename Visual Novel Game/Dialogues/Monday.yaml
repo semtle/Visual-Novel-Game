@@ -192,17 +192,17 @@ First time class:
         asking: Makoto-kun
         Option 1:
             text: Well... if she would like some one a bit goofy like you, you might have a chance.
-            influence: 2
+            influence: 2 # + 1 Influence
             next: FirstChoice1
 
         Option 2:
             text: Teemu-chan is right, you wouldn't have a chance with her.
-            influence: 0
+            influence: 0 # - 1 Influence
             next: SecondChoice1
 
         Option 3:
             text: Sorry man, won't be jumping on that wagon.
-            influence: 1
+            influence: 1 # No change
             next: ThirdChoice1
 
     FirstChoice1:

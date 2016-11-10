@@ -11,7 +11,7 @@
 class Character
 {
 public:
-	Character(const std::string& name, float Influence = 0.0f);
+	Character(const std::string& name, int Influence = 0);
 	~Character();
 
 	// Setters

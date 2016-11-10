@@ -110,6 +110,7 @@ void MainGame::gameLoop()
 	}
 }
 
+
 void MainGame::play()
 {
 	Scene* currScene = this->scenes.find(this->currentScene)->second;
@@ -198,14 +199,28 @@ void MainGame::drawGame()
 	
 	this->spriteBatch.begin();
 	
-	// Draw all images in the current scene
-	this->scenes.find(this->currentScene)->second->drawImages(this->spriteBatch, &this->hudCamera, &this->shaderProgram, this->screenWidth, this->screenHeight);
+	if (!this->loading) {
+		// Draw all images in the current scene
+		this->scenes.find(this->currentScene)->second->drawImages(this->spriteBatch, &this->hudCamera, &this->shaderProgram, this->screenWidth, this->screenHeight);
 
-	this->spriteBatch.end();
-	this->spriteBatch.renderBatch();
+		this->spriteBatch.end();
+		this->spriteBatch.renderBatch();
 
-	// Draw all texts in the current scene
-	this->scenes.find(this->currentScene)->second->drawTexts(this->spriteFont, &this->shaderProgram, this->screenWidth, this->screenHeight);
+		// Draw all texts in the current scene
+		this->scenes.find(this->currentScene)->second->drawTexts(this->spriteFont, &this->shaderProgram, this->screenWidth, this->screenHeight);
+	}
+	else {
+		this->spriteBatch.draw(
+			glm::vec4(0, 0, 150, 150),
+			glm::vec4(0.0f, 0.0f, 1.0f, 2.0f),
+			Bengine::ResourceManager::getTexture("Textures/Visuals/LoadingSpinInner.png").id,
+			0.0f,
+			Bengine::ColorRGBA8(255, 255, 255, 255)
+		);
+
+		this->spriteBatch.end();
+		this->spriteBatch.renderBatch();
+	}
 
 	// Unbind the texture
 	glBindTexture(GL_TEXTURE_2D, 0);

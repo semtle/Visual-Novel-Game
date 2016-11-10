@@ -1,6 +1,7 @@
 #include "Character.h"
+#include <SDL/SDL.h>
 
-Character::Character(const std::string& name, float Influence)
+Character::Character(const std::string& name, int Influence)
 {
 	this->name = name;
 	this->influence = Influence;
@@ -8,9 +9,12 @@ Character::Character(const std::string& name, float Influence)
 	std::string line;
 	std::ifstream file("SaveFiles/CharacterPaths/paths.txt");
 	if (file.is_open()) {
+		Uint32 ticks = SDL_GetTicks();
+
 		while (getline(file, line)) {
 			this->images.emplace(line, Bengine::ResourceManager::getTexture("Textures/Characters/" + name + "/" + line + ".png").id);
 		}
+		std::cout << "Ticks: " << SDL_GetTicks() - ticks << "\n";
 		file.close();
 		std::cout << "Read file successfully.\n";
 	}

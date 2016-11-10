@@ -1,43 +1,26 @@
-﻿Build started 04/11/2016 13:23:06.
-     1>Project "C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Visual Novel Game\Visual Novel Game.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D _MBCS /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt Day.cpp MainGame.cpp main.cpp
-         Day.cpp
-         MainGame.cpp
-         main.cpp
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\Visual Novel Game.exe" /NOLOGO "libyaml-cppmdd.lib" SDL2.lib SDL2main.lib SDL2_ttf.lib SDL2_mixer.lib opengl32.lib glew32.lib Bengine.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\Visual Novel Game.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\Visual Novel Game.lib" /MACHINE:X86 /SAFESEH Release\Character.obj
-         Release\Day.obj
-         Release\Dialogue.obj
-         Release\main.obj
-         Release\MainGame.obj
-         Release\MainMenu.obj
-         Release\Scene.obj
-         Generating code
-         125 of 3433 functions ( 3.6%) were compiled, the rest were copied from previous compilation.
-           0 functions were new in current compilation
-           5 functions had inline decision re-evaluated but remain unchanged
-         Finished generating code
-     1>libyaml-cppmdd.lib(directives.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(directives.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(exp.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(exp.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(memory.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(memory.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(node_data.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(node_data.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(nodebuilder.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(nodebuilder.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(null.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(null.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(parse.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(parse.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(parser.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(parser.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(regex_yaml.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(regex_yaml.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(scanner.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scanner.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(scanscalar.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scanscalar.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(scantag.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scantag.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(scantoken.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scantoken.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(simplekey.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(simplekey.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(singledocparser.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(singledocparser.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(stream.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(stream.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-     1>libyaml-cppmdd.lib(tag.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(tag.obj)' or at 'C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
-         Visual Novel Game.vcxproj -> C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\Visual Novel Game.exe
-     1>Done Building Project "C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Visual Novel Game\Visual Novel Game.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:12.39
+﻿  MainGame.cpp
+  main.cpp
+  Generating code
+  1 of 3300 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    5 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+libyaml-cppmdd.lib(directives.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(directives.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(exp.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(exp.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(memory.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(memory.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(node_data.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(node_data.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(nodebuilder.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(nodebuilder.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(null.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(null.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(parse.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(parse.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(parser.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(parser.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(regex_yaml.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(regex_yaml.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(scanner.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scanner.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(scanscalar.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scanscalar.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(scantag.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scantag.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(scantoken.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scantoken.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(simplekey.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(simplekey.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(singledocparser.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(singledocparser.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(stream.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(stream.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(tag.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(tag.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\yaml-cpp static md.pdb'; linking object as if no debug info
+  Visual Novel Game.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\Visual Novel Game.exe
+  Visual Novel Game.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\Visual Novel Game.pdb (Full PDB)

@@ -86,6 +86,8 @@ private:
 	std::map<std::string, Scene*> scenes; ///< All the scenes in the game
 	std::map<std::string, Day*> days;
 
+	bool loading = false;
+
 	int screenWidth = 800;
 	int screenHeight = 600;
 };

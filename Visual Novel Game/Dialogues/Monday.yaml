@@ -1,6 +1,6 @@
 Start:
     Background: bedroom
-    next_scene: First time class
+    next_scene: Start bedroom
 
 Start bedroom:
     Background: bedroom
@@ -115,7 +115,7 @@ First time class:
     Background: classroom
 
     Start:
-        next: Makoto 4
+        next: Makoto 1
 
     Fade In:
         next: Makoto 1
@@ -284,28 +284,95 @@ First time class:
         next_scene: After class
 
 After class:
-    Background: classroom.jpg
+    Background: classroom
 
     Start:
-        next: Makoto 1
+        next: Makoto1
 
     Fade In:
-        next: Makoto 1
+        next: Makoto1
 
-    Makoto 1:
+    Makoto1:
+        talking: Makoto-kun
+        left: Makoto-kun, disappointed_uniform
+        right: Teemu-kun, smiling_uniform
+        message: Finally! it's over! Is there anything more boring than reading how things should be done in a way that pleases the teacher?
+        next: Makoto2
+
+    Makoto2:
         talking: Makoto-kun
         left: Makoto-kun, bored_uniform
-        right: Teemu-kun, smiling_uniform
-        message: Finally it's over! Is there anything more boring than reading how things should be done in a way that pleases the teacher?
-        next: Teemu 1
+        right: Teemu-kun, normal_uniform
+        message: Is there anything more boring than reading how things should be done in a way that pleases the teacher?
+        next: Teemu1
 
-    Teemu 1:
+    Teemu1:
         talking: Teemu-kun
         left: Makoto-kun, bored_uniform
-        right: Teemu-kun, happy_uniform
-        message: Agreed. How can one learn if you fall asleep during the class because it was so boring?
-        next: Temp
+        right: Teemu-kun, angry_uniform
+        message: Agreed, how can one learn if you fall asleep during the class?
+        next: Makoto3
 
-    Temp:
-        talking: jere on gay
-        message: oon autist
+    Makoto3:
+        talking: Makoto-kun
+        left: Makoto-kun, bored_uniform
+        right: Teemu-kun, sad_uniform
+        message: That's right! This teacher should learn how to ignite the inner fire of students.
+        next: player1
+
+    player1:
+        talking: player
+        left: Makoto-kun, normal_uniform
+        right: Teemu-kun, sad_uniform
+        message: What do you guys think about eating something, I spent all my energy while trying to stay awake.
+        next: Teemu2
+
+    Teemu2:
+        left: Makoto-kun, smiling_uniform
+        right: Teemu-kun, normal_uniform
+        message: Sounds good, I'm getting hungry just thinking about the school's special food today.
+        next: Fade Out
+
+    Fade Out:
+        next_scene: Food
+
+Food:
+    Background: classroom
+
+    Start:
+        next: player 1
+
+    Fade In:
+        next: player1
+
+    player 1:
+        message: Wow! This place is so packed, there's no way we fit in.
+        next: makoto 1
+
+    makoto 1:
+        right: Makoto-kun, confident_uniform
+        message: Just watch.
+        next: player 2
+
+    player 2:
+        message: And there he goes, running around like an idiot. Oh? wait a moment did he find a free table for us?
+        next: teemu 1
+
+    teemu 1:
+        left: Teemu-kun, worried_uniform
+        message: Let's hope he didn't find trouble instead of a place to sit...
+        next: player 3
+
+    player 3:
+        left: Teemu-kun, worried_uniform
+        message: Give him some slack Teemu-kun, even if you don't believe it he has his moments.
+        next: teemu 2
+
+    teemu 2:
+        left: Teemu-kun, worried_uniform
+        message: That's what I'm worried about.
+        next: makoto 2
+
+    makoto 2:
+        message: Hey guys! I found us a place to sit! Come fast!
+        next: teemu 3

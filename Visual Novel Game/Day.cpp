@@ -19,13 +19,12 @@ void Day::init(Bengine::InputManager* manager, const std::map<std::string, Chara
 	std::string path = "Dialogues/" + this->day + ".yaml";
 	this->file = YAML::LoadFile(path);
 
-	std::cout << "BEFORE";
-	this->currentScene = this->file["Start"]["next_scene"].as<std::string>();
-	std::cout << "Current scene: " << this->currentScene;
-	this->currentDialogue = "Start";
+	this->sceneNames.push_back(this->file["Start"]["next_scene"].as<std::string>());
+	std::cout << "Current scene: " << this->sceneNames[this->currentSceneIdx];
+	this->dialogueNames.push_back("Start");
 
-	if (this->file[this->currentScene][this->currentDialogue]["message"] != nullptr) {
-		this->dialogues.push_back(new Dialogue(this->playerName, this->file[this->currentScene][this->currentDialogue]["message"].as<std::string>()));
+	if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["message"] != nullptr) {
+		this->dialogues.push_back(new Dialogue(this->playerName, this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["message"].as<std::string>()));
 	}
 	else {
 		this->dialogues.push_back(new Dialogue(this->playerName, ""));
@@ -58,7 +57,7 @@ void Day::update()
 	processInputs();
 
 	// Reset the option box colors when not in question
-	if (this->currentDialogue != "Question") {
+	if (this->dialogueNames[this->currentDialogueIdx] != "Question") {
 		this->greenBoxIdx = -1;
 		this->redBoxIdx = -1;
 	}
@@ -69,33 +68,40 @@ void Day::processInputs()
 {
 	/* When clicking the left mouse button, go to the next dialogue. */
 	if (this->inputManager->isKeyDown(SDL_BUTTON_LEFT)) {
+		std::cout << "Size: " << this->dialogues.size() << "\n";
 		this->inputManager->releaseKey(SDL_BUTTON_LEFT);
 
 		// Other than questions
-		if (this->currentDialogue != "Question") {
+		if (this->dialogueNames[this->currentDialogueIdx] != "Question") {
 			// Go to next scene
-			if (this->file[this->currentScene][this->currentDialogue]["next"] == nullptr) {
-				this->currentScene = this->file[this->currentScene][this->currentDialogue]["next_scene"].as<std::string>();
-				this->currentDialogue = "Start";
+			bool changeScene = false;
+			if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["next"] == nullptr) {
+				this->sceneNames.push_back(this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["next_scene"].as<std::string>());
+				this->dialogueNames.push_back("Start");
+				changeScene = true;
 			}
 			// Go to next dialog
 			else {
-				this->currentDialogue = this->file[this->currentScene][this->currentDialogue]["next"].as<std::string>();
+				this->dialogueNames.push_back(this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["next"].as<std::string>());
 			}
 
-			changeDialogue();
+			this->currentDialogueIdx++;
+
+			nextDialogue();
+
+			if (changeScene) this->currentSceneIdx++;
 		}
 		// Handle the question boxes
 		else {
 			// Get the index of the option that was clicked
-			int idx = this->dialogues[0]->processQuestionInputs(this->inputManager);
+			int idx = this->dialogues[this->currentDialogueIdx]->processQuestionInputs(this->inputManager);
 			if (idx != -1) {
 				// Reverse the index
 				idx = abs(idx - 2);
 				// Put the current option into string to access it from the YAML file
 				this->optionString = "Option " + std::to_string(idx + 1);
 				// Get the current option
-				YAML::Node currNode = this->file[this->currentScene][this->currentDialogue][this->optionString];
+				YAML::Node currNode = this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]][this->optionString];
 				
 				int influence = currNode["influence"].as<int>() - 1;
 				std::cout << influence << "\n";
@@ -111,12 +117,16 @@ void Day::processInputs()
 				this->wait = true;
 
 				// Get the name of the character who was asking the question
-				std::string asking = this->file[this->currentScene][this->currentDialogue]["asking"].as<std::string>();
+				std::string asking = this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["asking"].as<std::string>();
 
 				// Add (or substract) the influence from the character
 				this->characters[asking]->addInfluence(influence);
 			}
 		}
+	}
+	if (this->inputManager->isKeyDown(SDL_BUTTON_RIGHT)) {
+		this->inputManager->releaseKey(SDL_BUTTON_RIGHT);
+		if (this->currentDialogueIdx > 0) this->currentDialogueIdx--;
 	}
 }
 
@@ -138,25 +148,25 @@ std::string Day::changeScene()
 
 void Day::drawTexts(Bengine::SpriteFont* spriteFont, Bengine::GLSLProgram* shaderProgram, const int& screenWidth, const int& screenHeight)
 {
-	if (this->currentDialogue != "Question") {
-		this->dialogues[0]->drawTexts(spriteFont, shaderProgram, &this->fontBatch, screenWidth, screenHeight);
+	if (this->dialogueNames[this->currentDialogueIdx] != "Question") {
+		this->dialogues[this->currentDialogueIdx]->drawTexts(spriteFont, shaderProgram, &this->fontBatch, screenWidth, screenHeight);
 	}
 	else {
 		this->answers.clear();
 		for (unsigned i = 1; i <= 3; i++) {
 			// Get the answer options to pass them on to the dialogue
-			this->answers.push_back(this->file[this->currentScene][this->currentDialogue]["Option " + std::to_string(i)]["text"].as<std::string>());
+			this->answers.push_back(this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["Option " + std::to_string(i)]["text"].as<std::string>());
 		}
 
 		// Draw the different options inside the option boxes
-		this->dialogues[0]->drawAnswerTexts(spriteFont, &this->fontBatch, this->answers, screenWidth, screenHeight);
+		this->dialogues[this->currentDialogueIdx]->drawAnswerTexts(spriteFont, &this->fontBatch, this->answers, screenWidth, screenHeight);
 	}
 }
 
 void Day::drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* hudCamera, Bengine::GLSLProgram* shaderProgram, const int& screenWidth, const int& screenHeight)
 {
 	static const unsigned int dayImage = Bengine::ResourceManager::getTexture("Textures/Backgrounds/Weekdays/" + this->day + ".png").id;
-	unsigned int background = Bengine::ResourceManager::getTexture("Textures/Backgrounds/" + this->file[this->currentScene]["Background"].as<std::string>() + ".png").id;
+	unsigned int background = Bengine::ResourceManager::getTexture("Textures/Backgrounds/" + this->file[this->sceneNames[this->currentSceneIdx]]["Background"].as<std::string>() + ".png").id;
 	static const glm::vec4 destRect(-screenWidth / 2, -screenHeight / 2, screenWidth, screenHeight);
 	static const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 	static const Bengine::ColorRGBA8 color(255, 255, 255, 255);
@@ -166,8 +176,8 @@ void Day::drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* hudCa
 	int rightChar = -1;
 	int leftCharWidth, rightCharWidth;
 
-	if (this->file[this->currentScene][this->currentDialogue]["left"] != nullptr) {
-		std::string left = this->file[this->currentScene][this->currentDialogue]["left"].as<std::string>();
+	if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["left"] != nullptr) {
+		std::string left = this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["left"].as<std::string>();
 
 		for (unsigned i = 0; i < left.length(); i++) {
 			if (left[i] == ',') {
@@ -183,8 +193,8 @@ void Day::drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* hudCa
 	if (charName == "Teemu-kun") leftCharWidth = 275;
 	else leftCharWidth = 225;
 
-	if (this->file[this->currentScene][this->currentDialogue]["right"] != nullptr) {
-		std::string right = this->file[this->currentScene][this->currentDialogue]["right"].as<std::string>();
+	if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["right"] != nullptr) {
+		std::string right = this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["right"].as<std::string>();
 
 		for (unsigned i = 0; i < right.length(); i++) {
 			if (right[i] == ',') {
@@ -214,11 +224,11 @@ void Day::drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* hudCa
 
 	spriteBatch.begin();
 
-	if (this->currentDialogue != "Question") {
-		this->dialogues[0]->drawImages(spriteBatch, hudCamera, screenWidth, screenHeight, leftCharWidth, rightCharWidth, leftChar, rightChar);
+	if (this->dialogueNames[this->currentDialogueIdx] != "Question") {
+		this->dialogues[this->currentDialogueIdx]->drawImages(spriteBatch, hudCamera, screenWidth, screenHeight, leftCharWidth, rightCharWidth, leftChar, rightChar);
 	}
 	else {
-		this->dialogues[0]->drawAnswerBoxes(spriteBatch, screenWidth, screenHeight, this->redBoxIdx, this->greenBoxIdx);
+		this->dialogues[this->currentDialogueIdx]->drawAnswerBoxes(spriteBatch, screenWidth, screenHeight, this->redBoxIdx, this->greenBoxIdx);
 	}
 }
 
@@ -239,30 +249,29 @@ void Day::waitAfterQuestion()
 	}
 
 	this->wait = false;
-	this->currentDialogue = this->file[this->currentScene][this->currentDialogue][this->optionString]["next"].as<std::string>();
+	this->dialogueNames.push_back(this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]][this->optionString]["next"].as<std::string>());
 	
-	changeDialogue();
+	nextDialogue();
 }
 
 
-void Day::changeDialogue()
+void Day::nextDialogue()
 {
 	// Need to check if the message exists here, can't just pass it in because it can be null
-	if (this->file[this->currentScene][this->currentDialogue]["message"] != nullptr) {
-		this->dialogues.push_back(new Dialogue(this->playerName, this->file[this->currentScene][this->currentDialogue]["message"].as<std::string>()));
-	}
-	else {
-		this->dialogues.push_back(new Dialogue(this->playerName, ""));
+	if (this->currentDialogueIdx == this->dialogues.size()) {
+		std::cout << "Adding dialog...\n";
+		if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["message"] != nullptr) {
+			this->dialogues.push_back(new Dialogue(this->playerName, this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["message"].as<std::string>()));
+		}
+		else {
+			this->dialogues.push_back(new Dialogue(this->playerName, ""));
+		}
 	}
 
-	// This probably shouldn't be done with a vector since we're only using one element
-	// unless later we want to be able to go back to the previous dialogues (maybe will on questions at least)
-	delete this->dialogues[0];
-	this->dialogues[0] = this->dialogues.back();
-	this->dialogues.pop_back();
+	//this->currentDialogueIdx++;
 
 	// Dialog was not found
-	if (this->file[this->currentScene][this->currentDialogue] == nullptr) {
-		Bengine::fatalError("The dialogue '" + this->currentDialogue + "' in the scene '" + this->currentScene + "' could not be found.");
+	if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]] == nullptr) {
+		Bengine::fatalError("The dialogue '" + this->dialogueNames[this->currentDialogueIdx] + "' in the scene '" + this->sceneNames[this->currentSceneIdx] + "' could not be found.");
 	}
 }

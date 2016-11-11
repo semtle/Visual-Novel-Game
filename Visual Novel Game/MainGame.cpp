@@ -113,15 +113,16 @@ void MainGame::gameLoop()
 
 void MainGame::play()
 {
-	Scene* currScene = this->scenes.find(this->currentScene)->second;
-	
-	currScene->update();
 	this->camera.update();
 	this->hudCamera.update();
 	processInput();
 	this->inputManager.update();
 
 	drawGame();
+
+	Scene* currScene = this->scenes.find(this->currentScene)->second;
+
+	currScene->update();
 
 	if (currScene->exitGame()) this->gameState = GameState::EXIT;
 

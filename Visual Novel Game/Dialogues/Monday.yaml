@@ -26,7 +26,7 @@ Start bedroom:
 
     Checktime:
         talking: player
-        message: Ahh, my head hurts, but that dream sure was nice... Why do you always have to wake up at the best part of the dream..
+        message: Ahh, =^) my head hurts, but that dream sure was nice... Why do you always have to wake up at the best part of the dream..
         next: Sad cause late
 
     Sad cause late:

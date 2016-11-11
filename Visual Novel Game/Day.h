@@ -47,7 +47,7 @@ public:
 
 	void waitAfterQuestion();
 private:
-	void changeDialogue();
+	void nextDialogue();
 
 	unsigned int currentDialogueID;
 	std::string playerName;
@@ -55,13 +55,18 @@ private:
 	YAML::Node file;
 	int greenBoxIdx = -1;
 	int redBoxIdx = -1;
+	int currentDialogueIdx = 0;
+	int currentSceneIdx = 0;
 	bool wait = false;
 	std::string optionString;
 	bool inQuestion = false;
 	std::string currentScene;
 	std::string currentDialogue;
+
 	std::vector<std::string> answers;
 	std::vector<Dialogue *> dialogues;
 	std::map<std::string, Character *> characters;
-};
 
+	std::vector<std::string> dialogueNames;
+	std::vector<std::string> sceneNames;
+};

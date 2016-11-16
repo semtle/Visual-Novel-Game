@@ -1,6 +1,6 @@
 Start:
     Background: bedroom
-    next_scene: Start bedroom
+    next_scene: Food
 
 Start bedroom:
     Background: bedroom
@@ -328,6 +328,7 @@ After class:
         next: Teemu2
 
     Teemu2:
+        talking: Teemu-kun
         left: Makoto-kun, smiling_uniform
         right: Teemu-kun, normal_uniform
         message: Sounds good, I'm getting hungry just thinking about the school's special food today.
@@ -337,42 +338,180 @@ After class:
         next_scene: Food
 
 Food:
-    Background: classroom
+    Background: cafeday
 
     Start:
-        next: player 1
+        next: player1
 
     Fade In:
         next: player1
 
-    player 1:
+    player1:
+        talking: player
         message: Wow! This place is so packed, there's no way we fit in.
-        next: makoto 1
+        next: makoto1
 
-    makoto 1:
+    makoto1:
+        talking: Makoto-kun
         right: Makoto-kun, confident_uniform
         message: Just watch.
         next: player 2
 
     player 2:
+        talking: player
         message: And there he goes, running around like an idiot. Oh? wait a moment did he find a free table for us?
         next: teemu 1
 
     teemu 1:
+        talking: Teemu-kun
         left: Teemu-kun, worried_uniform
         message: Let's hope he didn't find trouble instead of a place to sit...
         next: player 3
 
     player 3:
+        talking: player
         left: Teemu-kun, worried_uniform
-        message: Give him some slack Teemu-kun, even if you don't believe it he has his moments.
+        message: Give him some slack Teemu-kun, even if you don't believe it, he has his moments.
         next: teemu 2
 
     teemu 2:
+        talking: Teemu-kun
         left: Teemu-kun, worried_uniform
         message: That's what I'm worried about.
         next: makoto 2
 
     makoto 2:
+        talking: Makoto-kun
         message: Hey guys! I found us a place to sit! Come fast!
         next: teemu 3
+
+    teemu 3: 
+        talking: Teemu-kun 
+        right: Teemu-kun, normal_uniform
+        message: Shall we?
+        next: player 4
+
+    player 4:
+        talking: player 
+        right: Teemu-kun, normal_uniform
+        message: Sure!
+        next: makoto 3
+
+    makoto 3:
+        talking: Makoto-kun 
+        left: Makoto-kun, smiling_uniform 
+        right: Teemu-kun, normal_uniform
+        message: Hey, hey, Look who I found sitting here all alone.
+        next: teemu 4
+
+    teemu 4:
+        talking: Teemu-kun 
+        left: Makoto-kun, smiling_uniform 
+        right: Teemu-kun, surprised_uniform
+        message: Who's she?
+        next: maiko 1
+
+    maiko 1:
+        talking:
+        left: Maiko-san, smiling_uniform 
+        right: Teemu-kun, surprised_uniform
+        message: You must be Makoto-kun's friends!
+        next: maiko 2
+
+    maiko 2:
+        talking:
+        left: Maiko-san, surprised_uniform 
+        right: Teemu-kun, surprised_uniform
+        message: Aaah! Sorry for not introducing myself, I'm Maiko-san, nice to meet you guys!
+        next: teemu 5
+
+    teemu 5:
+        talking: Teemu-kun
+        left: Maiko-san, smiling_uniform 
+        right: Teemu-kun, normal_uniform
+        message: No, I should be the one apologizing here, excuse me for my rudeness.
+        next: teemu 6
+
+    teemu 6:
+        talking: Teemu-kun
+        left: Maiko-san, smiling_uniform 
+        right: Teemu-kun, normal_uniform
+        message: I'm Teemu-kun and this here is player, nice to meet you too
+        next: player 5
+
+    player 5:
+        talking: player
+        left: Maiko-san, smiling_uniform 
+        right: Teemu-kun, normal_uniform
+        message: By the way, Maiko-san, where do you know Makoto-kun?
+        next: maiko 3
+        
+    maiko 3:
+        talking: Maiko-san
+        left: Maiko-san, smiling_uniform 
+        right: Teemu-kun, normal_uniform
+        message: We are childhood friends! We have know each others since kindergarten.
+        next: makoto 4
+        
+    makoto 4:
+        talking: Makoto-kun
+        left: Maiko-san, smiling_uniform 
+        right: Makoto-kun, smiling_uniform
+        message: That's right! She's one of my oldest friends.
+        next: teemu 7
+
+    teemu 7:
+        talking: Teemu-kun
+        left: Teemu-kun, worried_uniform 
+        message: Must be nice...
+        next: player 6
+        
+    player 6:
+        talking: player
+        left: Teemu-kun, worried_uniform 
+        message: Teemu-kun did you say something?
+        next: teemu 8
+
+    teemu 8:
+        talking: Teemu-kun
+        left: Teemu-kun, happy_uniform
+        message: no, I didn't say anything.
+        next: maiko 4
+
+    maiko 4:
+        talking: Maiko-San    
+        left: Teemu-kun, surprised_uniform
+        right: Maiko-san, smiling_uniform 
+        message: What? What? Is something going on?
+        next: teemu 9
+
+    teemu 9:
+        talking: Teemu-kun
+        left: Teemu-kun, worried_uniform
+        right: Maiko-san, smiling_uniform 
+        message: It's nothing really. Let's just start digging into this food, shall we?
+        next: everyone 1
+        
+    everyone 1:
+        talking: Everyone   
+        message: Thank you for the food!
+        next: Fade Out
+        
+    Fade Out:
+        next_scene: First time leaving school
+        
+First time leaving school:
+    Background: schoolyard
+        
+    Start:
+        next: makoto 1
+        
+    Fade In:
+        next: makoto 1
+
+    makoto 1:
+        talking: Makoto-Kun
+        left: Makoto-kun, smiling_uniform
+        right: Teemu-kun, normal_uniform
+        message: Finally the school is over!!
+        next: player 1

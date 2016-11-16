@@ -1,29 +1,33 @@
 ﻿  Window.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\graphics test\bengine\window.h(2): fatal error C1083: Cannot open include file: 'SDL/SDL.h': No such file or directory
+d:\visual-novel-game-cpp\bengine\window.h(2): fatal error C1083: Cannot open include file: 'SDL/SDL.h': No such file or directory
   Timing.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\graphics test\bengine\timing.h(3): fatal error C1083: Cannot open include file: 'SDL\SDL.h': No such file or directory
+d:\visual-novel-game-cpp\bengine\timing.h(3): fatal error C1083: Cannot open include file: 'SDL\SDL.h': No such file or directory
   TextureCache.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\graphics test\bengine\gltexture.h(2): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+d:\visual-novel-game-cpp\bengine\gltexture.h(2): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  SpriteFont.cpp
+d:\visual-novel-game-cpp\bengine\spritefont.h(27): fatal error C1083: Cannot open include file: 'TTF/SDL_ttf.h': No such file or directory
   SpriteBatch.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\graphics test\bengine\spritebatch.h(3): fatal error C1083: Cannot open include file: 'SDL/SDL.h': No such file or directory
+d:\visual-novel-game-cpp\bengine\spritebatch.h(3): fatal error C1083: Cannot open include file: 'SDL/SDL.h': No such file or directory
   Sprite.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\graphics test\bengine\sprite.h(2): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+d:\visual-novel-game-cpp\bengine\sprite.h(2): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
   ResourceManager.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\graphics test\bengine\gltexture.h(2): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+d:\visual-novel-game-cpp\bengine\gltexture.h(2): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
   picoPNG.cpp
   IOManager.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\graphics test\bengine\iomanager.cpp(19): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
-c:\users\zentryn\documents\visual studio 2015\projects\graphics test\bengine\iomanager.cpp(25): warning C4244: '-=': conversion from 'std::streamoff' to 'int', possible loss of data
+d:\visual-novel-game-cpp\bengine\iomanager.cpp(19): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+d:\visual-novel-game-cpp\bengine\iomanager.cpp(25): warning C4244: '-=': conversion from 'std::streamoff' to 'int', possible loss of data
   InputManager.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\graphics test\bengine\inputmanager.h(3): fatal error C1083: Cannot open include file: 'SDL/SDL.h': No such file or directory
+d:\visual-novel-game-cpp\bengine\inputmanager.h(3): fatal error C1083: Cannot open include file: 'SDL/SDL.h': No such file or directory
   ImageLoader.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\graphics test\bengine\gltexture.h(2): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+d:\visual-novel-game-cpp\bengine\gltexture.h(2): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
   GLSLProgram.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\graphics test\bengine\glslprogram.h(4): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
-  Errors.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\graphics test\bengine\errors.cpp(3): fatal error C1083: Cannot open include file: 'SDL/SDL.h': No such file or directory
+d:\visual-novel-game-cpp\bengine\glslprogram.h(4): fatal error C1083: Cannot open include file: 'GL/glew.h': No such file or directory
+  BengineErrors.cpp
+d:\visual-novel-game-cpp\bengine\bengineerrors.cpp(3): fatal error C1083: Cannot open include file: 'SDL/SDL.h': No such file or directory
   Camera2D.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\graphics test\bengine\camera2d.h(2): fatal error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
+d:\visual-novel-game-cpp\bengine\camera2d.h(2): fatal error C1083: Cannot open include file: 'glm/glm.hpp': No such file or directory
   Bengine.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\graphics test\bengine\bengine.cpp(1): fatal error C1083: Cannot open include file: 'SDL\SDL.h': No such file or directory
+d:\visual-novel-game-cpp\bengine\bengine.cpp(1): fatal error C1083: Cannot open include file: 'SDL/SDL.h': No such file or directory
+  AudioEngine.cpp
+d:\visual-novel-game-cpp\bengine\audioengine.h(3): fatal error C1083: Cannot open include file: 'SDL/SDL_mixer.h': No such file or directory
   Generating Code...

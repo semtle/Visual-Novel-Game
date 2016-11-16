@@ -1,0 +1,12 @@
+﻿  Scene.cpp
+  MainMenu.cpp
+  MainGame.cpp
+d:\visual-novel-game-cpp\visual novel game\day.h(14): fatal error C1083: Cannot open include file: 'yaml-cpp/yaml.h': No such file or directory
+  main.cpp
+d:\visual-novel-game-cpp\visual novel game\day.h(14): fatal error C1083: Cannot open include file: 'yaml-cpp/yaml.h': No such file or directory
+  Dialogue.cpp
+d:\visual-novel-game-cpp\visual novel game\dialogue.cpp(171): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+  Day.cpp
+d:\visual-novel-game-cpp\visual novel game\day.h(14): fatal error C1083: Cannot open include file: 'yaml-cpp/yaml.h': No such file or directory
+  Character.cpp
+  Generating Code...

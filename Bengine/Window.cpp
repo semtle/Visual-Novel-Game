@@ -79,6 +79,12 @@ int Window::create(std::string windowName, int screenWidth, int screenHeight, un
 }
 
 
+void Window::destroy()
+{
+	SDL_DestroyWindow(_sdlWindow);
+}
+
+
 void Window::swapBuffer()
 {
 	SDL_GL_SwapWindow(_sdlWindow);

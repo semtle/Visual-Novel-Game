@@ -1,9 +1,2 @@
-﻿Build started 11/11/2016 13:06:48.
-     1>Project "C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Bengine\Bengine.vcxproj" on node 2 (Build target(s)).
-     1>Lib:
-         Bengine.vcxproj -> C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\Bengine.lib
-     1>Done Building Project "C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Bengine\Bengine.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:00.10
+﻿  Window.cpp
+  Bengine.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Novel Game\Release\Bengine.lib

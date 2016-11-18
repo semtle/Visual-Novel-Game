@@ -15,6 +15,7 @@ namespace Bengine {
 		~Window();
 
 		int create(std::string windowName, int screenWidth, int screenHeight, unsigned int currentFlags, bool vSync);
+		void destroy();
 		void swapBuffer();
 
 		int getScreenWidth() { return _screenWidth; }

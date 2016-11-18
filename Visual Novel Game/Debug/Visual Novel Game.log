@@ -1,6 +1,8 @@
-﻿  MainMenu.cpp
+﻿  Scene.cpp
+  MainMenu.cpp
   MainGame.cpp
   Dialogue.cpp
+c:\users\zentryn\documents\visual studio 2015\projects\visual novel game\visual novel game\dialogue.cpp(171): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
   Day.cpp
   Character.cpp
   Generating Code...

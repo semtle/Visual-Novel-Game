@@ -49,9 +49,9 @@ int Window::create(std::string windowName, int screenWidth, int screenHeight, un
 	}
 
 	// Sets up the OpenGL Context
-	SDL_GLContext glContext = SDL_GL_CreateContext(_sdlWindow);
+	_glContext = SDL_GL_CreateContext(_sdlWindow);
 
-	if (glContext == nullptr) {
+	if (_glContext == nullptr) {
 		fatalError("SDL GL Context could not be created.");
 	}
 
@@ -82,6 +82,25 @@ int Window::create(std::string windowName, int screenWidth, int screenHeight, un
 void Window::destroy()
 {
 	SDL_DestroyWindow(_sdlWindow);
+}
+
+
+void Window::setActive()
+{
+	SDL_GL_MakeCurrent(_sdlWindow, _glContext);
+}
+
+
+void Window::resize(const int& w, const int& h)
+{
+	glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	glOrtho(0, w, 0, h, -1, 1);
+	glLoadIdentity();
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glClear(GL_COLOR_BUFFER_BIT);
+	glLoadIdentity();
 }
 
 

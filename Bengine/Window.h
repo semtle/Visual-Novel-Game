@@ -16,6 +16,8 @@ namespace Bengine {
 
 		int create(std::string windowName, int screenWidth, int screenHeight, unsigned int currentFlags, bool vSync);
 		void destroy();
+		void setActive();
+		void resize(const int& w, const int& h);
 		void swapBuffer();
 
 		int getScreenWidth() { return _screenWidth; }
@@ -26,6 +28,7 @@ namespace Bengine {
 		SDL_Window* _sdlWindow;
 		int _screenWidth;
 		int _screenHeight;
+		SDL_GLContext _glContext;
 	};
 
 }

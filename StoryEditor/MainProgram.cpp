@@ -255,6 +255,7 @@ void MainProgram::drawScreen()
 	this->spriteBatch.renderBatch();
 
 	if (this->currentState == ProgramState::ADDSCENE) this->drawSceneCreationScreenTexts();
+	else if (this->currentState == ProgramState::MAINSCREEN) this->drawMainScreenTexts();
 
 	// Unbind the texture
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -350,6 +351,45 @@ void MainProgram::drawSceneCreationScreen()
 		0.0f,
 		color
 	);
+}
+
+
+void MainProgram::drawMainScreenTexts()
+{
+	// Make the buffer that will hold the text
+	char buffer[256];
+
+	// Set the camera matrix
+	GLint pLocation = this->shaderProgram.getUniformLocation("P");
+	glm::mat4 cameraMatrix = this->fontCamera.getCameraMatrix();
+
+	// Send the camera matrix
+	glUniformMatrix4fv(pLocation, 1, false, &cameraMatrix[0][0]);
+
+	this->fontBatch.begin();
+
+	std::cout << "drawingasdf\n";
+
+	std::vector<std::string> scenes = this->sceneManager->getScenes();
+	int currentY = 152;
+	for (unsigned i = 0; i < scenes.size(); i++) {
+		// Fill the buffer with the text
+		sprintf_s(buffer, "%s", scenes[i].c_str());
+
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(20, this->screenHeight - currentY),
+			glm::vec2(0.7f),
+			0.0f,
+			Bengine::ColorRGBA8(0, 0, 0, 255)
+		);
+
+		currentY += 100;
+	}
+
+	this->fontBatch.end();
+	this->fontBatch.renderBatch();
 }
 
 

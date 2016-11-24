@@ -202,8 +202,6 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				}
 			}
 		}
-
-		std::cout << "Name: " << this->currentSceneName << "\n";
 	}
 }
 
@@ -351,5 +349,4 @@ void MainProgram::drawSceneCreationScreenTexts()
 
 	this->fontBatch.end();
 	this->fontBatch.renderBatch();
-	std::cout << "drawnig\n";
 }

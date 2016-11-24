@@ -36,6 +36,7 @@ public:
 	void drawMainScreen();
 	void drawSceneCreationScreen();
 
+	void drawMainScreenTexts();
 	void drawSceneCreationScreenTexts();
 private:
 	Bengine::Window window; ///< Main window

@@ -23,4 +23,10 @@ public:
 	~SceneManager();
 
 	void update();
+
+	void addScene(std::string sceneName);
+
+	std::vector<std::string> getScenes() const { return this->scenes; }
+private:
+	std::vector<std::string> scenes;
 };

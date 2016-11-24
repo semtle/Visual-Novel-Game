@@ -149,6 +149,22 @@ void MainProgram::checkSceneCreationScreenInputs()
 		if (mouseCoords.y > cancelButtonY && mouseCoords.y < cancelButtonY + this->BUTTON_HEIGHT) {
 			if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+				this->currentState = ProgramState::MAINSCREEN;
+			}
+		}
+	}
+
+	static const int createButtonX = this->screenWidth / 2 - this->BUTTONS_MIDDLE_HORIZONTAL_RADIUS - this->BUTTON_WIDTH;
+	static const int createButtonY = this->screenHeight / 2 + abs(this->BUTTONS_MIDDLE_VERTICAL_RADIUS) - this->BUTTON_HEIGHT;
+
+	// Mouse is inside the 'Create' button
+	if (mouseCoords.x > createButtonX && mouseCoords.x < createButtonX + this->BUTTON_WIDTH) {
+		if (mouseCoords.y > createButtonY && mouseCoords.y < createButtonY + this->BUTTON_HEIGHT) {
+			if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+				
+				this->sceneManager->addScene(this->currentSceneName);
 				this->currentState = ProgramState::MAINSCREEN;
 			}
 		}
@@ -255,8 +271,11 @@ void MainProgram::drawMainScreen()
 {
 	static const unsigned int main_background = Bengine::ResourceManager::getTexture("Textures/main-bg.png").id;
 	static const unsigned int add_new_button = Bengine::ResourceManager::getTexture("Textures/addnew.png").id;
+	static const unsigned int sceneBlock = Bengine::ResourceManager::getTexture("Textures/scene-block.png").id;
+
 	static const glm::vec4 bgDestRect(-this->screenWidth / 2, -this->screenHeight / 2, this->screenWidth, this->screenHeight);
 	static const glm::vec4 addNewDestRect(-this->screenWidth / 2 + 34, -this->screenHeight / 2 + 30, 134, 34);
+	static glm::vec4 sceneBlockDestRect(-this->screenWidth / 2 + 10, this->screenHeight / 2 - 195, 179, 77);
 	static const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 	static const Bengine::ColorRGBA8 color(255, 255, 255, 255);
 
@@ -274,6 +293,20 @@ void MainProgram::drawMainScreen()
 		0.0f,
 		color
 	);
+
+	std::vector<std::string> scenes = this->sceneManager->getScenes();
+	glm::vec4 originalDestRect = sceneBlockDestRect;
+	for (unsigned i = 0; i < scenes.size(); i++) {
+		this->spriteBatch.draw(
+			sceneBlockDestRect,
+			uvRect,
+			sceneBlock,
+			0.0f,
+			color
+		);
+		sceneBlockDestRect.y -= 100;
+	}
+	sceneBlockDestRect = originalDestRect;
 }
 
 

@@ -1,2 +1,51 @@
-﻿  Window.cpp
-  Bengine.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual Shit\Release\Bengine.lib
+﻿Build started 25/11/2016 12:48:49.
+     1>Project "C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Bengine\Bengine.vcxproj" on node 2 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _LIB /D _UNICODE /D UNICODE /Gm- /EHsc /MDd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\Bengine.pdb" /Gd /TP /analyze- /errorReport:prompt AudioEngine.cpp Bengine.cpp Camera2D.cpp BengineErrors.cpp GLSLProgram.cpp ImageLoader.cpp InputManager.cpp IOManager.cpp picoPNG.cpp ResourceManager.cpp Sprite.cpp SpriteBatch.cpp SpriteFont.cpp TextureCache.cpp Timing.cpp Window.cpp
+         AudioEngine.cpp
+         Bengine.cpp
+         Camera2D.cpp
+         BengineErrors.cpp
+         GLSLProgram.cpp
+         ImageLoader.cpp
+         InputManager.cpp
+         IOManager.cpp
+     1>IOManager.cpp(19): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+     1>IOManager.cpp(25): warning C4244: '-=': conversion from 'std::streamoff' to 'int', possible loss of data
+         picoPNG.cpp
+         ResourceManager.cpp
+         Sprite.cpp
+         SpriteBatch.cpp
+     1>SpriteBatch.cpp(56): warning C4018: '<': signed/unsigned mismatch
+     1>SpriteBatch.cpp(77): warning C4018: '<': signed/unsigned mismatch
+         SpriteFont.cpp
+         TextureCache.cpp
+         Timing.cpp
+     1>Timing.cpp(45): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
+     1>Timing.cpp(50): warning C4244: 'argument': conversion from 'float' to 'Uint32', possible loss of data
+     1>Timing.cpp(64): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
+     1>Timing.cpp(67): warning C4244: '=': conversion from 'Uint32' to 'float', possible loss of data
+         Window.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\Lib.exe /OUT:"C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\Bengine.lib" /NOLOGO /LTCG Release\AudioEngine.obj
+         Release\Bengine.obj
+         Release\Camera2D.obj
+         Release\BengineErrors.obj
+         Release\GLSLProgram.obj
+         Release\ImageLoader.obj
+         Release\InputManager.obj
+         Release\IOManager.obj
+         Release\picoPNG.obj
+         Release\ResourceManager.obj
+         Release\Sprite.obj
+         Release\SpriteBatch.obj
+         Release\SpriteFont.obj
+         Release\TextureCache.obj
+         Release\Timing.obj
+         Release\Window.obj
+         Bengine.vcxproj -> C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\Bengine.lib
+     1>Done Building Project "C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Bengine\Bengine.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:20.56

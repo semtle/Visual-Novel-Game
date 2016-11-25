@@ -19,5 +19,17 @@ void SceneManager::update()
 
 void SceneManager::addScene(std::string sceneName)
 {
-	this->scenes.push_back(sceneName);
+	this->scenes.emplace(std::pair<int, std::string>(this->scenes.size(), sceneName));
+}
+
+
+void SceneManager::saveScenes(const std::string& filePath)
+{
+	std::ofstream file(filePath);
+
+	for (unsigned i = 0; i < this->scenes.size(); i++) {
+		file << this->scenes[i] << "\n";
+	}
+
+	file.close();
 }

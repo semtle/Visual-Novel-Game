@@ -97,6 +97,7 @@ void MainProgram::processInput()
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_QUIT:
+			this->sceneManager->saveScenes("TestDialogs/Monday.yaml");
 			this->currentState = ProgramState::EXIT;
 			break; 
 		case SDL_KEYDOWN:
@@ -295,7 +296,7 @@ void MainProgram::drawMainScreen()
 		color
 	);
 
-	std::vector<std::string> scenes = this->sceneManager->getScenes();
+	std::map<int, std::string> scenes = this->sceneManager->getScenes();
 	glm::vec4 originalDestRect = sceneBlockDestRect;
 	for (unsigned i = 0; i < scenes.size(); i++) {
 		this->spriteBatch.draw(
@@ -368,7 +369,7 @@ void MainProgram::drawMainScreenTexts()
 
 	this->fontBatch.begin();
 
-	std::vector<std::string> scenes = this->sceneManager->getScenes();
+	std::map<int, std::string> scenes = this->sceneManager->getScenes();
 	int currentY = 152;
 	for (unsigned i = 0; i < scenes.size(); i++) {
 		// Fill the buffer with the text

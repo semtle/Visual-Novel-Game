@@ -341,17 +341,17 @@ Food:
     Background: cafeday
 
     Start:
-        next: player1
+        next: 0
 
     Fade In:
         next: player1
 
-    player1:
+    0:
         talking: player
         message: Wow! This place is so packed, there's no way we fit in.
-        next: makoto1
+        next: 1
 
-    makoto1:
+    1:
         talking: Makoto-kun
         right: Makoto-kun, confident_uniform
         message: Just watch.

@@ -296,7 +296,7 @@ void MainProgram::drawMainScreen()
 		color
 	);
 
-	std::map<int, std::string> scenes = this->sceneManager->getScenes();
+	std::map<int, std::pair<std::string, Dialogue>> scenes = this->sceneManager->getScenes();
 	glm::vec4 originalDestRect = sceneBlockDestRect;
 	for (unsigned i = 0; i < scenes.size(); i++) {
 		this->spriteBatch.draw(
@@ -369,11 +369,11 @@ void MainProgram::drawMainScreenTexts()
 
 	this->fontBatch.begin();
 
-	std::map<int, std::string> scenes = this->sceneManager->getScenes();
+	std::map<int, std::pair<std::string, Dialogue>> scenes = this->sceneManager->getScenes();
 	int currentY = 152;
 	for (unsigned i = 0; i < scenes.size(); i++) {
 		// Fill the buffer with the text
-		sprintf_s(buffer, "%s", scenes[i].c_str());
+		sprintf_s(buffer, "%s", scenes[i].first.c_str());
 
 		this->spriteFont->draw(
 			this->fontBatch,

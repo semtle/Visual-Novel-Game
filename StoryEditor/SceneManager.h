@@ -6,6 +6,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
+#include <fstream>
 
 #include <Bengine/Bengine.h>
 #include <Bengine/Window.h>
@@ -26,7 +28,9 @@ public:
 
 	void addScene(std::string sceneName);
 
-	std::vector<std::string> getScenes() const { return this->scenes; }
+	void saveScenes(const std::string& filePath);
+
+	std::map<int, std::string> getScenes() const { return this->scenes; }
 private:
-	std::vector<std::string> scenes;
+	std::map<int, std::string> scenes;
 };

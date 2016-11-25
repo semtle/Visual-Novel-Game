@@ -368,8 +368,6 @@ void MainProgram::drawMainScreenTexts()
 
 	this->fontBatch.begin();
 
-	std::cout << "drawingasdf\n";
-
 	std::vector<std::string> scenes = this->sceneManager->getScenes();
 	int currentY = 152;
 	for (unsigned i = 0; i < scenes.size(); i++) {

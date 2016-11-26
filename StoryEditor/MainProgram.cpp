@@ -41,7 +41,7 @@ void MainProgram::initSystems()
 	this->fontBatch.init();
 
 	// Initialize font
-	this->spriteFont = new Bengine::SpriteFont("Fonts/Chapaza/Chapaza.ttf", 32);
+	this->spriteFont = new Bengine::SpriteFont("Fonts/timeburnernormal.ttf", 32);
 
 	// Initialize the scene manager
 	this->sceneManager = new SceneManager();
@@ -273,11 +273,11 @@ void MainProgram::drawMainScreen()
 {
 	static const unsigned int main_background = Bengine::ResourceManager::getTexture("Textures/main-bg.png").id;
 	static const unsigned int add_new_button = Bengine::ResourceManager::getTexture("Textures/addnew.png").id;
-	static const unsigned int sceneBlock = Bengine::ResourceManager::getTexture("Textures/scene-block.png").id;
+	static const unsigned int sceneBox = Bengine::ResourceManager::getTexture("Textures/scene-box.png").id;
 
 	static const glm::vec4 bgDestRect(-this->screenWidth / 2, -this->screenHeight / 2, this->screenWidth, this->screenHeight);
 	static const glm::vec4 addNewDestRect(-this->screenWidth / 2 + 34, -this->screenHeight / 2 + 30, 134, 34);
-	static glm::vec4 sceneBlockDestRect(-this->screenWidth / 2 + 10, this->screenHeight / 2 - 195, 179, 77);
+	static glm::vec4 sceneBoxDestRect(-this->screenWidth / 2 + 10, this->screenHeight / 2 - 195, 179, 77);
 	static const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 	static const Bengine::ColorRGBA8 color(255, 255, 255, 255);
 
@@ -297,18 +297,18 @@ void MainProgram::drawMainScreen()
 	);
 
 	std::map<int, std::pair<std::string, Dialogue>> scenes = this->sceneManager->getScenes();
-	glm::vec4 originalDestRect = sceneBlockDestRect;
+	glm::vec4 originalDestRect = sceneBoxDestRect;
 	for (unsigned i = 0; i < scenes.size(); i++) {
 		this->spriteBatch.draw(
-			sceneBlockDestRect,
+			sceneBoxDestRect,
 			uvRect,
-			sceneBlock,
+			sceneBox,
 			0.0f,
 			color
 		);
-		sceneBlockDestRect.y -= 100;
+		sceneBoxDestRect.y -= 100;
 	}
-	sceneBlockDestRect = originalDestRect;
+	sceneBoxDestRect = originalDestRect;
 }
 
 
@@ -370,7 +370,7 @@ void MainProgram::drawMainScreenTexts()
 	this->fontBatch.begin();
 
 	std::map<int, std::pair<std::string, Dialogue>> scenes = this->sceneManager->getScenes();
-	int currentY = 152;
+	int currentY = 157;
 	for (unsigned i = 0; i < scenes.size(); i++) {
 		// Fill the buffer with the text
 		sprintf_s(buffer, "%s", scenes[i].first.c_str());
@@ -378,7 +378,7 @@ void MainProgram::drawMainScreenTexts()
 		this->spriteFont->draw(
 			this->fontBatch,
 			buffer,
-			glm::vec2(20, this->screenHeight - currentY),
+			glm::vec2(25, this->screenHeight - currentY),
 			glm::vec2(0.7f),
 			0.0f,
 			Bengine::ColorRGBA8(0, 0, 0, 255)

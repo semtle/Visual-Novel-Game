@@ -61,10 +61,14 @@ public:
 	void update();
 
 	void addScene(std::string sceneName);
+	void addDialogue(int idx, Dialogue *);
 
 	void saveScenes(const std::string& filePath);
 
-	std::map<int, std::pair<std::string, Dialogue>> getScenes() const { return this->scenes; }
+	// Getters
+	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> getScenes() const { return this->scenes; }
+
+	
 private:
-	std::map<int, std::pair<std::string, Dialogue>> scenes;
+	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> scenes;
 };

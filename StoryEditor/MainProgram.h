@@ -14,7 +14,7 @@
 #include <Bengine/Camera2D.h>
 #include <Bengine/SpriteFont.h>
 
-enum class ProgramState { MAINSCREEN, ADDSCENE, EXIT };
+enum class ProgramState { FILESELECT, MAINSCREEN, ADDSCENE, EXIT };
 
 class MainProgram
 {
@@ -29,16 +29,21 @@ public:
 	void processInput();
 	void drawScreen();
 
+	void checkFileSelectInputs();
 	void checkMainScreenInputs();
 	void checkSceneCreationScreenInputs();
 	void onKeyPress(unsigned int keyID);
 
+	void drawFileSelectScreen();
 	void drawMainScreen();
 	void drawSceneCreationScreen();
 
+	void drawFileSelectTexts();
 	void drawMainScreenTexts();
 	void drawSceneCreationScreenTexts();
 private:
+	std::map<int, std::pair<std::string, Dialogue>> getShownScenes(std::map<int, std::pair<std::string, Dialogue>> allScenes);
+
 	Bengine::Window window; ///< Main window
 
 	Bengine::GLSLProgram shaderProgram; ///< Shaders
@@ -64,6 +69,8 @@ private:
 	static const int BUTTONS_MIDDLE_VERTICAL_RADIUS = -150;
 	static const int BUTTON_WIDTH = 149;
 	static const int BUTTON_HEIGHT = 38;
+
+	int currentSceneListIdx = 0;
 
 	ProgramState currentState = ProgramState::MAINSCREEN;
 };

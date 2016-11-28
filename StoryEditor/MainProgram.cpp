@@ -65,6 +65,17 @@ void MainProgram::initShaders()
 void MainProgram::gameLoop()
 {
 	while (this->currentState != ProgramState::EXIT) {
+		while (this->currentState == ProgramState::FILESELECT) {
+			this->camera.update();
+			this->fontCamera.update();
+			this->inputManager.update();
+
+			this->processInput();
+			this->checkFileSelectInputs();
+
+			this->drawScreen();
+		}
+
 		while (this->currentState == ProgramState::MAINSCREEN) {
 			this->camera.update();
 			this->inputManager.update();
@@ -79,6 +90,7 @@ void MainProgram::gameLoop()
 			this->camera.update();
 			this->fontCamera.update();
 			this->inputManager.update();
+
 			this->processInput();
 			this->checkSceneCreationScreenInputs();
 
@@ -121,16 +133,51 @@ void MainProgram::processInput()
 }
 
 
+void MainProgram::checkFileSelectInputs()
+{
+	glm::vec2 mouseCoords = this->inputManager.getMouseCoords();
+}
+
+
 void MainProgram::checkMainScreenInputs()
 {
 	glm::vec2 mouseCoords = this->inputManager.getMouseCoords();
 
 	// Mouse is inside the 'add new' button
-	if (mouseCoords.x > 34 && mouseCoords.x < 168) {
-		if (mouseCoords.y > this->screenHeight - 68 && mouseCoords.y < this->screenHeight - 30) {
+	if (mouseCoords.x > 31 && mouseCoords.x < 165) {
+		if (mouseCoords.y > this->screenHeight - 58 && mouseCoords.y < this->screenHeight - 20) {
 			if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 				this->currentState = ProgramState::ADDSCENE;
+			}
+		}
+	}
+
+	static const glm::vec4 upArrowDestDect(-this->screenWidth / 2 + 52, this->screenHeight / 2 - 150, 86, 43);
+	static const glm::vec4 downArrowDestDect(-this->screenWidth / 2 + 52, -this->screenHeight / 2 + 60, 86, 43);
+
+	// Mouse is inside the up arrow
+	if (this->currentSceneListIdx > 0) {
+		if (mouseCoords.x > 52 && mouseCoords.x < 138) {
+			if (mouseCoords.y > 107 && mouseCoords.y < 150) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->currentSceneListIdx--;
+				}
+			}
+		}
+	}
+
+	// Mouse is inside the down arrow
+	if (this->sceneManager->getScenes().size() > 4 && this->currentSceneListIdx < this->sceneManager->getScenes().size() - 4) {
+		if (mouseCoords.x > 52 && mouseCoords.x < 138) {
+			if (mouseCoords.y > 497 && mouseCoords.y < 540) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->currentSceneListIdx++;
+				}
 			}
 		}
 	}
@@ -156,6 +203,7 @@ void MainProgram::checkSceneCreationScreenInputs()
 		}
 	}
 
+	// Get create button's location
 	static const int createButtonX = this->screenWidth / 2 - this->BUTTONS_MIDDLE_HORIZONTAL_RADIUS - this->BUTTON_WIDTH;
 	static const int createButtonY = this->screenHeight / 2 + abs(this->BUTTONS_MIDDLE_VERTICAL_RADIUS) - this->BUTTON_HEIGHT;
 
@@ -222,7 +270,6 @@ void MainProgram::onKeyPress(unsigned int keyID)
 	}
 }
 
-
 void MainProgram::drawScreen()
 {
 	// Set the base depth to 1.0
@@ -269,18 +316,43 @@ void MainProgram::drawScreen()
 }
 
 
+void MainProgram::drawFileSelectScreen()
+{
+	// Empty
+}
+
+
 void MainProgram::drawMainScreen()
 {
 	static const unsigned int main_background = Bengine::ResourceManager::getTexture("Textures/main-bg.png").id;
+	static const unsigned int arrow = Bengine::ResourceManager::getTexture("Textures/arrow.png").id;
 	static const unsigned int add_new_button = Bengine::ResourceManager::getTexture("Textures/addnew.png").id;
 	static const unsigned int sceneBox = Bengine::ResourceManager::getTexture("Textures/scene-box.png").id;
 
+	// Arrows
+	static const glm::vec4 upArrowDestDect(-this->screenWidth / 2 + 52, this->screenHeight / 2 - 150, 86, 43);
+	static const glm::vec4 downArrowDestDect(-this->screenWidth / 2 + 52, -this->screenHeight / 2 + 60, 86, 43);
+
+	// Background
 	static const glm::vec4 bgDestRect(-this->screenWidth / 2, -this->screenHeight / 2, this->screenWidth, this->screenHeight);
-	static const glm::vec4 addNewDestRect(-this->screenWidth / 2 + 34, -this->screenHeight / 2 + 30, 134, 34);
-	static glm::vec4 sceneBoxDestRect(-this->screenWidth / 2 + 10, this->screenHeight / 2 - 195, 179, 77);
+
+	// 'Add New' -button
+	static const glm::vec4 addNewDestRect(-this->screenWidth / 2 + 31, -this->screenHeight / 2 + 20, 134, 34);
+
+	// Box for scene information
+	static glm::vec4 sceneBoxDestRect(-this->screenWidth / 2 + 7, this->screenHeight / 2 - 234, 185, 85);
+
+	// Main UV-Rect
 	static const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
+
+	// UV-Rect for up-arrow (rotate arrow 180 degrees)
+	static const glm::vec4 upArrowUvRect(0.0f, 0.0f, 1.0f, -1.0f);
+
 	static const Bengine::ColorRGBA8 color(255, 255, 255, 255);
 
+	std::map<int, std::pair<std::string, Dialogue>> allScenes = this->sceneManager->getScenes();
+
+	// BG
 	this->spriteBatch.draw(
 		bgDestRect,
 		uvRect,
@@ -288,6 +360,8 @@ void MainProgram::drawMainScreen()
 		0.0f,
 		color
 	);
+
+	// Add new -button
 	this->spriteBatch.draw(
 		addNewDestRect,
 		uvRect,
@@ -296,9 +370,32 @@ void MainProgram::drawMainScreen()
 		color
 	);
 
-	std::map<int, std::pair<std::string, Dialogue>> scenes = this->sceneManager->getScenes();
+	// Up arrow
+	if (this->currentSceneListIdx > 0) {
+		this->spriteBatch.draw(
+			upArrowDestDect,
+			upArrowUvRect,
+			arrow,
+			0.0f,
+			color
+		);
+	}
+
+	// Down arrow
+	if (allScenes.size() > 4 && this->currentSceneListIdx < allScenes.size() - 4) {
+		this->spriteBatch.draw(
+			downArrowDestDect,
+			uvRect,
+			arrow,
+			0.0f,
+			color
+		);
+	}
+	
+	std::map<int, std::pair<std::string, Dialogue>> shownScenes = this->getShownScenes(allScenes);
+
 	glm::vec4 originalDestRect = sceneBoxDestRect;
-	for (unsigned i = 0; i < scenes.size(); i++) {
+	for (unsigned i = 0; i < shownScenes.size(); i++) {
 		this->spriteBatch.draw(
 			sceneBoxDestRect,
 			uvRect,
@@ -306,7 +403,7 @@ void MainProgram::drawMainScreen()
 			0.0f,
 			color
 		);
-		sceneBoxDestRect.y -= 100;
+		sceneBoxDestRect.y -= 87;
 	}
 	sceneBoxDestRect = originalDestRect;
 }
@@ -355,6 +452,12 @@ void MainProgram::drawSceneCreationScreen()
 }
 
 
+void MainProgram::drawFileSelectTexts()
+{
+	// Empty
+}
+
+
 void MainProgram::drawMainScreenTexts()
 {
 	// Make the buffer that will hold the text
@@ -369,8 +472,10 @@ void MainProgram::drawMainScreenTexts()
 
 	this->fontBatch.begin();
 
-	std::map<int, std::pair<std::string, Dialogue>> scenes = this->sceneManager->getScenes();
-	int currentY = 157;
+	// Get scenes to be shown
+	std::map<int, std::pair<std::string, Dialogue>> scenes = this->getShownScenes(this->sceneManager->getScenes());
+
+	int currentY = 191;
 	for (unsigned i = 0; i < scenes.size(); i++) {
 		// Fill the buffer with the text
 		sprintf_s(buffer, "%s", scenes[i].first.c_str());
@@ -384,7 +489,7 @@ void MainProgram::drawMainScreenTexts()
 			Bengine::ColorRGBA8(0, 0, 0, 255)
 		);
 
-		currentY += 100;
+		currentY += 87;
 	}
 
 	this->fontBatch.end();
@@ -421,4 +526,34 @@ void MainProgram::drawSceneCreationScreenTexts()
 
 	this->fontBatch.end();
 	this->fontBatch.renderBatch();
+}
+
+
+std::map<int, std::pair<std::string, Dialogue>> MainProgram::getShownScenes(std::map<int, std::pair<std::string, Dialogue>> allScenes)
+{
+	std::map<int, std::pair<std::string, Dialogue>> shownScenes;
+
+	// If there's more scenes that can be shown, only pick 4
+	if (allScenes.size() > 4) {
+		// Get 4 items from the map
+		auto end = allScenes.end();
+		int counter = 0;
+
+		for (auto it = allScenes.begin(); it != end; it++) {
+			if (counter == this->currentSceneListIdx) {
+				// Put the 4 scenes that will be shown into the 'shownScenes' vector
+				for (unsigned i = 0; i < 4; i++) {
+					shownScenes.emplace(i, it->second);
+					it++;
+				}
+
+				break;
+			}
+
+			counter++;
+		}
+	}
+
+	if (shownScenes.size() == 0) return allScenes;
+	else return shownScenes;
 }

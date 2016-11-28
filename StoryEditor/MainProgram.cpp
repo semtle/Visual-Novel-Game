@@ -143,9 +143,11 @@ void MainProgram::checkMainScreenInputs()
 {
 	glm::vec2 mouseCoords = this->inputManager.getMouseCoords();
 
+	glm::vec4 dim = this->getInputDimensions(this->addNewDestRect);
+	
 	// Mouse is inside the 'add new' button
-	if (mouseCoords.x > 31 && mouseCoords.x < 165) {
-		if (mouseCoords.y > this->screenHeight - 58 && mouseCoords.y < this->screenHeight - 20) {
+	if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+		if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 			if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 				this->currentState = ProgramState::ADDSCENE;
@@ -153,13 +155,12 @@ void MainProgram::checkMainScreenInputs()
 		}
 	}
 
-	static const glm::vec4 upArrowDestDect(-this->screenWidth / 2 + 52, this->screenHeight / 2 - 150, 86, 43);
-	static const glm::vec4 downArrowDestDect(-this->screenWidth / 2 + 52, -this->screenHeight / 2 + 60, 86, 43);
+	dim = this->getInputDimensions(this->upArrowDestDect);
 
 	// Mouse is inside the up arrow
 	if (this->currentSceneListIdx > 0) {
-		if (mouseCoords.x > 52 && mouseCoords.x < 138) {
-			if (mouseCoords.y > 107 && mouseCoords.y < 150) {
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
@@ -169,10 +170,12 @@ void MainProgram::checkMainScreenInputs()
 		}
 	}
 
+	dim = this->getInputDimensions(this->downArrowDestDect);
+
 	// Mouse is inside the down arrow
 	if (this->sceneManager->getScenes().size() > 4 && this->currentSceneListIdx < this->sceneManager->getScenes().size() - 4) {
-		if (mouseCoords.x > 52 && mouseCoords.x < 138) {
-			if (mouseCoords.y > 497 && mouseCoords.y < 540) {
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
@@ -188,13 +191,11 @@ void MainProgram::checkSceneCreationScreenInputs()
 {
 	glm::vec2 mouseCoords = this->inputManager.getMouseCoords();
 
-	// Get cancel button's location
-	static const int cancelButtonX = this->screenWidth / 2 + this->BUTTONS_MIDDLE_HORIZONTAL_RADIUS;
-	static const int cancelButtonY = this->screenHeight / 2 + abs(this->BUTTONS_MIDDLE_VERTICAL_RADIUS) - this->BUTTON_HEIGHT;
+	glm::vec4 dim = this->getInputDimensions(this->cancelBtnDestRect);
 
 	// Mouse is inside the 'Cancel' button
-	if (mouseCoords.x > cancelButtonX && mouseCoords.x < cancelButtonX + this->BUTTON_WIDTH) {
-		if (mouseCoords.y > cancelButtonY && mouseCoords.y < cancelButtonY + this->BUTTON_HEIGHT) {
+	if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+		if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 			if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
@@ -203,13 +204,11 @@ void MainProgram::checkSceneCreationScreenInputs()
 		}
 	}
 
-	// Get create button's location
-	static const int createButtonX = this->screenWidth / 2 - this->BUTTONS_MIDDLE_HORIZONTAL_RADIUS - this->BUTTON_WIDTH;
-	static const int createButtonY = this->screenHeight / 2 + abs(this->BUTTONS_MIDDLE_VERTICAL_RADIUS) - this->BUTTON_HEIGHT;
+	dim = this->getInputDimensions(this->createBtnDestRect);
 
 	// Mouse is inside the 'Create' button
-	if (mouseCoords.x > createButtonX && mouseCoords.x < createButtonX + this->BUTTON_WIDTH) {
-		if (mouseCoords.y > createButtonY && mouseCoords.y < createButtonY + this->BUTTON_HEIGHT) {
+	if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+		if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 			if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 				
@@ -275,7 +274,7 @@ void MainProgram::drawScreen()
 	// Set the base depth to 1.0
 	glClearDepth(1.0f);
 
-	// Clear the depth and color buffers
+	// Clear the depth and this->color buffers
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// Use the shader program
@@ -329,66 +328,45 @@ void MainProgram::drawMainScreen()
 	static const unsigned int add_new_button = Bengine::ResourceManager::getTexture("Textures/addnew.png").id;
 	static const unsigned int sceneBox = Bengine::ResourceManager::getTexture("Textures/scene-box.png").id;
 
-	// Arrows
-	static const glm::vec4 upArrowDestDect(-this->screenWidth / 2 + 52, this->screenHeight / 2 - 150, 86, 43);
-	static const glm::vec4 downArrowDestDect(-this->screenWidth / 2 + 52, -this->screenHeight / 2 + 60, 86, 43);
-
-	// Background
-	static const glm::vec4 bgDestRect(-this->screenWidth / 2, -this->screenHeight / 2, this->screenWidth, this->screenHeight);
-
-	// 'Add New' -button
-	static const glm::vec4 addNewDestRect(-this->screenWidth / 2 + 31, -this->screenHeight / 2 + 20, 134, 34);
-
-	// Box for scene information
-	static glm::vec4 sceneBoxDestRect(-this->screenWidth / 2 + 7, this->screenHeight / 2 - 234, 185, 85);
-
-	// Main UV-Rect
-	static const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
-
-	// UV-Rect for up-arrow (rotate arrow 180 degrees)
-	static const glm::vec4 upArrowUvRect(0.0f, 0.0f, 1.0f, -1.0f);
-
-	static const Bengine::ColorRGBA8 color(255, 255, 255, 255);
-
 	std::map<int, std::pair<std::string, Dialogue>> allScenes = this->sceneManager->getScenes();
 
 	// BG
 	this->spriteBatch.draw(
-		bgDestRect,
-		uvRect,
+		this->mainBgDestRect,
+		this->mainUvRect,
 		main_background,
 		0.0f,
-		color
+		this->color
 	);
 
 	// Add new -button
 	this->spriteBatch.draw(
-		addNewDestRect,
-		uvRect,
+		this->addNewDestRect,
+		this->mainUvRect,
 		add_new_button,
 		0.0f,
-		color
+		this->color
 	);
 
 	// Up arrow
 	if (this->currentSceneListIdx > 0) {
 		this->spriteBatch.draw(
-			upArrowDestDect,
-			upArrowUvRect,
+			this->upArrowDestDect,
+			this->upArrowUvRect,
 			arrow,
 			0.0f,
-			color
+			this->color
 		);
 	}
 
 	// Down arrow
 	if (allScenes.size() > 4 && this->currentSceneListIdx < allScenes.size() - 4) {
 		this->spriteBatch.draw(
-			downArrowDestDect,
-			uvRect,
+			this->downArrowDestDect,
+			this->mainUvRect,
 			arrow,
 			0.0f,
-			color
+			this->color
 		);
 	}
 	
@@ -397,11 +375,11 @@ void MainProgram::drawMainScreen()
 	glm::vec4 originalDestRect = sceneBoxDestRect;
 	for (unsigned i = 0; i < shownScenes.size(); i++) {
 		this->spriteBatch.draw(
-			sceneBoxDestRect,
-			uvRect,
+			this->sceneBoxDestRect,
+			this->mainUvRect,
 			sceneBox,
 			0.0f,
-			color
+			this->color
 		);
 		sceneBoxDestRect.y -= 87;
 	}
@@ -414,40 +392,32 @@ void MainProgram::drawSceneCreationScreen()
 	static const unsigned int background = Bengine::ResourceManager::getTexture("Textures/newscene.png").id;
 	static const unsigned int cancelButton = Bengine::ResourceManager::getTexture("Textures/cancel-button.png").id;
 	static const unsigned int createButton = Bengine::ResourceManager::getTexture("Textures/create-button.png").id;
-	
-	static const glm::vec4 bgDestRect(-this->screenWidth / 2, -this->screenHeight / 2, this->screenWidth, this->screenHeight);
-	static const glm::vec4 cancelBtnDestRect(this->BUTTONS_MIDDLE_HORIZONTAL_RADIUS, this->BUTTONS_MIDDLE_VERTICAL_RADIUS, this->BUTTON_WIDTH, this->BUTTON_HEIGHT);
-	static const glm::vec4 createBtnDestRect(-this->BUTTONS_MIDDLE_HORIZONTAL_RADIUS - 149, this->BUTTONS_MIDDLE_VERTICAL_RADIUS, this->BUTTON_WIDTH, this->BUTTON_HEIGHT);
 
-	static const glm::vec4 addNewDestRect(-this->screenWidth / 2 + 50, -this->screenHeight / 2 + 30, 149, 38);
-	static const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
-	static const Bengine::ColorRGBA8 color(255, 255, 255, 255);
-
-	// Background (banner, bg color)
+	// Background (banner, bg this->color)
 	this->spriteBatch.draw(
-		bgDestRect,
-		uvRect,
+		this->mainBgDestRect,
+		this->mainUvRect,
 		background,
 		0.0f,
-		color
+		this->color
 	);
 
 	// Cancel button
 	this->spriteBatch.draw(
-		cancelBtnDestRect,
-		uvRect,
+		this->cancelBtnDestRect,
+		this->mainUvRect,
 		cancelButton,
 		0.0f,
-		color
+		this->color
 	);
 
 	// Create button
 	this->spriteBatch.draw(
-		createBtnDestRect,
-		uvRect,
+		this->createBtnDestRect,
+		this->mainUvRect,
 		createButton,
 		0.0f,
-		color
+		this->color
 	);
 }
 
@@ -556,4 +526,13 @@ std::map<int, std::pair<std::string, Dialogue>> MainProgram::getShownScenes(std:
 
 	if (shownScenes.size() == 0) return allScenes;
 	else return shownScenes;
+}
+
+
+glm::vec4 MainProgram::getInputDimensions(glm::vec4 texture)
+{
+	texture.x = texture.x + this->screenWidth / 2;
+	texture.y = abs((texture.y + this->screenHeight / 2) - this->screenHeight) - texture.a; // Flips the y value
+
+	return texture;
 }

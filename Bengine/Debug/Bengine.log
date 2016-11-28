@@ -1,53 +1,27 @@
-﻿Build started 25/11/2016 13:15:41.
-     1>Project "C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Bengine\Bengine.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\Bengine.pdb" /Gd /TP /analyze- /errorReport:prompt AudioEngine.cpp Bengine.cpp Camera2D.cpp BengineErrors.cpp GLSLProgram.cpp ImageLoader.cpp InputManager.cpp IOManager.cpp picoPNG.cpp ResourceManager.cpp Sprite.cpp SpriteBatch.cpp SpriteFont.cpp TextureCache.cpp Timing.cpp Window.cpp
-         Window.cpp
-         Timing.cpp
-     1>c:\users\s1400589\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\timing.cpp(45): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
-     1>c:\users\s1400589\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\timing.cpp(50): warning C4244: 'argument': conversion from 'float' to 'Uint32', possible loss of data
-     1>c:\users\s1400589\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\timing.cpp(64): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
-     1>c:\users\s1400589\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\timing.cpp(67): warning C4244: '=': conversion from 'Uint32' to 'float', possible loss of data
-         TextureCache.cpp
-         SpriteFont.cpp
-         SpriteBatch.cpp
-     1>c:\users\s1400589\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\spritebatch.cpp(56): warning C4018: '<': signed/unsigned mismatch
-     1>c:\users\s1400589\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\spritebatch.cpp(77): warning C4018: '<': signed/unsigned mismatch
-         Sprite.cpp
-         ResourceManager.cpp
-         picoPNG.cpp
-         IOManager.cpp
-     1>c:\users\s1400589\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\iomanager.cpp(19): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
-     1>c:\users\s1400589\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\iomanager.cpp(25): warning C4244: '-=': conversion from 'std::streamoff' to 'int', possible loss of data
-         InputManager.cpp
-         ImageLoader.cpp
-         GLSLProgram.cpp
-         BengineErrors.cpp
-         Camera2D.cpp
-         Bengine.cpp
-         AudioEngine.cpp
-         Generating Code...
-     1>c:\users\s1400589\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\inputmanager.cpp(39): warning C4715: 'Bengine::InputManager::isKeyDown': not all control paths return a value
-       Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\Lib.exe /OUT:"C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\Bengine.lib" /NOLOGO Debug\AudioEngine.obj
-         Debug\Bengine.obj
-         Debug\Camera2D.obj
-         Debug\BengineErrors.obj
-         Debug\GLSLProgram.obj
-         Debug\ImageLoader.obj
-         Debug\InputManager.obj
-         Debug\IOManager.obj
-         Debug\picoPNG.obj
-         Debug\ResourceManager.obj
-         Debug\Sprite.obj
-         Debug\SpriteBatch.obj
-         Debug\SpriteFont.obj
-         Debug\TextureCache.obj
-         Debug\Timing.obj
-         Debug\Window.obj
-         Bengine.vcxproj -> C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\Bengine.lib
-     1>Done Building Project "C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Bengine\Bengine.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:13.23
+﻿  Window.cpp
+  Timing.cpp
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\timing.cpp(45): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\timing.cpp(50): warning C4244: 'argument': conversion from 'float' to 'Uint32', possible loss of data
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\timing.cpp(64): warning C4244: 'initializing': conversion from 'Uint32' to 'float', possible loss of data
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\timing.cpp(67): warning C4244: '=': conversion from 'Uint32' to 'float', possible loss of data
+  TextureCache.cpp
+  SpriteFont.cpp
+  SpriteBatch.cpp
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\spritebatch.cpp(56): warning C4018: '<': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\spritebatch.cpp(77): warning C4018: '<': signed/unsigned mismatch
+  Sprite.cpp
+  ResourceManager.cpp
+  picoPNG.cpp
+  IOManager.cpp
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\iomanager.cpp(19): warning C4244: 'initializing': conversion from 'std::streamoff' to 'int', possible loss of data
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\iomanager.cpp(25): warning C4244: '-=': conversion from 'std::streamoff' to 'int', possible loss of data
+  InputManager.cpp
+  ImageLoader.cpp
+  GLSLProgram.cpp
+  BengineErrors.cpp
+  Camera2D.cpp
+  Bengine.cpp
+  AudioEngine.cpp
+  Generating Code...
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\inputmanager.cpp(39): warning C4715: 'Bengine::InputManager::isKeyDown': not all control paths return a value
+  Bengine.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\Bengine.lib

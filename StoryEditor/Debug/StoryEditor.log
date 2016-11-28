@@ -1,18 +1,8 @@
-﻿Build started 25/11/2016 13:15:55.
-     1>Project "C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\StoryEditor\StoryEditor.vcxproj" on node 2 (Build target(s)).
-     1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Debug\\" /Fd"Debug\vc140.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp MainProgram.cpp SceneManager.cpp
-         SceneManager.cpp
-         MainProgram.cpp
-         main.cpp
-         Generating Code...
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\StoryEditor.exe" /INCREMENTAL /NOLOGO SDL2.lib SDL2main.lib SDL2_ttf.lib SDL2_mixer.lib opengl32.lib glew32.lib Bengine.lib "libyaml-cppmdd.lib" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG:FASTLINK /PDB:"C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\StoryEditor.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\StoryEditor.lib" /MACHINE:X86 Debug\main.obj
-         Debug\MainProgram.obj
-         Debug\SceneManager.obj
-         StoryEditor.vcxproj -> C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\StoryEditor.exe
-     1>Done Building Project "C:\Users\s1400589\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\StoryEditor\StoryEditor.vcxproj" (Build target(s)).
-
-Build succeeded.
-
-Time Elapsed 00:00:05.76
+﻿  SceneManager.cpp
+  MainProgram.cpp
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(356): warning C4018: '<': signed/unsigned mismatch
+  main.cpp
+  Generating Code...
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(529): warning C4715: 'MainProgram::getShownScenes': not all control paths return a value
+  StoryEditor.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\StoryEditor.exe
+  StoryEditor.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\StoryEditor.pdb (Partial PDB)

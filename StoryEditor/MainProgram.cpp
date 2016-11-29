@@ -220,7 +220,8 @@ void MainProgram::checkMainScreenInputs()
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
-					std::cout << "Clicked on scene box\n";
+					// Open the clicked scene
+					this->selectedSceneIdx = this->shownSceneIndexes[i];
 				}
 			}
 		}
@@ -507,6 +508,57 @@ void MainProgram::drawCurrentDialogue()
 {
 	static const unsigned int blackBox = Bengine::ResourceManager::getTexture("Textures/schoolyard.png").id;
 	static const unsigned int textBox = Bengine::ResourceManager::getTexture("Textures/TextBoxBlue.png").id;
+
+	static const unsigned int bgBtn = Bengine::ResourceManager::getTexture("Textures/bg-button.png").id;
+	static const unsigned int char1Btn = Bengine::ResourceManager::getTexture("Textures/char1-button.png").id;
+	static const unsigned int char2Btn = Bengine::ResourceManager::getTexture("Textures/char2-button.png").id;
+	static const unsigned int saveBtn = Bengine::ResourceManager::getTexture("Textures/save-button.png").id;
+	static const unsigned int deleteBtn = Bengine::ResourceManager::getTexture("Textures/delete-button.png").id;
+
+	// Get the dialogues of the selected scene
+	std::vector<Dialogue *> dialogues = this->sceneManager->getScenes()[this->selectedSceneIdx].second;
+
+	/*std::cout << "Dialogues size: " << dialogues.size() << "\n";*/
+
+	this->spriteBatch.draw(
+		this->bgBtnDestRect,
+		this->mainUvRect,
+		bgBtn,
+		0.0f,
+		this->color
+	);
+
+	this->spriteBatch.draw(
+		this->char1BtnDestRect,
+		this->mainUvRect,
+		char1Btn,
+		0.0f,
+		this->color
+	);
+
+	this->spriteBatch.draw(
+		this->saveBtnDestRect,
+		this->mainUvRect,
+		saveBtn,
+		0.0f,
+		this->color
+	);
+
+	this->spriteBatch.draw(
+		this->deleteBtnDestRect,
+		this->mainUvRect,
+		deleteBtn,
+		0.0f,
+		this->color
+	);
+
+	this->spriteBatch.draw(
+		this->char2BtnDestRect,
+		this->mainUvRect,
+		char2Btn,
+		0.0f,
+		this->color
+	);
 
 	/*
 	this->spriteBatch.draw(

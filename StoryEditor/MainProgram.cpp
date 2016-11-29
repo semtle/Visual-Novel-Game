@@ -176,7 +176,13 @@ void MainProgram::checkMainScreenInputs()
 		if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 			if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
-				this->currentState = ProgramState::ADDSCENE;
+
+				if (this->selectedSceneIdx == -1) {
+					this->currentState = ProgramState::ADDSCENE;
+				}
+				else {
+					this->currentState = ProgramState::ADD_DIALOGUE;
+				}
 			}
 		}
 	}
@@ -184,7 +190,7 @@ void MainProgram::checkMainScreenInputs()
 	dim = this->getInputDimensions(this->upArrowDestDect);
 
 	// Mouse is inside the up arrow
-	if (this->currentSceneListIdx > 0) {
+	if (this->currentSceneListIdx > 0 && this->selectedSceneIdx == -1) {
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
@@ -199,7 +205,7 @@ void MainProgram::checkMainScreenInputs()
 	dim = this->getInputDimensions(this->downArrowDestDect);
 
 	// Mouse is inside the down arrow
-	if (this->sceneManager->getScenes().size() > 5 && this->currentSceneListIdx < this->sceneManager->getScenes().size() - 5) {
+	if (this->sceneManager->getScenes().size() > 5 && this->currentSceneListIdx < this->sceneManager->getScenes().size() - 5 && this->selectedSceneIdx == -1) {
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
@@ -223,6 +229,20 @@ void MainProgram::checkMainScreenInputs()
 					// Open the clicked scene
 					this->selectedSceneIdx = this->shownSceneIndexes[i];
 				}
+			}
+		}
+	}
+
+	dim = getInputDimensions(this->arrowLeftDestRect);
+
+	// Check if the back arrow was clicked on
+	if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+		if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+			if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+				this->selectedSceneIdx = -1;
+				this->selectedDialogueIdx = -1;
 			}
 		}
 	}
@@ -258,6 +278,7 @@ void MainProgram::checkSceneCreationScreenInputs()
 					this->sceneManager->addScene(this->currentSceneName);
 				}
 				else if (this->currentState == ProgramState::ADD_DIALOGUE) {
+					this->currentDialogue.name = this->currentDialogueName;
 					this->sceneManager->addDialogue(this->selectedSceneIdx, &this->currentDialogue);
 				}
 
@@ -403,12 +424,12 @@ void MainProgram::drawScreen()
 	this->spriteBatch.begin();
 
 	if (this->currentState == ProgramState::MAINSCREEN) this->drawMainScreen();
-	else if (this->currentState == ProgramState::ADDSCENE) this->drawSceneCreationScreen();
+	else if (this->currentState == ProgramState::ADDSCENE || this->currentState == ProgramState::ADD_DIALOGUE) this->drawSceneCreationScreen();
 
 	this->spriteBatch.end();
 	this->spriteBatch.renderBatch();
 
-	if (this->currentState == ProgramState::ADDSCENE) this->drawSceneCreationScreenTexts();
+	if (this->currentState == ProgramState::ADDSCENE || this->currentState == ProgramState::ADD_DIALOGUE) this->drawSceneCreationScreenTexts();
 	else if (this->currentState == ProgramState::MAINSCREEN) this->drawMainScreenTexts();
 
 	// Unbind the texture
@@ -434,6 +455,7 @@ void MainProgram::drawMainScreen()
 	static const unsigned int arrow = Bengine::ResourceManager::getTexture("Textures/arrow.png").id;
 	static const unsigned int add_new_button = Bengine::ResourceManager::getTexture("Textures/addnew.png").id;
 	static const unsigned int sceneBox = Bengine::ResourceManager::getTexture("Textures/scene-box.png").id;
+	static const unsigned int arrowSide = Bengine::ResourceManager::getTexture("Textures/arrow-side.png").id;
 
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> allScenes = this->sceneManager->getScenes();
 
@@ -456,7 +478,7 @@ void MainProgram::drawMainScreen()
 	);
 
 	// Up arrow
-	if (this->currentSceneListIdx > 0) {
+	if (this->currentSceneListIdx > 0 && this->selectedSceneIdx == -1) {
 		this->spriteBatch.draw(
 			this->upArrowDestDect,
 			this->upArrowUvRect,
@@ -467,7 +489,7 @@ void MainProgram::drawMainScreen()
 	}
 
 	// Down arrow
-	if (allScenes.size() > 5 && this->currentSceneListIdx < allScenes.size() - 5) {
+	if (allScenes.size() > 5 && this->currentSceneListIdx < allScenes.size() - 5 && this->selectedSceneIdx == -1) {
 		this->spriteBatch.draw(
 			this->downArrowDestDect,
 			this->mainUvRect,
@@ -476,6 +498,15 @@ void MainProgram::drawMainScreen()
 			this->color
 		);
 	}
+
+	// Left arrow (back)
+	this->spriteBatch.draw(
+		this->arrowLeftDestRect,
+		glm::vec4(0.0f, 0.0f, -1.0f, 1.0f),
+		arrowSide,
+		0.0f,
+		this->color
+	);
 
 	// Draw dialogue editor
 	if (this->selectedSceneIdx != -1) this->drawCurrentDialogue();
@@ -499,7 +530,19 @@ void MainProgram::drawMainScreen()
 	}
 	// If a scene is selected, show list of the dialogues
 	else {
+		std::vector<Dialogue *> dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
+		glm::vec4 destRect = this->sceneBoxDestRect;
 
+		for (unsigned i = 0; i < dialogues.size(); i++) {
+			this->spriteBatch.draw(
+				destRect,
+				this->mainUvRect,
+				sceneBox,
+				0.0f,
+				this->color
+			);
+			destRect.y -= this->sceneBlockPositionDiff;
+		}
 	}
 }
 
@@ -520,45 +563,48 @@ void MainProgram::drawCurrentDialogue()
 
 	/*std::cout << "Dialogues size: " << dialogues.size() << "\n";*/
 
-	this->spriteBatch.draw(
-		this->bgBtnDestRect,
-		this->mainUvRect,
-		bgBtn,
-		0.0f,
-		this->color
-	);
+	// Buttons for dialogue editing, only show if a dialogue is selected
+	if (this->selectedDialogueIdx != -1) {
+		this->spriteBatch.draw(
+			this->bgBtnDestRect,
+			this->mainUvRect,
+			bgBtn,
+			0.0f,
+			this->color
+		);
 
-	this->spriteBatch.draw(
-		this->char1BtnDestRect,
-		this->mainUvRect,
-		char1Btn,
-		0.0f,
-		this->color
-	);
+		this->spriteBatch.draw(
+			this->char1BtnDestRect,
+			this->mainUvRect,
+			char1Btn,
+			0.0f,
+			this->color
+		);
 
-	this->spriteBatch.draw(
-		this->saveBtnDestRect,
-		this->mainUvRect,
-		saveBtn,
-		0.0f,
-		this->color
-	);
+		this->spriteBatch.draw(
+			this->saveBtnDestRect,
+			this->mainUvRect,
+			saveBtn,
+			0.0f,
+			this->color
+		);
 
-	this->spriteBatch.draw(
-		this->deleteBtnDestRect,
-		this->mainUvRect,
-		deleteBtn,
-		0.0f,
-		this->color
-	);
+		this->spriteBatch.draw(
+			this->deleteBtnDestRect,
+			this->mainUvRect,
+			deleteBtn,
+			0.0f,
+			this->color
+		);
 
-	this->spriteBatch.draw(
-		this->char2BtnDestRect,
-		this->mainUvRect,
-		char2Btn,
-		0.0f,
-		this->color
-	);
+		this->spriteBatch.draw(
+			this->char2BtnDestRect,
+			this->mainUvRect,
+			char2Btn,
+			0.0f,
+			this->color
+		);
+	}
 
 	/*
 	this->spriteBatch.draw(
@@ -614,6 +660,7 @@ void MainProgram::drawSceneCreationScreen()
 		);
 	}
 	else if (this->currentState == ProgramState::ADD_DIALOGUE) {
+		std::cout << "Drawing add dialogue\n";
 		this->spriteBatch.draw(
 			this->mainBgDestRect,
 			this->mainUvRect,
@@ -667,20 +714,44 @@ void MainProgram::drawMainScreenTexts()
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> scenes = this->getShownScenes(this->sceneManager->getScenes());
 
 	int currentY = 196;
-	for (unsigned i = 0; i < scenes.size(); i++) {
-		// Fill the buffer with the text
-		sprintf_s(buffer, "%s", scenes[i].first.c_str());
 
-		this->spriteFont->draw(
-			this->fontBatch,
-			buffer,
-			glm::vec2(25, this->screenHeight - currentY),
-			glm::vec2(0.7f),
-			0.0f,
-			Bengine::ColorRGBA8(0, 0, 0, 255)
-		);
+	// Scene names, only show if a scene isn't opened
+	if (this->selectedSceneIdx == -1) {
+		for (unsigned i = 0; i < scenes.size(); i++) {
+			// Fill the buffer with the text
+			sprintf_s(buffer, "%s", scenes[i].first.c_str());
 
-		currentY += 90;
+			this->spriteFont->draw(
+				this->fontBatch,
+				buffer,
+				glm::vec2(25, this->screenHeight - currentY),
+				glm::vec2(0.7f),
+				0.0f,
+				Bengine::ColorRGBA8(0, 0, 0, 255)
+			);
+
+			currentY += 90;
+		}
+	}
+	// Dialogue names, show if a scene is selected
+	else {
+		std::vector<Dialogue *> dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
+
+		for (unsigned i = 0; i < dialogues.size(); i++) {
+			// Fill the buffer with the text
+			sprintf_s(buffer, "%s", dialogues[i]->name.c_str());
+
+			this->spriteFont->draw(
+				this->fontBatch,
+				buffer,
+				glm::vec2(25, this->screenHeight - currentY),
+				glm::vec2(0.7f),
+				0.0f,
+				Bengine::ColorRGBA8(0, 0, 0, 255)
+			);
+
+			currentY += 90;
+		}
 	}
 
 	this->fontBatch.end();
@@ -703,7 +774,12 @@ void MainProgram::drawSceneCreationScreenTexts()
 	this->fontBatch.begin();
 
 	// Fill the buffer with the text
-	sprintf_s(buffer, "%s", this->currentSceneName.c_str());
+	if (this->currentState == ProgramState::ADDSCENE) {
+		sprintf_s(buffer, "%s", this->currentSceneName.c_str());
+	}
+	else if (this->currentState == ProgramState::ADD_DIALOGUE) {
+		sprintf_s(buffer, "%s", this->currentDialogueName.c_str());
+	}
 
 	this->spriteFont->draw(
 		this->fontBatch,

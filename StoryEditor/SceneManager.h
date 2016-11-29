@@ -21,6 +21,7 @@
 struct Dialogue {
 	Dialogue() :
 		index(-1),
+		name(""),
 		talking(""),
 		left(std::pair<std::string, std::string>("", "")),
 		right(std::pair<std::string, std::string>("", "")),
@@ -30,6 +31,7 @@ struct Dialogue {
 
 	Dialogue(
 		int Index,
+		std::string Name,
 		std::string Talking,
 		std::pair<std::string, std::string> Left,
 		std::pair<std::string, std::string> Right,
@@ -37,6 +39,7 @@ struct Dialogue {
 		int NextDialogue
 	) :
 		index(Index),
+		name(Name),
 		talking(Talking),
 		left(Left),
 		right(Right),
@@ -45,6 +48,7 @@ struct Dialogue {
 	{ }
 
 	int index;
+	std::string name;
 	std::string talking;
 	std::pair<std::string, std::string> left;
 	std::pair<std::string, std::string> right;
@@ -67,6 +71,7 @@ public:
 
 	// Getters
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> getScenes() const { return this->scenes; }
+	std::vector<Dialogue *> getDialogues(int idx) { return this->scenes[idx].second; }
 
 	
 private:

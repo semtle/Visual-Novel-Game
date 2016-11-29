@@ -1,5 +1,5 @@
 ﻿  MainProgram.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(202): warning C4018: '<': signed/unsigned mismatch
-c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(469): warning C4018: '<': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(208): warning C4018: '<': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(491): warning C4018: '<': signed/unsigned mismatch
   StoryEditor.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\StoryEditor.exe
   StoryEditor.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\StoryEditor.pdb (Partial PDB)

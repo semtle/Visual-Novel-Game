@@ -39,6 +39,8 @@ public:
 	void drawMainScreen();
 	void drawCurrentDialogue();
 
+	void submitDialogue();
+
 	void drawSceneCreationScreen();
 
 	void drawFileSelectTexts();
@@ -46,6 +48,7 @@ public:
 	void drawSceneCreationScreenTexts();
 private:
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> getShownScenes(std::map<int, std::pair<std::string, std::vector<Dialogue *>>> allScenes);
+	std::vector<Dialogue *> getShownDialogues(std::vector<Dialogue *> allDialogues);
 	glm::vec4 getInputDimensions(glm::vec4 texture, bool swapy = true);
 
 	Bengine::Window window; ///< Main window
@@ -71,6 +74,7 @@ private:
 	int sceneBlockPositionDiff = 90;
 
 	std::vector<int> shownSceneIndexes;
+	std::vector<int> shownDialogueIndexes;
 
 	std::string currentSceneName = "";
 	std::string currentDialogueName = "";
@@ -141,6 +145,8 @@ private:
 	glm::vec4 upArrowUvRect = glm::vec4(0.0f, 0.0f, 1.0f, -1.0f);
 
 	int currentSceneListIdx = 0;
+	int currentDialogueListIdx = 0;
+
 	int selectedSceneIdx = -1;
 	int selectedDialogueIdx = -1;
 

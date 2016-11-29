@@ -4,6 +4,10 @@
 
 #include <iostream>
 #include <string>
+#include <algorithm>
+
+#include <windows.h>
+#include <Commdlg.h>
 
 #include <Bengine/Bengine.h>
 #include <Bengine/Window.h>
@@ -46,6 +50,8 @@ public:
 	void drawFileSelectTexts();
 	void drawMainScreenTexts();
 	void drawSceneCreationScreenTexts();
+
+	std::wstring getOpenFileName(HWND owner);
 private:
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> getShownScenes(std::map<int, std::pair<std::string, std::vector<Dialogue *>>> allScenes);
 	std::vector<Dialogue *> getShownDialogues(std::vector<Dialogue *> allDialogues);
@@ -79,7 +85,7 @@ private:
 	std::string currentSceneName = "";
 	std::string currentDialogueName = "";
 
-	Dialogue currentDialogue;
+	Dialogue* currentDialogue;
 
 	std::vector<std::pair<int, glm::vec2>> shownSceneBlockPositions;
 	std::vector<std::pair<int, glm::vec2>> showDialogueBoxPositions;
@@ -100,7 +106,7 @@ private:
 	// Create button
 	glm::vec4 createBtnDestRect = glm::vec4(-this->BUTTONS_MIDDLE_HORIZONTAL_RADIUS - 149, this->BUTTONS_MIDDLE_VERTICAL_RADIUS, this->BUTTON_WIDTH, this->BUTTON_HEIGHT);
 
-	glm::vec4 blackBoxDestRect = glm::vec4(-this->screenWidth / 2 + 200, -this->screenHeight / 2 + 65, 600, 450);
+	glm::vec4 dialogueBgDestRect = glm::vec4(-this->screenWidth / 2 + 200, -this->screenHeight / 2 + 73, 600, 450);
 
 	// 'Add new' -button
 	glm::vec4 addNewBtnDestRect = glm::vec4(-this->screenWidth / 2 + 50, -this->screenHeight / 2 + 30, 149, 38);

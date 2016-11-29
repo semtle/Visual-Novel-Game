@@ -30,6 +30,8 @@ void MainProgram::initSystems()
 	// Initialize shaders
 	initShaders();
 
+	if (!debug_mode) this->loadBackgrounds();
+
 	// Initialize camera
 	this->camera.init(this->screenWidth, this->screenHeight);
 
@@ -59,6 +61,11 @@ void MainProgram::initShaders()
 	this->shaderProgram.addAttribute("vertexColor");
 	this->shaderProgram.addAttribute("vertexUV");
 	this->shaderProgram.linkShaders();
+}
+
+
+void MainProgram::loadBackgrounds()
+{
 }
 
 
@@ -326,7 +333,61 @@ void MainProgram::checkMainScreenInputs()
 
 					// Set the background
 					if (filePath.length() > 0) {
-						this->currentDialogue->background = Bengine::ResourceManager::getTexture(filePath).id;
+						this->currentDialogue->background = filePath;
+					}
+				}
+			}
+		}
+	}
+
+	// Char 1 button
+	if (this->currentDialogue != nullptr && this->currentDialogue->background != "") {
+		dim = this->getInputDimensions(this->char1BtnDestRect);
+
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					// Open up the file explorer to pick a background image
+					std::wstring wFilePath = this->getOpenFileName(NULL);
+
+					// Convert the filepath from a wide string to a regural string
+					std::string filePath = "";
+					for (char c : wFilePath) {
+						filePath += c;
+					}
+
+					// Set the background
+					if (filePath.length() > 0) {
+						this->currentDialogue->left = filePath;
+					}
+				}
+			}
+		}
+	}
+
+	// Char 2 button
+	if (this->currentDialogue != nullptr && this->currentDialogue->background != "") {
+		dim = this->getInputDimensions(this->char2BtnDestRect);
+
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					// Open up the file explorer to pick a background image
+					std::wstring wFilePath = this->getOpenFileName(NULL);
+
+					// Convert the filepath from a wide string to a regural string
+					std::string filePath = "";
+					for (char c : wFilePath) {
+						filePath += c;
+					}
+
+					// Set the background
+					if (filePath.length() > 0) {
+						this->currentDialogue->right = filePath;
 					}
 				}
 			}
@@ -350,8 +411,10 @@ void MainProgram::checkSceneCreationScreenInputs()
 				this->currentState = ProgramState::MAINSCREEN;
 				
 				// Set the current dialogue to be the last one when cancelling
-				std::vector<Dialogue *> dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
-				this->currentDialogue = dialogues[dialogues.size() - 1];
+				if (this->selectedSceneIdx != -1) {
+					std::vector<Dialogue *> dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
+					this->currentDialogue = dialogues[dialogues.size() - 1];
+				}
 			}
 		}
 	}
@@ -702,11 +765,31 @@ void MainProgram::drawCurrentDialogue()
 			this->color
 		);
 
-		if (this->currentDialogue != nullptr && this->currentDialogue->background != NULL) {
+		if (this->currentDialogue->background != "") {
 			this->spriteBatch.draw(
 				this->dialogueBgDestRect,
 				this->mainUvRect,
-				this->currentDialogue->background,
+				Bengine::ResourceManager::getTexture(this->currentDialogue->background).id,
+				0.0f,
+				this->color
+			);
+		}
+
+		if (this->currentDialogue->left != "") {
+			this->spriteBatch.draw(
+				this->leftCharDestRect,
+				this->flippedXUvRect,
+				Bengine::ResourceManager::getTexture(this->currentDialogue->left).id,
+				0.0f,
+				this->color
+			);
+		}
+
+		if (this->currentDialogue->right != "") {
+			this->spriteBatch.draw(
+				this->rightCharDestRect,
+				this->mainUvRect,
+				Bengine::ResourceManager::getTexture(this->currentDialogue->right).id,
 				0.0f,
 				this->color
 			);
@@ -1027,10 +1110,10 @@ void MainProgram::submitDialogue()
 		new Dialogue(
 			-1,
 			this->currentDialogueName,
-			NULL,
 			"",
-			std::pair<std::string, std::string>("", ""),
-			std::pair<std::string, std::string>("", ""),
+			"",
+			"",
+			"",
 			"",
 			-1
 		)
@@ -1052,6 +1135,7 @@ std::wstring MainProgram::getOpenFileName(HWND owner)
 	ofn.hwndOwner = owner;
 	ofn.lpstrFilter = L"PNG Files\0*.png\0";
 	ofn.nFilterIndex = 1;
+	ofn.lpstrTitle = L"Here you can browse your favorite anime collectionz and pls select an image with the .png extension or poop things will happening in game :-)";
 	ofn.lpstrFile = buffer;
 	ofn.nMaxFile = MAX_PATH;
 	ofn.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST;

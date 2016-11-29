@@ -22,6 +22,7 @@ struct Dialogue {
 	Dialogue() :
 		index(-1),
 		name(""),
+		background(NULL),
 		talking(""),
 		left(std::pair<std::string, std::string>("", "")),
 		right(std::pair<std::string, std::string>("", "")),
@@ -32,6 +33,7 @@ struct Dialogue {
 	Dialogue(
 		int Index,
 		std::string Name,
+		Uint32 Background,
 		std::string Talking,
 		std::pair<std::string, std::string> Left,
 		std::pair<std::string, std::string> Right,
@@ -40,6 +42,7 @@ struct Dialogue {
 	) :
 		index(Index),
 		name(Name),
+		background(Background),
 		talking(Talking),
 		left(Left),
 		right(Right),
@@ -49,6 +52,7 @@ struct Dialogue {
 
 	int index;
 	std::string name;
+	Uint32 background;
 	std::string talking;
 	std::pair<std::string, std::string> left;
 	std::pair<std::string, std::string> right;

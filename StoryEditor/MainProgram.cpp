@@ -200,6 +200,7 @@ void MainProgram::checkMainScreenInputs()
 					this->currentState = ProgramState::ADDSCENE;
 				}
 				else {
+					this->currentDialogue = nullptr;
 					this->currentState = ProgramState::ADD_DIALOGUE;
 				}
 			}
@@ -275,10 +276,13 @@ void MainProgram::checkMainScreenInputs()
 				if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 					if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 						this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+						std::cout << "Was clicked.\n";
 
 						// Open the clicked scene
-						//this->selectedSceneIdx = this->shownSceneIndexes[i];
-						std::cout << "Clicked on dialogue box idx " << this->shownDialogueIndexes[i] << "\n";
+						this->selectedDialogueIdx = this->shownDialogueIndexes[i];
+
+						// Set the current dialogue
+						this->currentDialogue = this->sceneManager->getDialogues(this->selectedSceneIdx)[this->selectedDialogueIdx];
 					}
 				}
 			}
@@ -296,6 +300,35 @@ void MainProgram::checkMainScreenInputs()
 				this->selectedSceneIdx = -1;
 				this->selectedDialogueIdx = -1;
 				this->currentDialogueListIdx = 0;
+
+				this->currentDialogue = nullptr;
+			}
+		}
+	}
+
+	// Background button
+	if (this->currentDialogue != nullptr) {
+		dim = this->getInputDimensions(this->bgBtnDestRect);
+
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					// Open up the file explorer to pick a background image
+					std::wstring wFilePath = this->getOpenFileName(NULL);
+
+					// Convert the filepath from a wide string to a regural string
+					std::string filePath = "";
+					for (char c : wFilePath) {
+						filePath += c;
+					}
+
+					// Set the background
+					if (filePath.length() > 0) {
+						this->currentDialogue->background = Bengine::ResourceManager::getTexture(filePath).id;
+					}
+				}
 			}
 		}
 	}
@@ -315,6 +348,10 @@ void MainProgram::checkSceneCreationScreenInputs()
 				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 				this->currentState = ProgramState::MAINSCREEN;
+				
+				// Set the current dialogue to be the last one when cancelling
+				std::vector<Dialogue *> dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
+				this->currentDialogue = dialogues[dialogues.size() - 1];
 			}
 		}
 	}
@@ -624,7 +661,7 @@ void MainProgram::drawCurrentDialogue()
 	/*std::cout << "Dialogues size: " << dialogues.size() << "\n";*/
 
 	// Buttons for dialogue editing, only show if a dialogue is selected
-	if (this->selectedDialogueIdx != -1) {
+	if (this->currentDialogue != nullptr) {
 		this->spriteBatch.draw(
 			this->bgBtnDestRect,
 			this->mainUvRect,
@@ -664,6 +701,16 @@ void MainProgram::drawCurrentDialogue()
 			0.0f,
 			this->color
 		);
+
+		if (this->currentDialogue != nullptr && this->currentDialogue->background != NULL) {
+			this->spriteBatch.draw(
+				this->dialogueBgDestRect,
+				this->mainUvRect,
+				this->currentDialogue->background,
+				0.0f,
+				this->color
+			);
+		}
 	}
 
 	/*
@@ -813,6 +860,20 @@ void MainProgram::drawMainScreenTexts()
 		}
 	}
 
+	if (this->currentDialogue != nullptr) {
+		sprintf_s(buffer, "%s", this->currentDialogue->name.c_str());
+
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(this->screenWidth - 20, 540),
+			glm::vec2(0.8f),
+			0.0f,
+			Bengine::ColorRGBA8(0, 0, 0, 255),
+			Bengine::Justification::RIGHT
+		);
+	}
+
 	this->fontBatch.end();
 	this->fontBatch.renderBatch();
 }
@@ -960,22 +1021,43 @@ glm::vec4 MainProgram::getInputDimensions(glm::vec4 texture, bool swapy)
 
 void MainProgram::submitDialogue()
 {
-	this->currentDialogue.name = this->currentDialogueName;
-
 	// Create a new dialogue
 	this->sceneManager->addDialogue(
 		this->selectedSceneIdx,
 		new Dialogue(
-			this->currentDialogue.index,
-			this->currentDialogue.name,
-			this->currentDialogue.talking,
-			this->currentDialogue.left,
-			this->currentDialogue.right,
-			this->currentDialogue.message,
-			this->currentDialogue.nextDialogue
+			-1,
+			this->currentDialogueName,
+			NULL,
+			"",
+			std::pair<std::string, std::string>("", ""),
+			std::pair<std::string, std::string>("", ""),
+			"",
+			-1
 		)
 	);
 
-	// Reset the dialogue
-	this->currentDialogue = Dialogue();
+	std::vector<Dialogue *> dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
+
+	this->currentDialogue = dialogues[dialogues.size() - 1];
+}
+
+
+std::wstring MainProgram::getOpenFileName(HWND owner)
+{
+	wchar_t buffer[MAX_PATH];
+
+	OPENFILENAMEW ofn = { 0 };
+
+	ofn.lStructSize = sizeof(ofn);
+	ofn.hwndOwner = owner;
+	ofn.lpstrFilter = L"PNG Files\0*.png\0";
+	ofn.nFilterIndex = 1;
+	ofn.lpstrFile = buffer;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST;
+
+	if (!GetOpenFileNameW(&ofn))
+		return L"";
+
+	return buffer;
 }

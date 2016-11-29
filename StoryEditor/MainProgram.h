@@ -29,6 +29,7 @@ public:
 	void run();
 	void initSystems();
 	void initShaders();
+	void loadBackgrounds();
 	void gameLoop();
 	void processInput();
 	void drawScreen();
@@ -53,6 +54,8 @@ public:
 
 	std::wstring getOpenFileName(HWND owner);
 private:
+	bool debug_mode = false;
+
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> getShownScenes(std::map<int, std::pair<std::string, std::vector<Dialogue *>>> allScenes);
 	std::vector<Dialogue *> getShownDialogues(std::vector<Dialogue *> allDialogues);
 	glm::vec4 getInputDimensions(glm::vec4 texture, bool swapy = true);
@@ -106,13 +109,23 @@ private:
 	// Create button
 	glm::vec4 createBtnDestRect = glm::vec4(-this->BUTTONS_MIDDLE_HORIZONTAL_RADIUS - 149, this->BUTTONS_MIDDLE_VERTICAL_RADIUS, this->BUTTON_WIDTH, this->BUTTON_HEIGHT);
 
+	// BG of the current dialog
 	glm::vec4 dialogueBgDestRect = glm::vec4(-this->screenWidth / 2 + 200, -this->screenHeight / 2 + 73, 600, 450);
+
+	// Left character
+	glm::vec4 leftCharDestRect = glm::vec4(-this->screenWidth / 2 + 255, -this->screenHeight / 2 + 73, 165, 440);
+
+	// Left character
+	glm::vec4 rightCharDestRect = glm::vec4(-this->screenWidth / 2 + 565, -this->screenHeight / 2 + 73, 165, 440);
 
 	// 'Add new' -button
 	glm::vec4 addNewBtnDestRect = glm::vec4(-this->screenWidth / 2 + 50, -this->screenHeight / 2 + 30, 149, 38);
 
 	// Main UV rect for most textures
 	glm::vec4 mainUvRect = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+
+	// Flipped x uv rect
+	glm::vec4 flippedXUvRect = glm::vec4(0.0f, 0.0f, -1.0f, 1.0f);
 
 	// Main color
 	Bengine::ColorRGBA8 color = Bengine::ColorRGBA8(255, 255, 255, 255);

@@ -82,6 +82,7 @@ private:
 	Dialogue currentDialogue;
 
 	std::vector<std::pair<int, glm::vec2>> shownSceneBlockPositions;
+	std::vector<std::pair<int, glm::vec2>> showDialogueBoxPositions;
 
 	static const int BUTTONS_MIDDLE_HORIZONTAL_RADIUS = 60;
 	static const int BUTTONS_MIDDLE_VERTICAL_RADIUS = -150;

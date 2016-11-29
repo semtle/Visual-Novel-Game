@@ -99,6 +99,7 @@ void MainProgram::gameLoop()
 		}
 
 		this->currentSceneName = "";
+		this->currentDialogueName = "";
 	}
 }
 
@@ -278,8 +279,7 @@ void MainProgram::checkSceneCreationScreenInputs()
 					this->sceneManager->addScene(this->currentSceneName);
 				}
 				else if (this->currentState == ProgramState::ADD_DIALOGUE) {
-					this->currentDialogue.name = this->currentDialogueName;
-					this->sceneManager->addDialogue(this->selectedSceneIdx, &this->currentDialogue);
+					this->submitDialogue();
 				}
 
 				this->currentState = ProgramState::MAINSCREEN;
@@ -295,7 +295,7 @@ void MainProgram::checkSceneCreationScreenInputs()
 			this->sceneManager->addScene(this->currentSceneName);
 		}
 		else if (this->currentState == ProgramState::ADD_DIALOGUE) {
-			this->sceneManager->addDialogue(this->selectedSceneIdx, &this->currentDialogue);
+			this->submitDialogue();
 		}
 
 		this->currentState = ProgramState::MAINSCREEN;
@@ -530,7 +530,7 @@ void MainProgram::drawMainScreen()
 	}
 	// If a scene is selected, show list of the dialogues
 	else {
-		std::vector<Dialogue *> dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
+		std::vector<Dialogue *> dialogues = this->getShownDialogues(this->sceneManager->getDialogues(this->selectedSceneIdx));
 		glm::vec4 destRect = this->sceneBoxDestRect;
 
 		for (unsigned i = 0; i < dialogues.size(); i++) {
@@ -660,7 +660,6 @@ void MainProgram::drawSceneCreationScreen()
 		);
 	}
 	else if (this->currentState == ProgramState::ADD_DIALOGUE) {
-		std::cout << "Drawing add dialogue\n";
 		this->spriteBatch.draw(
 			this->mainBgDestRect,
 			this->mainUvRect,
@@ -735,7 +734,7 @@ void MainProgram::drawMainScreenTexts()
 	}
 	// Dialogue names, show if a scene is selected
 	else {
-		std::vector<Dialogue *> dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
+		std::vector<Dialogue *> dialogues = this->getShownDialogues(this->sceneManager->getDialogues(this->selectedSceneIdx));
 
 		for (unsigned i = 0; i < dialogues.size(); i++) {
 			// Fill the buffer with the text
@@ -803,12 +802,12 @@ std::map<int, std::pair<std::string, std::vector<Dialogue *>>> MainProgram::getS
 
 	// If there's more scenes that can be shown, only pick 5
 	if (allScenes.size() > 5) {
-		// Get 4 items from the map
+		// Get 5 items from the map
 		int counter = 0;
 
 		for (auto it = allScenes.begin(); it != allScenes.end(); it++) {
 			if (counter == this->currentSceneListIdx) {
-				// Put the 4 scenes that will be shown into the 'shownScenes' vector
+				// Put the 5 scenes that will be shown into the 'shownScenes' vector
 				for (unsigned i = 0; i < 5; i++) {
 					shownScenes.emplace(i, it->second);
 					indexes.push_back(it->first);
@@ -842,6 +841,52 @@ std::map<int, std::pair<std::string, std::vector<Dialogue *>>> MainProgram::getS
 }
 
 
+std::vector<Dialogue *> MainProgram::getShownDialogues(std::vector<Dialogue *> allDialogues)
+{
+	std::vector<Dialogue *> shownDialogues;
+	std::vector<int> indexes;
+
+	// If there's more dialogues that can be shown, only pick 5
+	if (allDialogues.size() > 5) {
+		// Get 5 items from the vector
+		int counter = 0;
+
+		for (unsigned j = 0; j < allDialogues.size(); j++) {
+			if (counter == this->currentDialogueListIdx) {
+				// Put the 5 dialogues that will be shown into the 'shownDialogues' vector
+				for (unsigned i = 0; i < 5; i++) {
+					shownDialogues.push_back(allDialogues[j]);
+					indexes.push_back(j);
+
+					j++;
+				}
+
+				break;
+			}
+
+			counter++;
+		}
+	}
+
+	this->shownDialogueIndexes.clear();
+
+	if (shownDialogues.size() == 0) {
+		// Store shown scene indexes
+		for (unsigned i = 0; i < allDialogues.size(); i++) {
+			this->shownDialogueIndexes.push_back(i);
+		}
+
+		return allDialogues;
+	}
+	else {
+		// Store shown scene indexes
+		this->shownDialogueIndexes = indexes;
+
+		return shownDialogues;
+	}
+}
+
+
 glm::vec4 MainProgram::getInputDimensions(glm::vec4 texture, bool swapy)
 {
 	texture.x = texture.x + this->screenWidth / 2;
@@ -851,4 +896,26 @@ glm::vec4 MainProgram::getInputDimensions(glm::vec4 texture, bool swapy)
 	}
 
 	return texture;
+}
+
+void MainProgram::submitDialogue()
+{
+	this->currentDialogue.name = this->currentDialogueName;
+
+	// Create a new dialogue
+	this->sceneManager->addDialogue(
+		this->selectedSceneIdx,
+		new Dialogue(
+			this->currentDialogue.index,
+			this->currentDialogue.name,
+			this->currentDialogue.talking,
+			this->currentDialogue.left,
+			this->currentDialogue.right,
+			this->currentDialogue.message,
+			this->currentDialogue.nextDialogue
+		)
+	);
+
+	// Reset the dialogue
+	this->currentDialogue = Dialogue();
 }

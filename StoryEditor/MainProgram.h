@@ -86,6 +86,8 @@ private:
 	static const int SCENE_BOX_WIDTH = 185;
 	static const int SCENE_BOX_HEIGHT = 85;
 
+	glm::vec2 buttonSize = glm::vec2(99, 37);
+
 	// Main window bg
 	glm::vec4 mainBgDestRect = glm::vec4(-this->screenWidth / 2, -this->screenHeight / 2, this->screenWidth, this->screenHeight);
 	// Cancel button
@@ -116,6 +118,21 @@ private:
 
 	// Box for scene information
 	glm::vec4 sceneBoxDestRect = glm::vec4(sceneBlockDrawStartPos, SCENE_BOX_WIDTH, SCENE_BOX_HEIGHT);
+
+	// Background button
+	glm::vec4 bgBtnDestRect = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 540, 149, 37);
+
+	// Char 1 button
+	glm::vec4 char1BtnDestRect = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 20, buttonSize);
+
+	// Save button
+	glm::vec4 saveBtnDestRect = glm::vec4(-this->screenWidth / 2 + 400, -this->screenHeight / 2 + 20, buttonSize);
+
+	// Delete button
+	glm::vec4 deleteBtnDestRect = glm::vec4(-this->screenWidth / 2 + 520, -this->screenHeight / 2 + 20, buttonSize);
+
+	// Char 2 button
+	glm::vec4 char2BtnDestRect = glm::vec4(-this->screenWidth / 2 + 680, -this->screenHeight / 2 + 20, buttonSize);
 
 	// UV-Rect for up-arrow (rotate arrow 180 degrees)
 	glm::vec4 upArrowUvRect = glm::vec4(0.0f, 0.0f, 1.0f, -1.0f);

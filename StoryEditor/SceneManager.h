@@ -22,10 +22,10 @@ struct Dialogue {
 	Dialogue() :
 		index(-1),
 		name(""),
-		background(NULL),
+		background(""),
 		talking(""),
-		left(std::pair<std::string, std::string>("", "")),
-		right(std::pair<std::string, std::string>("", "")),
+		left(""),
+		right(""),
 		message(""),
 		nextDialogue(-1)
 	{ }
@@ -33,10 +33,10 @@ struct Dialogue {
 	Dialogue(
 		int Index,
 		std::string Name,
-		Uint32 Background,
+		std::string Background,
 		std::string Talking,
-		std::pair<std::string, std::string> Left,
-		std::pair<std::string, std::string> Right,
+		std::string Left,
+		std::string Right,
 		std::string Message,
 		int NextDialogue
 	) :
@@ -52,10 +52,10 @@ struct Dialogue {
 
 	int index;
 	std::string name;
-	Uint32 background;
+	std::string background;
 	std::string talking;
-	std::pair<std::string, std::string> left;
-	std::pair<std::string, std::string> right;
+	std::string left;
+	std::string right;
 	std::string message;
 	int nextDialogue;
 };

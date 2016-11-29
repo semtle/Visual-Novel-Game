@@ -123,6 +123,24 @@ void MainProgram::update()
 
 		counter++;
 	}
+
+	this->showDialogueBoxPositions.clear();
+
+	counter = 0;
+
+	// Store the positions of the scene boxes to check which box was clicked on
+	// Doing this every frame so that the positions are always updated.
+	for (int idx : this->shownDialogueIndexes) {
+		this->showDialogueBoxPositions.push_back(
+			std::pair<int, glm::vec2>
+			(
+				idx,
+				glm::vec2(this->sceneBlockDrawStartPos.x, this->sceneBlockDrawStartPos.y - (this->sceneBlockPositionDiff * counter))
+				)
+		);
+
+		counter++;
+	}
 }
 
 
@@ -191,13 +209,16 @@ void MainProgram::checkMainScreenInputs()
 	dim = this->getInputDimensions(this->upArrowDestDect);
 
 	// Mouse is inside the up arrow
-	if (this->currentSceneListIdx > 0 && this->selectedSceneIdx == -1) {
+	if ((this->currentSceneListIdx > 0 && this->selectedSceneIdx == -1) || (this->currentDialogueListIdx > 0 && this->selectedSceneIdx != -1)) {
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
-					this->currentSceneListIdx--;
+					if (this->selectedSceneIdx == -1)
+						this->currentSceneListIdx--;
+					else
+						this->currentDialogueListIdx--;
 				}
 			}
 		}
@@ -205,30 +226,60 @@ void MainProgram::checkMainScreenInputs()
 
 	dim = this->getInputDimensions(this->downArrowDestDect);
 
+	int dialoguesSize = 0;
+	if (this->selectedSceneIdx != -1)
+		dialoguesSize = this->sceneManager->getDialogues(this->selectedSceneIdx).size();
+
 	// Mouse is inside the down arrow
-	if (this->sceneManager->getScenes().size() > 5 && this->currentSceneListIdx < this->sceneManager->getScenes().size() - 5 && this->selectedSceneIdx == -1) {
+	if ((this->sceneManager->getScenes().size() > 5 && this->currentSceneListIdx < this->sceneManager->getScenes().size() - 5 && this->selectedSceneIdx == -1)
+		|| (dialoguesSize > 5 && this->currentDialogueListIdx < dialoguesSize - 5 && this->selectedSceneIdx != -1)) {
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
-					this->currentSceneListIdx++;
+					if (this->selectedSceneIdx == -1)
+						this->currentSceneListIdx++;
+					else {
+						this->currentDialogueListIdx++;
+						std::cout << "Added index\n";
+					}
 				}
 			}
 		}
 	}
 
 	// Check if any of the scene boxes were clicked on
-	for (unsigned i = 0; i < this->shownSceneBlockPositions.size(); i++) {
-		dim = this->getInputDimensions(glm::vec4(this->shownSceneBlockPositions[i].second, this->SCENE_BOX_WIDTH, this->SCENE_BOX_HEIGHT));
+	if (this->selectedSceneIdx == -1) {
+		for (unsigned i = 0; i < this->shownSceneBlockPositions.size(); i++) {
+			dim = this->getInputDimensions(glm::vec4(this->shownSceneBlockPositions[i].second, this->SCENE_BOX_WIDTH, this->SCENE_BOX_HEIGHT));
 
-		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
-			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
-				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
-					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+			if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+				if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+					if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+						this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
-					// Open the clicked scene
-					this->selectedSceneIdx = this->shownSceneIndexes[i];
+						// Open the clicked scene
+						this->selectedSceneIdx = this->shownSceneIndexes[i];
+					}
+				}
+			}
+		}
+	}
+	else {
+		// Check if any of the dialogue boxes were clicked on
+		for (unsigned i = 0; i < this->showDialogueBoxPositions.size(); i++) {
+			dim = this->getInputDimensions(glm::vec4(this->showDialogueBoxPositions[i].second, this->SCENE_BOX_WIDTH, this->SCENE_BOX_HEIGHT));
+
+			if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+				if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+					if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+						this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+						// Open the clicked scene
+						//this->selectedSceneIdx = this->shownSceneIndexes[i];
+						std::cout << "Clicked on dialogue box idx " << this->shownDialogueIndexes[i] << "\n";
+					}
 				}
 			}
 		}
@@ -244,6 +295,7 @@ void MainProgram::checkMainScreenInputs()
 
 				this->selectedSceneIdx = -1;
 				this->selectedDialogueIdx = -1;
+				this->currentDialogueListIdx = 0;
 			}
 		}
 	}
@@ -478,7 +530,7 @@ void MainProgram::drawMainScreen()
 	);
 
 	// Up arrow
-	if (this->currentSceneListIdx > 0 && this->selectedSceneIdx == -1) {
+	if ((this->currentSceneListIdx > 0 && this->selectedSceneIdx == -1) || (this->currentDialogueListIdx > 0 && this->selectedSceneIdx != -1)) {
 		this->spriteBatch.draw(
 			this->upArrowDestDect,
 			this->upArrowUvRect,
@@ -488,8 +540,14 @@ void MainProgram::drawMainScreen()
 		);
 	}
 
+	int dialoguesSize = 0;
+
+	if (this->selectedSceneIdx != -1)
+		dialoguesSize = this->sceneManager->getDialogues(this->selectedSceneIdx).size();
+
 	// Down arrow
-	if (allScenes.size() > 5 && this->currentSceneListIdx < allScenes.size() - 5 && this->selectedSceneIdx == -1) {
+	if ((allScenes.size() > 5 && this->currentSceneListIdx < allScenes.size() - 5 && this->selectedSceneIdx == -1)
+		|| (dialoguesSize > 5 && this->currentDialogueListIdx < dialoguesSize - 5 && this->selectedSceneIdx != -1)) {
 		this->spriteBatch.draw(
 			this->downArrowDestDect,
 			this->mainUvRect,
@@ -499,14 +557,16 @@ void MainProgram::drawMainScreen()
 		);
 	}
 
-	// Left arrow (back)
-	this->spriteBatch.draw(
-		this->arrowLeftDestRect,
-		glm::vec4(0.0f, 0.0f, -1.0f, 1.0f),
-		arrowSide,
-		0.0f,
-		this->color
-	);
+	// Left arrow (back), only draw if no scene is selected
+	if (this->selectedSceneIdx != -1) {
+		this->spriteBatch.draw(
+			this->arrowLeftDestRect,
+			glm::vec4(0.0f, 0.0f, -1.0f, 1.0f),
+			arrowSide,
+			0.0f,
+			this->color
+		);
+	}
 
 	// Draw dialogue editor
 	if (this->selectedSceneIdx != -1) this->drawCurrentDialogue();

@@ -1,12 +1,9 @@
 ﻿  MainProgram.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(216): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
-c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(295): warning C4018: '<': signed/unsigned mismatch
-c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(383): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
-c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(410): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
-c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(437): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
-c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(745): warning C4018: '<': signed/unsigned mismatch
-  Generating Code...
-  Skipping... (no relevant changes detected)
-  main.cpp
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(214): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(302): warning C4018: '<': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(390): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(417): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(444): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(792): warning C4018: '<': signed/unsigned mismatch
   StoryEditor.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\StoryEditor.exe
   StoryEditor.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\StoryEditor.pdb (Partial PDB)

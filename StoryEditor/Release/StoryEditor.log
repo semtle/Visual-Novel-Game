@@ -1,15 +1,14 @@
 ﻿  MainProgram.cpp
 MainProgram.cpp(214): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
-MainProgram.cpp(293): warning C4018: '<': signed/unsigned mismatch
-MainProgram.cpp(381): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
-MainProgram.cpp(408): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
-MainProgram.cpp(435): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
-MainProgram.cpp(744): warning C4018: '<': signed/unsigned mismatch
-  main.cpp
+MainProgram.cpp(311): warning C4018: '<': signed/unsigned mismatch
+MainProgram.cpp(399): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
+MainProgram.cpp(426): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
+MainProgram.cpp(453): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
+MainProgram.cpp(853): warning C4018: '<': signed/unsigned mismatch
   Generating code
-  0 of 2290 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  1 of 2290 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    38 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   StoryEditor.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\StoryEditor.exe
   StoryEditor.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\StoryEditor.pdb (Full PDB)

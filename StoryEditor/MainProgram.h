@@ -86,6 +86,9 @@ private:
 	std::string currentDialogueName = "";
 	std::string currentFileName = "";
 
+	bool clickedOnTalkerBox = false;
+	bool clickedOnDialogueBox = false;
+
 	Dialogue* currentDialogue;
 
 	std::vector<std::pair<int, glm::vec2>> shownSceneBlockPositions;
@@ -142,7 +145,10 @@ private:
 	glm::vec4 downArrowDestDect = glm::vec4(-this->screenWidth / 2 + 52, -this->screenHeight / 2 + 60, 86, 43);
 
 	// Dialogue box inside the dialogues
-	glm::vec4 textBoxDestRect = glm::vec4(-this->screenWidth / 2 + 200, -this->screenHeight / 2 + 73, 600, 200);
+	glm::vec4 textBoxDestRect = glm::vec4(-this->screenWidth / 2 + 200, -this->screenHeight / 2 + 73, 600, 160);
+
+	// Talker box
+	glm::vec4 talkerBoxDestRect = glm::vec4(-this->screenWidth / 2 + 215, textBoxDestRect.y + textBoxDestRect.a - 13, 123, 45);
 
 	// Background for scene creation window
 	glm::vec4 createSceneBgDestRect = glm::vec4(-this->screenWidth / 2, -this->screenHeight / 2, this->screenWidth, this->screenHeight);
@@ -180,5 +186,5 @@ private:
 	int selectedSceneIdx = -1;
 	int selectedDialogueIdx = -1;
 
-	ProgramState currentState = ProgramState::FILESELECT;
+	ProgramState currentState = ProgramState::MAINSCREEN;
 };

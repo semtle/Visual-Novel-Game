@@ -1,5 +1,7 @@
 #include "MainProgram.h"
 
+#define ARRSIZE(arr) (sizeof(arr)/sizeof(*(arr)))
+
 
 MainProgram::MainProgram()
 {
@@ -24,13 +26,13 @@ void MainProgram::initSystems()
 	// Initialize the engine
 	Bengine::init();
 
+	std::cout << "Creating window...\n";
+
 	// Create the window
 	this->window.create("Teemun fantasiat editor", this->screenWidth, this->screenHeight, 0, false);
 
 	// Initialize shaders
 	initShaders();
-
-	if (!debug_mode) this->loadBackgrounds();
 
 	// Initialize camera
 	this->camera.init(this->screenWidth, this->screenHeight);
@@ -64,11 +66,6 @@ void MainProgram::initShaders()
 }
 
 
-void MainProgram::loadBackgrounds()
-{
-}
-
-
 void MainProgram::gameLoop()
 {
 	while (this->currentState != ProgramState::EXIT) {
@@ -85,11 +82,12 @@ void MainProgram::gameLoop()
 
 		while (this->currentState == ProgramState::MAINSCREEN) {
 			this->camera.update();
+			this->fontCamera.update();
 			this->inputManager.update();
 
 			this->processInput();
 			this->checkMainScreenInputs();
-			this->update();
+			this->updateBoxes();
 
 			this->drawScreen();
 		}
@@ -111,7 +109,7 @@ void MainProgram::gameLoop()
 }
 
 
-void MainProgram::update()
+void MainProgram::updateBoxes()
 {
 	this->shownSceneBlockPositions.clear();
 
@@ -188,6 +186,59 @@ void MainProgram::processInput()
 void MainProgram::checkFileSelectInputs()
 {
 	glm::vec2 mouseCoords = this->inputManager.getMouseCoords();
+
+	glm::vec4 dim = this->getInputDimensions(this->exitBtnDestRect);
+
+	// Exit button
+	if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+		if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+			if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+				this->currentState = ProgramState::EXIT;
+			}
+		}
+	}
+
+	dim = this->getInputDimensions(this->openFileBtnDestRect);
+
+	// Open File button
+	if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+		if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+			if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+				// Open up the file explorer to pick a yaml file
+				std::wstring wFilePath = this->getOpenFileName(NULL, false);
+
+				// Convert the filepath from a wide string to a regural string
+				std::string filePath = "";
+				for (char c : wFilePath) {
+					filePath += c;
+				}
+
+				std::cout << "File path: " << filePath << "\n";
+
+				size_t pos = filePath.find("Dialogues");
+
+				if (filePath.length() > 0)
+					this->currentFileName = filePath.substr(pos + 10);
+			}
+		}
+	}
+
+	dim = this->getInputDimensions(this->editFileBtnDestRect);
+
+	// Edit File button
+	if (this->currentFileName.length() > 0) {
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->currentState = ProgramState::MAINSCREEN;
+				}
+			}
+		}
+	}
 }
 
 
@@ -573,15 +624,18 @@ void MainProgram::drawScreen()
 	// Send the camera matrix
 	glUniformMatrix4fv(pLocation, 1, false, &cameraMatrix[0][0]);
 
-	this->spriteBatch.begin();
+	// Sort type none for proper layering of images
+	this->spriteBatch.begin(Bengine::GlyphSortType::NONE);
 
-	if (this->currentState == ProgramState::MAINSCREEN) this->drawMainScreen();
+	if (this->currentState == ProgramState::FILESELECT) this->drawFileSelectScreen();
+	else if (this->currentState == ProgramState::MAINSCREEN) this->drawMainScreen();
 	else if (this->currentState == ProgramState::ADDSCENE || this->currentState == ProgramState::ADD_DIALOGUE) this->drawSceneCreationScreen();
 
 	this->spriteBatch.end();
 	this->spriteBatch.renderBatch();
 
-	if (this->currentState == ProgramState::ADDSCENE || this->currentState == ProgramState::ADD_DIALOGUE) this->drawSceneCreationScreenTexts();
+	if (this->currentState == ProgramState::FILESELECT) this->drawFileSelectTexts();
+	else if (this->currentState == ProgramState::ADDSCENE || this->currentState == ProgramState::ADD_DIALOGUE) this->drawSceneCreationScreenTexts();
 	else if (this->currentState == ProgramState::MAINSCREEN) this->drawMainScreenTexts();
 
 	// Unbind the texture
@@ -597,7 +651,48 @@ void MainProgram::drawScreen()
 
 void MainProgram::drawFileSelectScreen()
 {
-	// Empty
+	static const unsigned int background = Bengine::ResourceManager::getTexture("Textures/choosefile.png").id;
+	static const unsigned int openFileBtn = Bengine::ResourceManager::getTexture("Textures/openfile.png").id;
+	static const unsigned int editFileBtn = Bengine::ResourceManager::getTexture("Textures/editfile.png").id;
+	static const unsigned int exitBtn = Bengine::ResourceManager::getTexture("Textures/exit.png").id;
+
+	// Background
+	this->spriteBatch.draw(
+		this->mainBgDestRect,
+		this->mainUvRect,
+		background,
+		0.0f,
+		this->color
+	);
+
+	// 'Open File' -button
+	this->spriteBatch.draw(
+		this->openFileBtnDestRect,
+		this->mainUvRect,
+		openFileBtn,
+		0.0f,
+		this->color
+	);
+
+	// 'Edit File' -button
+	if (this->currentFileName.length() > 0) {
+		this->spriteBatch.draw(
+			this->editFileBtnDestRect,
+			this->mainUvRect,
+			editFileBtn,
+			0.0f,
+			this->color
+		);
+	}
+
+	// 'Exit' -button
+	this->spriteBatch.draw(
+		this->exitBtnDestRect,
+		this->mainUvRect,
+		exitBtn,
+		0.0f,
+		this->color
+	);
 }
 
 
@@ -710,7 +805,6 @@ void MainProgram::drawMainScreen()
 void MainProgram::drawCurrentDialogue()
 {
 	static const unsigned int blackBox = Bengine::ResourceManager::getTexture("Textures/schoolyard.png").id;
-	static const unsigned int textBox = Bengine::ResourceManager::getTexture("Textures/TextBoxBlue.png").id;
 
 	static const unsigned int bgBtn = Bengine::ResourceManager::getTexture("Textures/bg-button.png").id;
 	static const unsigned int char1Btn = Bengine::ResourceManager::getTexture("Textures/char1-button.png").id;
@@ -765,6 +859,7 @@ void MainProgram::drawCurrentDialogue()
 			this->color
 		);
 
+		// Background
 		if (this->currentDialogue->background != "") {
 			this->spriteBatch.draw(
 				this->dialogueBgDestRect,
@@ -775,6 +870,7 @@ void MainProgram::drawCurrentDialogue()
 			);
 		}
 
+		// Left Character
 		if (this->currentDialogue->left != "") {
 			this->spriteBatch.draw(
 				this->leftCharDestRect,
@@ -785,6 +881,7 @@ void MainProgram::drawCurrentDialogue()
 			);
 		}
 
+		// Right character
 		if (this->currentDialogue->right != "") {
 			this->spriteBatch.draw(
 				this->rightCharDestRect,
@@ -794,41 +891,18 @@ void MainProgram::drawCurrentDialogue()
 				this->color
 			);
 		}
+
+		// Dialogue box
+		if (this->currentDialogue->background != "") {
+			this->spriteBatch.draw(
+				this->textBoxDestRect,
+				this->mainUvRect,
+				Bengine::ResourceManager::getTexture("Textures/TextBoxBlue.png").id,
+				0.0f,
+				this->color
+			);
+		}
 	}
-
-	/*
-	this->spriteBatch.draw(
-		this->blackBoxDestRect,
-		this->mainUvRect,
-		blackBox,
-		0.0f,
-		this->color
-	);
-
-	this->spriteBatch.draw(
-		glm::vec4(185, -290, 165, 440),
-		this->mainUvRect,
-		laugh,
-		0.0f,
-		this->color
-	);
-
-	this->spriteBatch.draw(
-		glm::vec4(-135, -290, 165, 440),
-		glm::vec4(0.0f, 0.0f, -1.0f, 1.0f),
-		laugh,
-		0.0f,
-		this->color
-	);
-
-	this->spriteBatch.draw(
-		glm::vec4(-this->screenWidth / 2 + 200, -270, 600, 500),
-		this->mainUvRect,
-		box,
-		0.0f,
-		this->color
-	);
-	*/
 }
 
 
@@ -881,7 +955,36 @@ void MainProgram::drawSceneCreationScreen()
 
 void MainProgram::drawFileSelectTexts()
 {
-	// Empty
+	if (this->currentFileName != "") {
+		// Make the buffer that will hold the text
+		char buffer[256];
+
+		// Set the camera matrix
+		GLint pLocation = this->shaderProgram.getUniformLocation("P");
+		glm::mat4 cameraMatrix = this->fontCamera.getCameraMatrix();
+
+		// Send the camera matrix
+		glUniformMatrix4fv(pLocation, 1, false, &cameraMatrix[0][0]);
+
+		this->fontBatch.begin();
+
+		std::string fileName = this->currentFileName.substr(0, this->currentFileName.size() - 5);
+
+		sprintf_s(buffer, "%s", fileName.c_str());
+
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(this->screenWidth / 2, this->screenHeight / 2 + 50),
+			glm::vec2(1.0f),
+			0.0f,
+			Bengine::ColorRGBA8(0, 0, 0, 255),
+			Bengine::Justification::MIDDLE
+		);
+
+		this->fontBatch.end();
+		this->fontBatch.renderBatch();
+	}
 }
 
 
@@ -1125,23 +1228,47 @@ void MainProgram::submitDialogue()
 }
 
 
-std::wstring MainProgram::getOpenFileName(HWND owner)
+std::wstring MainProgram::getOpenFileName(HWND owner, bool png)
 {
+	// Save current working directory
+	TCHAR currentDirectory[MAX_PATH];
+	DWORD ret;
+	ret = GetCurrentDirectory(ARRSIZE(currentDirectory), currentDirectory);
+
+	if (ret == 0) {
+		std::cout << "Error with saving directory: " << GetLastError() << "\n";
+	}
+	else if (ret > ARRSIZE(currentDirectory)) {
+		std::cout << "Error: buffer was too small when saving current directory!\n";
+	}
+
 	wchar_t buffer[MAX_PATH];
 
 	OPENFILENAMEW ofn = { 0 };
 
-	ofn.lStructSize = sizeof(ofn);
+	ofn.lStructSize = sizeof(ofn); std::cout << "hi\n";
 	ofn.hwndOwner = owner;
-	ofn.lpstrFilter = L"PNG Files\0*.png\0";
+
+	// Show only the appropriate file type
+	if (png) ofn.lpstrFilter = L"PNG Files\0*.png\0";
+	else ofn.lpstrFilter = L"Yaml Files\0*.yaml\0";
+
 	ofn.nFilterIndex = 1;
-	ofn.lpstrTitle = L"Here you can browse your favorite anime collectionz and pls select an image with the .png extension or poop things will happening in game :-)";
+	ofn.lpstrTitle = L"Select an image";
 	ofn.lpstrFile = buffer;
 	ofn.nMaxFile = MAX_PATH;
 	ofn.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST;
 
+	// Need to set the first character to null to avoid crashes
+	buffer[0] = '\0';
+
 	if (!GetOpenFileNameW(&ofn))
 		return L"";
+
+	// Set the current directory back to the root of the program so that images will load correctly
+	if (!SetCurrentDirectory(currentDirectory)) {
+		std::cout << "Error: could not set current directory back to default!\n";
+	}
 
 	return buffer;
 }

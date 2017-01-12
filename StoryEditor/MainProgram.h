@@ -29,11 +29,10 @@ public:
 	void run();
 	void initSystems();
 	void initShaders();
-	void loadBackgrounds();
 	void gameLoop();
 	void processInput();
 	void drawScreen();
-	void update();
+	void updateBoxes();
 
 	void checkFileSelectInputs();
 	void checkMainScreenInputs();
@@ -52,10 +51,8 @@ public:
 	void drawMainScreenTexts();
 	void drawSceneCreationScreenTexts();
 
-	std::wstring getOpenFileName(HWND owner);
+	std::wstring getOpenFileName(HWND owner, bool png = true);
 private:
-	bool debug_mode = false;
-
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> getShownScenes(std::map<int, std::pair<std::string, std::vector<Dialogue *>>> allScenes);
 	std::vector<Dialogue *> getShownDialogues(std::vector<Dialogue *> allDialogues);
 	glm::vec4 getInputDimensions(glm::vec4 texture, bool swapy = true);
@@ -87,6 +84,7 @@ private:
 
 	std::string currentSceneName = "";
 	std::string currentDialogueName = "";
+	std::string currentFileName = "";
 
 	Dialogue* currentDialogue;
 
@@ -121,6 +119,15 @@ private:
 	// 'Add new' -button
 	glm::vec4 addNewBtnDestRect = glm::vec4(-this->screenWidth / 2 + 50, -this->screenHeight / 2 + 30, 149, 38);
 
+	// 'Open File' -button
+	glm::vec4 openFileBtnDestRect = glm::vec4(-150 - this->buttonSize.x / 2, -100, this->buttonSize);
+
+	// 'Edit File' -button
+	glm::vec4 editFileBtnDestRect = glm::vec4(-this->buttonSize.x / 2, -100, this->buttonSize);
+
+	// 'Exit' -button
+	glm::vec4 exitBtnDestRect = glm::vec4(150 - this->buttonSize.x / 2, -100, this->buttonSize);
+
 	// Main UV rect for most textures
 	glm::vec4 mainUvRect = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
@@ -133,6 +140,9 @@ private:
 	// Arrows
 	glm::vec4 upArrowDestDect = glm::vec4(-this->screenWidth / 2 + 52, this->screenHeight / 2 - 155, 86, 43);
 	glm::vec4 downArrowDestDect = glm::vec4(-this->screenWidth / 2 + 52, -this->screenHeight / 2 + 60, 86, 43);
+
+	// Dialogue box inside the dialogues
+	glm::vec4 textBoxDestRect = glm::vec4(-this->screenWidth / 2 + 200, -this->screenHeight / 2 + 73, 600, 200);
 
 	// Background for scene creation window
 	glm::vec4 createSceneBgDestRect = glm::vec4(-this->screenWidth / 2, -this->screenHeight / 2, this->screenWidth, this->screenHeight);
@@ -170,5 +180,5 @@ private:
 	int selectedSceneIdx = -1;
 	int selectedDialogueIdx = -1;
 
-	ProgramState currentState = ProgramState::MAINSCREEN;
+	ProgramState currentState = ProgramState::FILESELECT;
 };

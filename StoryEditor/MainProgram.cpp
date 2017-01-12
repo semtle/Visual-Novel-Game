@@ -246,7 +246,25 @@ void MainProgram::checkMainScreenInputs()
 {
 	glm::vec2 mouseCoords = this->inputManager.getMouseCoords();
 
-	glm::vec4 dim = this->getInputDimensions(this->addNewDestRect);
+	glm::vec4 dim = this->getInputDimensions(this->talkerBoxDestRect);
+
+	// If clicked outside of talker box, don't allow setting the name
+	if (mouseCoords.x < dim.x || mouseCoords.x > dim.x + dim.z || mouseCoords.y < dim.y || mouseCoords.y > dim.y + dim.a) {
+		if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+			this->clickedOnTalkerBox = false;
+		}
+	}
+
+	dim = this->getInputDimensions(this->textBoxDestRect);
+
+	// Check if mouse clicked outside of dialogue box
+	if (mouseCoords.x < dim.x || mouseCoords.x > dim.x + dim.z || mouseCoords.y < dim.y || mouseCoords.y > dim.y + dim.a) {
+		if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+			this->clickedOnDialogueBox = false;
+		}
+	}
+
+	dim = this->getInputDimensions(this->addNewDestRect);
 	
 	// Mouse is inside the 'add new' button
 	if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
@@ -444,6 +462,38 @@ void MainProgram::checkMainScreenInputs()
 			}
 		}
 	}
+
+	dim = this->getInputDimensions(this->textBoxDestRect);
+
+	// Dialogue box
+	if (this->currentDialogue != nullptr && this->currentDialogue->background != "") {
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->clickedOnDialogueBox = true;
+				}
+			}
+		}
+	}
+
+	dim = this->getInputDimensions(this->talkerBoxDestRect);
+
+	// Talker box
+	if (this->currentDialogue != nullptr && this->currentDialogue->background != "") {
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->clickedOnTalkerBox = true;
+				}
+			}
+		}
+	}
+
+	if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 }
 
 
@@ -508,10 +558,11 @@ void MainProgram::checkSceneCreationScreenInputs()
 
 void MainProgram::onKeyPress(unsigned int keyID)
 {
-	if (this->currentState == ProgramState::ADD_DIALOGUE || this->currentState == ProgramState::ADDSCENE) {
+	// This function handles writing text in many different places in the editor
+	if (this->currentState == ProgramState::ADD_DIALOGUE || this->currentState == ProgramState::ADDSCENE || this->clickedOnTalkerBox || this->clickedOnDialogueBox) {
 		// Handle modifying the current scene name being given
 		std::string keyName = SDL_GetKeyName(keyID);
-		static std::string allowedKeys[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "Space", "Backspace", "Return" };
+		static std::string allowedKeys[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "-", "Space", ".", ",", "+", "1", "Backspace", "Return" };
 
 		bool keyAllowed = false;
 
@@ -523,34 +574,63 @@ void MainProgram::onKeyPress(unsigned int keyID)
 
 		// Remove the last character from the player's name
 		if (keyName == "Backspace") {
+			// Scene name
 			if (this->currentState == ProgramState::ADDSCENE) {
 				this->currentSceneName = this->currentSceneName.substr(0, this->currentSceneName.size() - 1);
 			}
+			// Talker
+			else if (this->currentDialogue != nullptr && this->clickedOnTalkerBox) {
+				this->currentDialogue->talking = this->currentDialogue->talking.substr(0, this->currentDialogue->talking.size() - 1);
+			}
+			// Message
+			else if (this->currentDialogue != nullptr && this->clickedOnDialogueBox) {
+				this->currentDialogue->message = this->currentDialogue->message.substr(0, this->currentDialogue->message.size() - 1);
+			}
+			// Dialogue name
 			else {
 				this->currentDialogueName = this->currentDialogueName.substr(0, this->currentDialogueName.size() - 1);
 			}
 		}
 
-		// Add a space to the name
+		// Add a space to the text
+		// Scene name
 		if (this->currentState == ProgramState::ADDSCENE) {
 			if (keyName == "Space" && this->currentSceneName.length() < 16) {
-				if (this->currentSceneName.length() > 1) this->currentSceneName += " ";
+				if (this->currentSceneName.length() > 0) this->currentSceneName += " ";
 			}
 		}
 
+		// Dialogue name
 		else if (this->currentState == ProgramState::ADD_DIALOGUE) {
 			if (keyName == "Space" && this->currentDialogueName.length() < 16) {
-				if (this->currentDialogueName.length() > 1) this->currentDialogueName += " ";
+				if (this->currentDialogueName.length() > 0) this->currentDialogueName += " ";
 			}
 		}
 
-		// Confirm the player's name
+		// Message
+		else if (this->currentDialogue != nullptr && this->clickedOnDialogueBox) {
+			if (keyName == "Space") {
+				this->currentDialogue->message += " ";
+			}
+		}
+
+		// Validate the text
 		if (keyName == "Return") {
+			// Scene name
 			if (this->currentState == ProgramState::ADDSCENE) {
 				if (this->currentSceneName.length() >= 3 && this->currentSceneName.length() <= 16) {
 					std::cout << "Name was valid.\n";
 				}
 			}
+			// Talker
+			else if (this->currentDialogue != nullptr && this->clickedOnTalkerBox) {
+				this->clickedOnTalkerBox = false;
+			}
+			// Message
+			else if (this->currentDialogue != nullptr && this->clickedOnDialogueBox) {
+				this->clickedOnDialogueBox = false;
+			}
+			// Dialogue name
 			else {
 				if (this->currentDialogueName.length() >= 3 && this->currentDialogueName.length() <= 16) {
 					std::cout << "Name was valid.\n";
@@ -560,40 +640,69 @@ void MainProgram::onKeyPress(unsigned int keyID)
 
 		// Add the character to the player's name
 		if (keyName != "Return" && keyName != "Space" && keyName != "Backspace") {
-			if (this->currentState == ProgramState::ADDSCENE) {
+			// Scene name
+			if (this->currentState == ProgramState::ADDSCENE && keyName != "+" && keyName != "1" && keyName != ",") {
 				if (this->currentSceneName.length() < 16) {
 					this->currentSceneName += static_cast<char>(keyID);
 				}
 			}
+			// Talker
+			else if (this->clickedOnTalkerBox && keyName != "+" && keyName != "1" && keyName != ",") {
+				if (this->currentDialogue != nullptr && this->currentDialogue->talking.length() < 11) {
+					this->currentDialogue->talking += static_cast<char>(keyID);
+				}
+			}
+			// Message
+			else if (this->currentDialogue != nullptr && this->clickedOnDialogueBox) {
+				// Question mark
+				if (keyName == "+" && (this->inputManager.isKeyDown(SDLK_LSHIFT) || this->inputManager.isKeyDown(SDLK_RSHIFT))) {
+					this->currentDialogue->message += "?";
+				}
+				// Exclamation mark
+				else if (keyName == "1" && (this->inputManager.isKeyDown(SDLK_LSHIFT) || this->inputManager.isKeyDown(SDLK_RSHIFT))) {
+					this->currentDialogue->message += "!";
+				}
+				else {
+					this->currentDialogue->message += ((this->inputManager.isKeyDown(SDLK_LSHIFT) || this->inputManager.isKeyDown(SDLK_RSHIFT))) ? toupper(static_cast<char>(keyID)) : static_cast<char>(keyID);
+				}
+			}
+			// Dialogue name
 			else {
-				if (this->currentDialogueName.length() < 16) {
+				if (this->currentDialogueName.length() < 16 && keyName != "+" && keyName != "1" && keyName != ",") {
 					this->currentDialogueName += static_cast<char>(keyID);
 				}
 			}
 		}
 
-		// Capitalize first letters of the name
-		if (this->currentSceneName.length() > 0) {
-			this->currentSceneName[0] = toupper(this->currentSceneName[0]);
-		}
-		if (this->currentDialogueName.length() > 0) {
-			this->currentDialogueName[0] = toupper(this->currentDialogueName[0]);
+		// Capitalize first letter of the name
+		if (this->currentDialogue != nullptr && this->clickedOnTalkerBox && this->currentDialogue->talking.length() > 0) {
+			this->currentDialogue->talking[0] = toupper(this->currentDialogue->talking[0]);
 		}
 
-		// Scene name
-		for (unsigned i = 0; i < this->currentSceneName.length(); i++) {
-			if (this->currentSceneName[i] == ' ') {
-				if (i != this->currentSceneName.length() - 1) {
-					this->currentSceneName[i + 1] = toupper(this->currentSceneName[i + 1]);
+		if (!this->clickedOnTalkerBox && !this->clickedOnDialogueBox) {
+			// Capitalize first letters of the name
+			if (this->currentSceneName.length() > 0) {
+				this->currentSceneName[0] = toupper(this->currentSceneName[0]);
+			}
+			if (this->currentDialogueName.length() > 0) {
+				this->currentDialogueName[0] = toupper(this->currentDialogueName[0]);
+			}
+
+			// Scene name
+			for (unsigned i = 0; i < this->currentSceneName.length(); i++) {
+				if (this->currentSceneName[i] == ' ') {
+					if (i != this->currentSceneName.length() - 1) {
+						this->currentSceneName[i + 1] = toupper(this->currentSceneName[i + 1]);
+					}
 				}
 			}
-		}
 
-		// Dialogue name
-		for (unsigned i = 0; i < this->currentDialogueName.length(); i++) {
-			if (this->currentDialogueName[i] == ' ') {
-				if (i != this->currentDialogueName.length() - 1) {
-					this->currentDialogueName[i + 1] = toupper(this->currentDialogueName[i + 1]);
+			// Dialogue name
+			for (unsigned i = 0; i < this->currentDialogueName.length(); i++) {
+				if (this->currentDialogueName[i] == ' ') {
+					if (i != this->currentDialogueName.length() - 1) {
+						this->currentDialogueName[i + 1] = toupper(this->currentDialogueName[i + 1]);
+					}
 				}
 			}
 		}
@@ -892,12 +1001,23 @@ void MainProgram::drawCurrentDialogue()
 			);
 		}
 
+		// Talker box
+		if (this->currentDialogue->background != "") {
+			this->spriteBatch.draw(
+				this->talkerBoxDestRect,
+				this->mainUvRect,
+				Bengine::ResourceManager::getTexture("Textures/TalkerBoxBlue.png").id,
+				0.0f,
+				this->color
+			);
+		}
+
 		// Dialogue box
 		if (this->currentDialogue->background != "") {
 			this->spriteBatch.draw(
 				this->textBoxDestRect,
 				this->mainUvRect,
-				Bengine::ResourceManager::getTexture("Textures/TextBoxBlue.png").id,
+				Bengine::ResourceManager::getTexture("Textures/TextBoxBlueSolo.png").id,
 				0.0f,
 				this->color
 			);
@@ -1046,6 +1166,7 @@ void MainProgram::drawMainScreenTexts()
 		}
 	}
 
+	// Name of current dialogue
 	if (this->currentDialogue != nullptr) {
 		sprintf_s(buffer, "%s", this->currentDialogue->name.c_str());
 
@@ -1057,6 +1178,53 @@ void MainProgram::drawMainScreenTexts()
 			0.0f,
 			Bengine::ColorRGBA8(0, 0, 0, 255),
 			Bengine::Justification::RIGHT
+		);
+	}
+
+	// 'Type talker name' -text
+	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->clickedOnTalkerBox) {
+		sprintf_s(buffer, "%s", "Type name");
+
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(this->screenWidth / 2 - 20, 540),
+			glm::vec2(0.8f),
+			0.0f,
+			Bengine::ColorRGBA8(0, 0, 0, 255),
+			Bengine::Justification::LEFT
+		);
+	}
+
+	// Talker name
+	if (this->currentDialogue != nullptr && this->currentDialogue->background != "") {
+		sprintf_s(buffer, "%s", this->currentDialogue->talking.c_str());
+
+		glm::vec4 dim = this->getInputDimensions(this->talkerBoxDestRect);
+
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(dim.x + dim.z / 2, abs((dim.y + dim.a / 2) - this->screenHeight) - 8),
+			glm::vec2(0.5f),
+			0.0f,
+			Bengine::ColorRGBA8(0, 0, 0, 255),
+			Bengine::Justification::MIDDLE
+		);
+	}
+
+	if (this->currentDialogue != nullptr && this->currentDialogue->background != "") {
+		sprintf_s(buffer, "%s", this->currentDialogue->message.c_str());
+
+		glm::vec4 dim = this->getInputDimensions(this->textBoxDestRect);
+
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(dim.x + 24, abs((dim.y + dim.a / 2) - this->screenHeight) + 46),
+			glm::vec2(0.6f),
+			0.0f,
+			Bengine::ColorRGBA8(0, 0, 0, 255)
 		);
 	}
 
@@ -1246,7 +1414,7 @@ std::wstring MainProgram::getOpenFileName(HWND owner, bool png)
 
 	OPENFILENAMEW ofn = { 0 };
 
-	ofn.lStructSize = sizeof(ofn); std::cout << "hi\n";
+	ofn.lStructSize = sizeof(ofn);
 	ofn.hwndOwner = owner;
 
 	// Show only the appropriate file type

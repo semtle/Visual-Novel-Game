@@ -55,6 +55,7 @@ public:
 private:
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> getShownScenes(std::map<int, std::pair<std::string, std::vector<Dialogue *>>> allScenes);
 	std::vector<Dialogue *> getShownDialogues(std::vector<Dialogue *> allDialogues);
+	std::vector<std::string> getWrappedText(std::string text, Bengine::SpriteFont* spriteFont, const float& maxLength, const float& fontScale);
 	glm::vec4 getInputDimensions(glm::vec4 texture, bool swapy = true);
 
 	Bengine::Window window; ///< Main window
@@ -89,7 +90,10 @@ private:
 	bool clickedOnTalkerBox = false;
 	bool clickedOnDialogueBox = false;
 
+	bool changingSettings = false;
+
 	Dialogue* currentDialogue;
+	Dialogue* lastDialogue;
 
 	std::vector<std::pair<int, glm::vec2>> shownSceneBlockPositions;
 	std::vector<std::pair<int, glm::vec2>> showDialogueBoxPositions;
@@ -166,13 +170,28 @@ private:
 	glm::vec4 char1BtnDestRect = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 20, buttonSize);
 
 	// Save button
-	glm::vec4 saveBtnDestRect = glm::vec4(-this->screenWidth / 2 + 400, -this->screenHeight / 2 + 20, buttonSize);
+	glm::vec4 saveBtnDestRect = glm::vec4(-this->screenWidth / 2 + 335, -this->screenHeight / 2 + 20, buttonSize);
+
+	// Settings button
+	glm::vec4 settingsBtnDestRect = glm::vec4(-this->screenWidth / 2 + 450, -this->screenHeight / 2 + 20, buttonSize);
 
 	// Delete button
-	glm::vec4 deleteBtnDestRect = glm::vec4(-this->screenWidth / 2 + 520, -this->screenHeight / 2 + 20, buttonSize);
+	glm::vec4 deleteBtnDestRect = glm::vec4(-this->screenWidth / 2 + 565, -this->screenHeight / 2 + 20, buttonSize);
 
 	// Char 2 button
 	glm::vec4 char2BtnDestRect = glm::vec4(-this->screenWidth / 2 + 680, -this->screenHeight / 2 + 20, buttonSize);
+
+	// Show dialogue box checkbox
+	glm::vec4 firstCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 520, 32, 32);
+
+	// Talker checkbox
+	glm::vec4 secondCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 440, 32, 32);
+
+	// Question checkbox
+	glm::vec4 thirdCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 360, 32, 32);
+
+	// Close icon
+	glm::vec4 closeIconDestRect = glm::vec4(this->screenWidth / 2 - 48, -this->screenHeight / 2 + 550, 32, 32);
 
 	// Left arrow
 	glm::vec4 arrowLeftDestRect = glm::vec4(-this->screenWidth / 2 + 135, -this->screenHeight / 2 + 605, 49, 30);

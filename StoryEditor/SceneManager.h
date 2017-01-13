@@ -27,7 +27,10 @@ struct Dialogue {
 		left(""),
 		right(""),
 		message(""),
-		nextDialogue(-1)
+		nextDialogue(-1),
+		showTextBox(true),
+		question(false),
+		talker(false)
 	{ }
 
 	Dialogue(
@@ -38,7 +41,10 @@ struct Dialogue {
 		std::string Left,
 		std::string Right,
 		std::string Message,
-		int NextDialogue
+		int NextDialogue,
+		bool showTextBox,
+		bool question,
+		bool talker
 	) :
 		index(Index),
 		name(Name),
@@ -47,7 +53,10 @@ struct Dialogue {
 		left(Left),
 		right(Right),
 		message(Message),
-		nextDialogue(NextDialogue)
+		nextDialogue(NextDialogue),
+		showTextBox(true),
+		question(false),
+		talker(true)
 	{ }
 
 	int index;
@@ -58,6 +67,10 @@ struct Dialogue {
 	std::string right;
 	std::string message;
 	int nextDialogue;
+
+	bool showTextBox;
+	bool question;
+	bool talker;
 };
 
 class SceneManager

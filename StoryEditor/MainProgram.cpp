@@ -162,9 +162,6 @@ void MainProgram::processInput()
 		case SDL_KEYDOWN:
 			this->inputManager.pressKey(event.key.keysym.sym);
 			this->onKeyPress(event.key.keysym.sym);
-
-			std::cout << "Current scene name: " << this->currentSceneName << "\n";
-			std::cout << "Current dialogue name: " << this->currentDialogueName << "\n";
 			break;
 		case SDL_KEYUP:
 			this->inputManager.releaseKey(event.key.keysym.sym);

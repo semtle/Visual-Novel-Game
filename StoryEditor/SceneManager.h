@@ -30,7 +30,20 @@ struct Dialogue {
 		nextDialogue(-1),
 		showTextBox(true),
 		question(false),
-		talker(false)
+		talker(false),
+		charAskingQuestion(""),
+
+		option1Text(""),
+		option1Influence(1),
+		option1Next(""),
+
+		option2Text(""),
+		option2Influence(1),
+		option2Next(""),
+
+		option3Text(""),
+		option3Influence(1),
+		option3Next("")
 	{ }
 
 	Dialogue(
@@ -42,9 +55,22 @@ struct Dialogue {
 		std::string Right,
 		std::string Message,
 		int NextDialogue,
-		bool showTextBox,
-		bool question,
-		bool talker
+		bool ShowTextBox,
+		bool Question,
+		bool Talker,
+		std::string CharAskingQuestion,
+
+		std::string Option1Text,
+		int Option1Influence,
+		std::string Option1Next,
+
+		std::string Option2Text,
+		int Option2Influence,
+		std::string Option2Next,
+
+		std::string Option3Text,
+		int Option3Influence,
+		std::string Option3Next
 	) :
 		index(Index),
 		name(Name),
@@ -54,9 +80,22 @@ struct Dialogue {
 		right(Right),
 		message(Message),
 		nextDialogue(NextDialogue),
-		showTextBox(true),
-		question(false),
-		talker(true)
+		showTextBox(ShowTextBox),
+		question(Question),
+		talker(Talker),
+		charAskingQuestion(CharAskingQuestion),
+
+		option1Text(Option1Text),
+		option1Influence(Option1Influence),
+		option1Next(Option1Next),
+
+		option2Text(Option2Text),
+		option2Influence(Option2Influence),
+		option2Next(Option2Next),
+
+		option3Text(Option3Text),
+		option3Influence(Option3Influence),
+		option3Next(Option3Next)
 	{ }
 
 	int index;
@@ -71,6 +110,20 @@ struct Dialogue {
 	bool showTextBox;
 	bool question;
 	bool talker;
+
+	std::string charAskingQuestion;
+
+	std::string option1Text;
+	int option1Influence;
+	std::string option1Next;
+
+	std::string option2Text;
+	int option2Influence;
+	std::string option2Next;
+
+	std::string option3Text;
+	int option3Influence;
+	std::string option3Next;
 };
 
 class SceneManager

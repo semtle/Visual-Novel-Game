@@ -208,8 +208,8 @@ void MainProgram::checkFileSelectInputs()
 
 				// Convert the filepath from a wide string to a regural string
 				std::string filePath = "";
-				for (char c : wFilePath) {
-					filePath += c;
+				for (wchar_t c : wFilePath) {
+					filePath += static_cast<char>(c);;
 				}
 
 				std::cout << "File path: " << filePath << "\n";
@@ -403,8 +403,8 @@ void MainProgram::checkMainScreenInputs()
 
 					// Convert the filepath from a wide string to a regural string
 					std::string filePath = "";
-					for (char c : wFilePath) {
-						filePath += c;
+					for (wchar_t c : wFilePath) {
+						filePath += static_cast<char>(c);
 					}
 
 					// Set the background
@@ -417,7 +417,7 @@ void MainProgram::checkMainScreenInputs()
 	}
 
 	// Char 1 button
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "") {
+	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && !this->currentDialogue->question) {
 		dim = this->getInputDimensions(this->char1BtnDestRect);
 
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
@@ -430,8 +430,8 @@ void MainProgram::checkMainScreenInputs()
 
 					// Convert the filepath from a wide string to a regural string
 					std::string filePath = "";
-					for (char c : wFilePath) {
-						filePath += c;
+					for (wchar_t c : wFilePath) {
+						filePath += static_cast<char>(c);
 					}
 
 					// Set the background
@@ -444,7 +444,7 @@ void MainProgram::checkMainScreenInputs()
 	}
 
 	// Char 2 button
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "") {
+	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && !this->currentDialogue->question) {
 		dim = this->getInputDimensions(this->char2BtnDestRect);
 
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
@@ -457,8 +457,8 @@ void MainProgram::checkMainScreenInputs()
 
 					// Convert the filepath from a wide string to a regural string
 					std::string filePath = "";
-					for (char c : wFilePath) {
-						filePath += c;
+					for (wchar_t c : wFilePath) {
+						filePath += static_cast<char>(c);
 					}
 
 					// Set the background
@@ -1051,13 +1051,24 @@ void MainProgram::drawCurrentDialogue()
 		);
 
 		// Char 1 button
-		this->spriteBatch.draw(
-			this->char1BtnDestRect,
-			this->mainUvRect,
-			char1Btn,
-			0.0f,
-			this->color
-		);
+		if (!this->currentDialogue->question) {
+			this->spriteBatch.draw(
+				this->char1BtnDestRect,
+				this->mainUvRect,
+				char1Btn,
+				0.0f,
+				this->color
+			);
+
+			// Char 2 button
+			this->spriteBatch.draw(
+				this->char2BtnDestRect,
+				this->mainUvRect,
+				char2Btn,
+				0.0f,
+				this->color
+			);
+		}
 
 		// Settings button
 		this->spriteBatch.draw(
@@ -1086,15 +1097,6 @@ void MainProgram::drawCurrentDialogue()
 			this->color
 		);
 
-		// Char 2 button
-		this->spriteBatch.draw(
-			this->char2BtnDestRect,
-			this->mainUvRect,
-			char2Btn,
-			0.0f,
-			this->color
-		);
-
 		// Background
 		if (this->currentDialogue->background != "") {
 			this->spriteBatch.draw(
@@ -1107,7 +1109,7 @@ void MainProgram::drawCurrentDialogue()
 		}
 
 		// Left Character
-		if (this->currentDialogue->left != "") {
+		if (this->currentDialogue->left != "" && !this->currentDialogue->question) {
 			this->spriteBatch.draw(
 				this->leftCharDestRect,
 				this->flippedXUvRect,
@@ -1118,7 +1120,7 @@ void MainProgram::drawCurrentDialogue()
 		}
 
 		// Right character
-		if (this->currentDialogue->right != "") {
+		if (this->currentDialogue->right != "" && !this->currentDialogue->question) {
 			this->spriteBatch.draw(
 				this->rightCharDestRect,
 				this->mainUvRect,
@@ -1149,15 +1151,82 @@ void MainProgram::drawCurrentDialogue()
 				this->color
 			);
 		}
+
+		/* Question boxes */
+		if (this->currentDialogue->question && this->currentDialogue->background != "") {
+			unsigned int firstBox, secondBox, thirdBox;
+
+			// Determine first box color
+			if (this->currentDialogue->option1Influence == 0) {
+				firstBox = Bengine::ResourceManager::getTexture("Textures/RedOptionBox.png").id;
+			}
+			else if (this->currentDialogue->option1Influence == 1) {
+				firstBox = Bengine::ResourceManager::getTexture("Textures/BlueOptionBox.png").id;
+			}
+			else {
+				firstBox = Bengine::ResourceManager::getTexture("Textures/GreenOptionBox.png").id;
+			}
+
+			// Determine second box color
+			if (this->currentDialogue->option2Influence == 0) {
+				secondBox = Bengine::ResourceManager::getTexture("Textures/RedOptionBox.png").id;
+			}
+			else if (this->currentDialogue->option2Influence == 1) {
+				secondBox = Bengine::ResourceManager::getTexture("Textures/BlueOptionBox.png").id;
+			}
+			else {
+				secondBox = Bengine::ResourceManager::getTexture("Textures/GreenOptionBox.png").id;
+			}
+
+			// Determine second box color
+			if (this->currentDialogue->option3Influence == 0) {
+				thirdBox = Bengine::ResourceManager::getTexture("Textures/RedOptionBox.png").id;
+			}
+			else if (this->currentDialogue->option3Influence == 1) {
+				thirdBox = Bengine::ResourceManager::getTexture("Textures/BlueOptionBox.png").id;
+			}
+			else {
+				thirdBox = Bengine::ResourceManager::getTexture("Textures/GreenOptionBox.png").id;
+			}
+
+			// First answer box
+			this->spriteBatch.draw(
+				this->firstAnswerBoxDestRect,
+				this->mainUvRect,
+				firstBox,
+				0.0f,
+				this->color
+			);
+
+			// Second answer box
+			this->spriteBatch.draw(
+				this->secondAnswerBoxDestRect,
+				this->mainUvRect,
+				secondBox,
+				0.0f,
+				this->color
+			);
+
+			// First answer box
+			this->spriteBatch.draw(
+				this->thirdAnswerBoxDestRect,
+				this->mainUvRect,
+				thirdBox,
+				0.0f,
+				this->color
+			);
+		}
 	}
     else if (this->changingSettings) {
 		unsigned int texture;
 
 		// Show dialogue box
-		if (this->lastDialogue->showTextBox)
+		if (this->lastDialogue->showTextBox) {
 			texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
-		else
+		}
+		else {
 			texture = Bengine::ResourceManager::getTexture("Textures/checkbox_unchecked.png").id;
+		}
 
 		this->spriteBatch.draw(
 			this->firstCheckBox,
@@ -1632,7 +1701,17 @@ void MainProgram::submitDialogue()
 			-1,
 			true,
 			false,
-			true
+			true,
+			"",
+			"",
+			1,
+			"",
+			"",
+			1,
+			"",
+			"",
+			1,
+			""
 		)
 	);
 

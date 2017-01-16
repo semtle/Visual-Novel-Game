@@ -181,6 +181,15 @@ private:
 	// Char 2 button
 	glm::vec4 char2BtnDestRect = glm::vec4(-this->screenWidth / 2 + 680, -this->screenHeight / 2 + 20, buttonSize);
 
+	// First answer box
+	glm::vec4 firstAnswerBoxDestRect = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 389, 560, 86);
+
+	// Second answer box
+	glm::vec4 secondAnswerBoxDestRect = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 255, 560, 86);
+
+	// Third answer box
+	glm::vec4 thirdAnswerBoxDestRect = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 121, 560, 86);
+
 	// Show dialogue box checkbox
 	glm::vec4 firstCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 520, 32, 32);
 
@@ -199,8 +208,8 @@ private:
 	// UV-Rect for up-arrow (rotate arrow 180 degrees)
 	glm::vec4 upArrowUvRect = glm::vec4(0.0f, 0.0f, 1.0f, -1.0f);
 
-	int currentSceneListIdx = 0;
-	int currentDialogueListIdx = 0;
+	unsigned currentSceneListIdx = 0;
+	unsigned currentDialogueListIdx = 0;
 
 	int selectedSceneIdx = -1;
 	int selectedDialogueIdx = -1;

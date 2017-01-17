@@ -667,10 +667,26 @@ void MainProgram::checkMainScreenInputs()
 					if (this->lastDialogue->question) {
 						this->lastDialogue->showTextBox = false;
 						this->lastDialogue->talker = false;
+
+						// Move buttons from the way of 'Set Next Dialogue' -button
+						this->saveBtnDestRect.x += 120;
+						this->settingsBtnDestRect.x += 120;
+						this->deleteBtnDestRect.x += 120;
+					}
+					else {
+						this->saveBtnDestRect.x -= 120;
+						this->settingsBtnDestRect.x -= 120;
+						this->deleteBtnDestRect.x -= 120;
 					}
 				}
 			}
 		}
+	}
+
+	if (this->currentDialogue != nullptr && !this->currentDialogue->question) {
+		this->saveBtnDestRect.x = -this->screenWidth / 2 + 335;
+		this->settingsBtnDestRect.x = -this->screenWidth / 2 + 450;
+		this->deleteBtnDestRect.x = -this->screenWidth / 2 + 565;
 	}
 
 	if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) this->inputManager.releaseKey(SDL_BUTTON_LEFT);
@@ -965,13 +981,6 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				}
 			}
 		}
-
-		if (keyName == "Up") {
-			std::cout << "Up\n";
-		}
-		else if (keyName == "Down") {
-			std::cout << "Down\n";
-		}
 	}
 }
 
@@ -1208,6 +1217,17 @@ void MainProgram::drawCurrentDialogue()
 			this->color
 		);
 
+		// 'Set Next Dialogue' button
+		if (this->currentDialogue->question && (this->clickedOnFirstAnswerBox || this->clickedOnSecondAnswerBox || this->clickedOnThirdAnswerBox)) {
+			this->spriteBatch.draw(
+				setNextBtnDestRect,
+				this->mainUvRect,
+				Bengine::ResourceManager::getTexture("Textures/setnext.png").id,
+				0.0f,
+				this->color
+			);
+		}
+
 		// Char 1 button
 		if (!this->currentDialogue->question) {
 			this->spriteBatch.draw(
@@ -1370,6 +1390,39 @@ void MainProgram::drawCurrentDialogue()
 				this->thirdAnswerBoxDestRect,
 				this->mainUvRect,
 				thirdBox,
+				0.0f,
+				this->color
+			);
+		}
+
+		if (this->currentDialogue->question) {
+			// Black boxes so can see next dialogue text
+			glm::vec4 dim = this->firstAnswerBoxDestRect;
+
+			this->spriteBatch.draw(
+				glm::vec4(dim.x, dim.y + 85, 350, 30),
+				this->mainUvRect,
+				Bengine::ResourceManager::getTexture("Textures/blackbox.png").id,
+				0.0f,
+				this->color
+			);
+
+			dim = this->secondAnswerBoxDestRect;
+
+			this->spriteBatch.draw(
+				glm::vec4(dim.x, dim.y + 85, 350, 30),
+				this->mainUvRect,
+				Bengine::ResourceManager::getTexture("Textures/blackbox.png").id,
+				0.0f,
+				this->color
+			);
+
+			dim = this->thirdAnswerBoxDestRect;
+
+			this->spriteBatch.draw(
+				glm::vec4(dim.x, dim.y + 85, 350, 30),
+				this->mainUvRect,
+				Bengine::ResourceManager::getTexture("Textures/blackbox.png").id,
 				0.0f,
 				this->color
 			);
@@ -1769,6 +1822,53 @@ void MainProgram::drawMainScreenTexts()
 		}
 	}
 
+	// Next dialogue texts for answers
+	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->question) {
+		const float fontScale = 0.7f;
+
+		sprintf_s(buffer, "%s", this->currentDialogue->option1Next.c_str());
+
+		glm::vec4 dim = this->getInputDimensions(this->firstAnswerBoxDestRect);
+
+		// First answer
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(dim.x + 5, abs(dim.y - this->screenHeight)),
+			glm::vec2(fontScale),
+			0.0f,
+			this->color
+		);
+
+		sprintf_s(buffer, "%s", this->currentDialogue->option2Next.c_str());
+
+		dim = this->getInputDimensions(this->secondAnswerBoxDestRect);
+
+		// Second answer
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(dim.x + 5, abs(dim.y - this->screenHeight)),
+			glm::vec2(fontScale),
+			0.0f,
+			this->color
+		);
+
+		sprintf_s(buffer, "%s", this->currentDialogue->option3Next.c_str());
+
+		dim = this->getInputDimensions(this->thirdAnswerBoxDestRect);
+
+		// Third answer
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(dim.x + 5, abs(dim.y - this->screenHeight)),
+			glm::vec2(fontScale),
+			0.0f,
+			this->color
+		);
+	}
+
 	if (this->changingSettings) {
 		// Show dialogue box checkbox
 		sprintf_s(buffer, "%s", "Show the dialogue box");
@@ -1972,13 +2072,13 @@ void MainProgram::submitDialogue()
 			"",
 			"",
 			1,
-			"",
-			"",
-			1,
-			"",
+			"Next Dialogue: Evening Beach",
 			"",
 			1,
-			""
+			"Next Dialogue: NOT SET",
+			"",
+			1,
+			"Next Dialogue: Sunday (Scene)"
 		)
 	);
 

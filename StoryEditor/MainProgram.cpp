@@ -261,6 +261,33 @@ void MainProgram::checkMainScreenInputs()
 		}
 	}
 
+	dim = this->getInputDimensions(this->firstAnswerBoxDestRect);
+
+	// Check if mouse clicked outside of first answer box
+	if (mouseCoords.x < dim.x || mouseCoords.x > dim.x + dim.z || mouseCoords.y < dim.y || mouseCoords.y > dim.y + dim.a) {
+		if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+			this->clickedOnFirstAnswerBox = false;
+		}
+	}
+
+	dim = this->getInputDimensions(this->secondAnswerBoxDestRect);
+
+	// Check if mouse clicked outside of second answer box
+	if (mouseCoords.x < dim.x || mouseCoords.x > dim.x + dim.z || mouseCoords.y < dim.y || mouseCoords.y > dim.y + dim.a) {
+		if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+			this->clickedOnSecondAnswerBox = false;
+		}
+	}
+
+	dim = this->getInputDimensions(this->textBoxDestRect);
+
+	// Check if mouse clicked outside of third answer box
+	if (mouseCoords.x < dim.x || mouseCoords.x > dim.x + dim.z || mouseCoords.y < dim.y || mouseCoords.y > dim.y + dim.a) {
+		if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+			this->clickedOnThirdAnswerBox = false;
+		}
+	}
+
 	dim = this->getInputDimensions(this->addNewDestRect);
 	
 	// Mouse is inside the 'add new' button
@@ -524,6 +551,51 @@ void MainProgram::checkMainScreenInputs()
 		}
 	}
 
+	dim = this->getInputDimensions(this->firstAnswerBoxDestRect);
+
+	// First answer box
+	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->question) {
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->clickedOnFirstAnswerBox = true;
+				}
+			}
+		}
+	}
+
+	dim = this->getInputDimensions(this->secondAnswerBoxDestRect);
+
+	// Second answer box
+	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->question) {
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->clickedOnSecondAnswerBox = true;
+				}
+			}
+		}
+	}
+
+	dim = this->getInputDimensions(this->thirdAnswerBoxDestRect);
+
+	// Third answer box
+	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->question) {
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->clickedOnThirdAnswerBox = true;
+				}
+			}
+		}
+	}
+
 	// Close icon
 	if (this->changingSettings) {
 		dim = this->getInputDimensions(this->closeIconDestRect);
@@ -667,7 +739,9 @@ void MainProgram::checkSceneCreationScreenInputs()
 void MainProgram::onKeyPress(unsigned int keyID)
 {
 	// This function handles writing text in many different places in the editor
-	if (this->currentState == ProgramState::ADD_DIALOGUE || this->currentState == ProgramState::ADDSCENE || this->clickedOnTalkerBox || this->clickedOnDialogueBox) {
+	if (this->currentState == ProgramState::ADD_DIALOGUE || this->currentState == ProgramState::ADDSCENE
+		|| this->clickedOnTalkerBox || this->clickedOnDialogueBox || this->clickedOnFirstAnswerBox || this->clickedOnSecondAnswerBox || this->clickedOnThirdAnswerBox
+		) {
 		// Handle modifying the current scene name being given
 		std::string keyName = SDL_GetKeyName(keyID);
 		static std::string allowedKeys[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "-", "Space", ".", ",", "'", "+", "1", "Backspace", "Return" };
@@ -694,6 +768,18 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			else if (this->currentDialogue != nullptr && this->clickedOnDialogueBox) {
 				this->currentDialogue->message = this->currentDialogue->message.substr(0, this->currentDialogue->message.size() - 1);
 			}
+			// First answer box
+			else if (this->currentDialogue != nullptr && this->clickedOnFirstAnswerBox) {
+				this->currentDialogue->option1Text = this->currentDialogue->option1Text.substr(0, this->currentDialogue->option1Text.size() - 1);
+			}
+			// Second answer box
+			else if (this->currentDialogue != nullptr && this->clickedOnSecondAnswerBox) {
+				this->currentDialogue->option2Text = this->currentDialogue->option2Text.substr(0, this->currentDialogue->option2Text.size() - 1);
+			}
+			// Third answer box
+			else if (this->currentDialogue != nullptr && this->clickedOnThirdAnswerBox) {
+				this->currentDialogue->option3Text = this->currentDialogue->option3Text.substr(0, this->currentDialogue->option3Text.size() - 1);
+			}
 			// Dialogue name
 			else {
 				this->currentDialogueName = this->currentDialogueName.substr(0, this->currentDialogueName.size() - 1);
@@ -702,23 +788,38 @@ void MainProgram::onKeyPress(unsigned int keyID)
 
 		// Add a space to the text
 		// Scene name
-		if (this->currentState == ProgramState::ADDSCENE) {
-			if (keyName == "Space" && this->currentSceneName.length() < 16) {
-				if (this->currentSceneName.length() > 0) this->currentSceneName += " ";
+		if (keyName == "Space") {
+			if (this->currentState == ProgramState::ADDSCENE) {
+				if (this->currentSceneName.length() < 16) {
+					if (this->currentSceneName.length() > 0) this->currentSceneName += " ";
+				}
 			}
-		}
 
-		// Dialogue name
-		else if (this->currentState == ProgramState::ADD_DIALOGUE) {
-			if (keyName == "Space" && this->currentDialogueName.length() < 16) {
-				if (this->currentDialogueName.length() > 0) this->currentDialogueName += " ";
+			// Dialogue name
+			else if (this->currentState == ProgramState::ADD_DIALOGUE) {
+				if (this->currentDialogueName.length() < 16) {
+					if (this->currentDialogueName.length() > 0) this->currentDialogueName += " ";
+				}
 			}
-		}
 
-		// Message
-		else if (this->currentDialogue != nullptr && this->clickedOnDialogueBox) {
-			if (keyName == "Space") {
+			// Message
+			else if (this->currentDialogue != nullptr && this->clickedOnDialogueBox) {
 				this->currentDialogue->message += " ";
+			}
+
+			// First answer box
+			else if (this->currentDialogue != nullptr && this->clickedOnFirstAnswerBox) {
+				this->currentDialogue->option1Text += " ";
+			}
+
+			// Second answer box
+			else if (this->currentDialogue != nullptr && this->clickedOnSecondAnswerBox) {
+				this->currentDialogue->option2Text += " ";
+			}
+
+			// Third answer box
+			else if (this->currentDialogue != nullptr && this->clickedOnThirdAnswerBox) {
+				this->currentDialogue->option3Text += " ";
 			}
 		}
 
@@ -737,6 +838,18 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			// Message
 			else if (this->currentDialogue != nullptr && this->clickedOnDialogueBox) {
 				this->clickedOnDialogueBox = false;
+			}
+			// First answer box
+			else if (this->currentDialogue != nullptr && this->clickedOnFirstAnswerBox) {
+				this->clickedOnFirstAnswerBox = false;
+			}
+			// Second answer box
+			else if (this->currentDialogue != nullptr && this->clickedOnSecondAnswerBox) {
+				this->clickedOnSecondAnswerBox = false;
+			}
+			// Third answer box
+			else if (this->currentDialogue != nullptr && this->clickedOnThirdAnswerBox) {
+				this->clickedOnSecondAnswerBox = false;
 			}
 			// Dialogue name
 			else {
@@ -761,17 +874,29 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				}
 			}
 			// Message
-			else if (this->currentDialogue != nullptr && this->clickedOnDialogueBox) {
+			else if (this->currentDialogue != nullptr && (this->clickedOnDialogueBox || this->clickedOnFirstAnswerBox || this->clickedOnSecondAnswerBox || this->clickedOnThirdAnswerBox)) {
 				// Question mark
 				if (keyName == "+" && (this->inputManager.isKeyDown(SDLK_LSHIFT) || this->inputManager.isKeyDown(SDLK_RSHIFT))) {
-					this->currentDialogue->message += "?";
+					if (this->clickedOnDialogueBox) this->currentDialogue->message += "?";
+					else if (this->clickedOnFirstAnswerBox) this->currentDialogue->option1Text += "?";
+					else if (this->clickedOnSecondAnswerBox) this->currentDialogue->option2Text += "?";
+					else if (this->clickedOnThirdAnswerBox) this->currentDialogue->option3Text += "?";
 				}
 				// Exclamation mark
 				else if (keyName == "1" && (this->inputManager.isKeyDown(SDLK_LSHIFT) || this->inputManager.isKeyDown(SDLK_RSHIFT))) {
-					this->currentDialogue->message += "!";
+					if (this->clickedOnDialogueBox) this->currentDialogue->message += "!";
+					else if (this->clickedOnFirstAnswerBox) this->currentDialogue->option1Text += "!";
+					else if (this->clickedOnSecondAnswerBox) this->currentDialogue->option2Text += "!";
+					else if (this->clickedOnThirdAnswerBox) this->currentDialogue->option3Text += "!";
 				}
+				// Upper case letter (while holding shift)
 				else {
-					this->currentDialogue->message += ((this->inputManager.isKeyDown(SDLK_LSHIFT) || this->inputManager.isKeyDown(SDLK_RSHIFT))) ? toupper(static_cast<char>(keyID)) : static_cast<char>(keyID);
+					char letter = ((this->inputManager.isKeyDown(SDLK_LSHIFT) || this->inputManager.isKeyDown(SDLK_RSHIFT))) ? toupper(static_cast<char>(keyID)) : static_cast<char>(keyID);
+
+					if (this->clickedOnDialogueBox) this->currentDialogue->message += letter;
+					else if (this->clickedOnFirstAnswerBox) this->currentDialogue->option1Text += letter;
+					else if (this->clickedOnSecondAnswerBox) this->currentDialogue->option2Text += letter;
+					else if (this->clickedOnThirdAnswerBox) this->currentDialogue->option3Text += letter;
 				}
 			}
 			// Dialogue name
@@ -782,7 +907,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			}
 		}
 
-		// Capitalize first letter of the name
+		// Capitalize first letter of the text
 		if (this->currentDialogue != nullptr && this->clickedOnTalkerBox && this->currentDialogue->talking.length() > 0) {
 			this->currentDialogue->talking[0] = toupper(this->currentDialogue->talking[0]);
 		}

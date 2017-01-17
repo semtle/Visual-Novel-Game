@@ -90,6 +90,10 @@ private:
 	bool clickedOnTalkerBox = false;
 	bool clickedOnDialogueBox = false;
 
+	bool clickedOnFirstAnswerBox = false;
+	bool clickedOnSecondAnswerBox = false;
+	bool clickedOnThirdAnswerBox = false;
+
 	bool changingSettings = false;
 
 	Dialogue* currentDialogue;

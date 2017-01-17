@@ -170,6 +170,9 @@ private:
 	// Background button
 	glm::vec4 bgBtnDestRect = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 540, 149, 37);
 
+	// 'Set Next Dialogue' button
+	glm::vec4 setNextBtnDestRect = glm::vec4(-this->screenWidth / 2 + 248, -this->screenHeight / 2 + 20, 149, 37);
+
 	// Char 1 button
 	glm::vec4 char1BtnDestRect = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 20, buttonSize);
 

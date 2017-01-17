@@ -279,7 +279,7 @@ void MainProgram::checkMainScreenInputs()
 		}
 	}
 
-	dim = this->getInputDimensions(this->textBoxDestRect);
+	dim = this->getInputDimensions(this->thirdAnswerBoxDestRect);
 
 	// Check if mouse clicked outside of third answer box
 	if (mouseCoords.x < dim.x || mouseCoords.x > dim.x + dim.z || mouseCoords.y < dim.y || mouseCoords.y > dim.y + dim.a) {
@@ -744,7 +744,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 		) {
 		// Handle modifying the current scene name being given
 		std::string keyName = SDL_GetKeyName(keyID);
-		static std::string allowedKeys[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "-", "Space", ".", ",", "'", "+", "1", "Backspace", "Return" };
+		static std::string allowedKeys[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "-", "Space", ".", ",", "'", "+", "1", "Backspace", "Return", "Up", "Down"};
 
 		bool keyAllowed = false;
 
@@ -849,7 +849,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			}
 			// Third answer box
 			else if (this->currentDialogue != nullptr && this->clickedOnThirdAnswerBox) {
-				this->clickedOnSecondAnswerBox = false;
+				this->clickedOnThirdAnswerBox = false;
 			}
 			// Dialogue name
 			else {
@@ -860,7 +860,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 		}
 
 		// Add the character to the player's name
-		if (keyName != "Return" && keyName != "Space" && keyName != "Backspace") {
+		if (keyName != "Return" && keyName != "Space" && keyName != "Backspace" && keyName != "Up" && keyName != "Down") {
 			// Scene name
 			if (this->currentState == ProgramState::ADDSCENE && keyName != "+" && keyName != "1" && keyName != ",") {
 				if (this->currentSceneName.length() < 16) {
@@ -907,6 +907,32 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			}
 		}
 
+		// Add influence to the selected answer
+		if (this->currentDialogue != nullptr && keyName == "Up") {
+			if (this->clickedOnFirstAnswerBox) {
+				this->currentDialogue->option1Influence += (this->currentDialogue->option1Influence < 2) ? 1 : 0;
+			}
+			else if (this->clickedOnSecondAnswerBox) {
+				this->currentDialogue->option2Influence += (this->currentDialogue->option2Influence < 2) ? 1 : 0;
+			}
+			else if (this->clickedOnThirdAnswerBox) {
+				this->currentDialogue->option3Influence += (this->currentDialogue->option3Influence < 2) ? 1 : 0;
+			}
+		}
+
+		// Remove influece from the selected answer
+		if (this->currentDialogue != nullptr && keyName == "Down") {
+			if (this->clickedOnFirstAnswerBox) {
+				this->currentDialogue->option1Influence -= (this->currentDialogue->option1Influence > 0) ? 1 : 0;
+			}
+			else if (this->clickedOnSecondAnswerBox) {
+				this->currentDialogue->option2Influence -= (this->currentDialogue->option2Influence > 0) ? 1 : 0;
+			}
+			else if (this->clickedOnThirdAnswerBox) {
+				this->currentDialogue->option3Influence -= (this->currentDialogue->option3Influence > 0) ? 1 : 0;
+			}
+		}
+
 		// Capitalize first letter of the text
 		if (this->currentDialogue != nullptr && this->clickedOnTalkerBox && this->currentDialogue->talking.length() > 0) {
 			this->currentDialogue->talking[0] = toupper(this->currentDialogue->talking[0]);
@@ -938,6 +964,13 @@ void MainProgram::onKeyPress(unsigned int keyID)
 					}
 				}
 			}
+		}
+
+		if (keyName == "Up") {
+			std::cout << "Up\n";
+		}
+		else if (keyName == "Down") {
+			std::cout << "Down\n";
 		}
 	}
 }
@@ -1624,6 +1657,115 @@ void MainProgram::drawMainScreenTexts()
 				0.0f,
 				Bengine::ColorRGBA8(0, 0, 0, 255)
 			);
+		}
+	}
+
+	// Answer boxes
+	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->question) {
+		// First box
+		glm::vec4 dim = this->getInputDimensions(this->firstAnswerBoxDestRect);
+		const float fontScale = 0.6f;
+
+		// Get wrapped text so the message doesn't go over the edge
+		std::vector<std::string> wrappedMessage = this->getWrappedText(this->currentDialogue->option1Text, this->spriteFont, 520, fontScale);
+
+		if (wrappedMessage.size() == 1) {
+			sprintf_s(buffer, "%s", wrappedMessage[0].c_str());
+
+			this->spriteFont->draw(
+				this->fontBatch,
+				buffer,
+				glm::vec2(dim.x + this->firstAnswerBoxDestRect.z / 2, abs((dim.y + dim.a / 2) - this->screenHeight) - (this->spriteFont->measure(wrappedMessage[0].c_str()).y * fontScale / 2) + 2),
+				glm::vec2(fontScale),
+				0.0f,
+				Bengine::ColorRGBA8(0, 0, 0, 255),
+				Bengine::Justification::MIDDLE
+			);
+		}
+		else {
+			for (unsigned i = 0; i < wrappedMessage.size(); i++) {
+				sprintf_s(buffer, "%s", wrappedMessage[i].c_str());
+
+				this->spriteFont->draw(
+					this->fontBatch,
+					buffer,
+					glm::vec2(dim.x + this->firstAnswerBoxDestRect.z / 2, abs((dim.y + dim.a / 2) - this->screenHeight) - (i * 26)),
+					glm::vec2(fontScale),
+					0.0f,
+					Bengine::ColorRGBA8(0, 0, 0, 255),
+					Bengine::Justification::MIDDLE
+				);
+			}
+		}
+
+		// Second box
+		dim = this->getInputDimensions(this->secondAnswerBoxDestRect);
+
+		// Get wrapped text so the message doesn't go over the edge
+		wrappedMessage = this->getWrappedText(this->currentDialogue->option2Text, this->spriteFont, 520, fontScale);
+
+		if (wrappedMessage.size() == 1) {
+			sprintf_s(buffer, "%s", wrappedMessage[0].c_str());
+
+			this->spriteFont->draw(
+				this->fontBatch,
+				buffer,
+				glm::vec2(dim.x + this->secondAnswerBoxDestRect.z / 2, abs((dim.y + dim.a / 2) - this->screenHeight) - (this->spriteFont->measure(wrappedMessage[0].c_str()).y * fontScale / 2) + 2),
+				glm::vec2(fontScale),
+				0.0f,
+				Bengine::ColorRGBA8(0, 0, 0, 255),
+				Bengine::Justification::MIDDLE
+			);
+		}
+		else {
+			for (unsigned i = 0; i < wrappedMessage.size(); i++) {
+				sprintf_s(buffer, "%s", wrappedMessage[i].c_str());
+
+				this->spriteFont->draw(
+					this->fontBatch,
+					buffer,
+					glm::vec2(dim.x + this->secondAnswerBoxDestRect.z / 2, abs((dim.y + dim.a / 2) - this->screenHeight) - (i * 26)),
+					glm::vec2(fontScale),
+					0.0f,
+					Bengine::ColorRGBA8(0, 0, 0, 255),
+					Bengine::Justification::MIDDLE
+				);
+			}
+		}
+
+		// Third box
+		dim = this->getInputDimensions(this->thirdAnswerBoxDestRect);
+
+		// Get wrapped text so the message doesn't go over the edge
+		wrappedMessage = this->getWrappedText(this->currentDialogue->option3Text, this->spriteFont, 520, fontScale);
+
+		if (wrappedMessage.size() == 1) {
+			sprintf_s(buffer, "%s", wrappedMessage[0].c_str());
+
+			this->spriteFont->draw(
+				this->fontBatch,
+				buffer,
+				glm::vec2(dim.x + this->thirdAnswerBoxDestRect.z / 2, abs((dim.y + dim.a / 2) - this->screenHeight) - (this->spriteFont->measure(wrappedMessage[0].c_str()).y * fontScale / 2) + 2),
+				glm::vec2(fontScale),
+				0.0f,
+				Bengine::ColorRGBA8(0, 0, 0, 255),
+				Bengine::Justification::MIDDLE
+			);
+		}
+		else {
+			for (unsigned i = 0; i < wrappedMessage.size(); i++) {
+				sprintf_s(buffer, "%s", wrappedMessage[i].c_str());
+
+				this->spriteFont->draw(
+					this->fontBatch,
+					buffer,
+					glm::vec2(dim.x + this->thirdAnswerBoxDestRect.z / 2, abs((dim.y + dim.a / 2) - this->screenHeight) - (i * 26)),
+					glm::vec2(fontScale),
+					0.0f,
+					Bengine::ColorRGBA8(0, 0, 0, 255),
+					Bengine::Justification::MIDDLE
+				);
+			}
 		}
 	}
 

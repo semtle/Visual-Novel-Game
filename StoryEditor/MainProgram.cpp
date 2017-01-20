@@ -708,26 +708,25 @@ void MainProgram::checkMainScreenInputs()
 					if (this->lastDialogue->question) {
 						this->lastDialogue->showTextBox = false;
 						this->lastDialogue->talker = false;
-
-						// Move buttons from the way of 'Set Next Dialogue' -button
-						this->saveBtnDestRect.x += 120;
-						this->settingsBtnDestRect.x += 120;
-						this->deleteBtnDestRect.x += 120;
-					}
-					else {
-						this->saveBtnDestRect.x -= 120;
-						this->settingsBtnDestRect.x -= 120;
-						this->deleteBtnDestRect.x -= 120;
 					}
 				}
 			}
 		}
 	}
 
-	if (this->currentDialogue != nullptr && !this->currentDialogue->question) {
+	if (this->dlgButtonsOnRight && this->currentDialogue != nullptr && !this->currentDialogue->question) {
 		this->saveBtnDestRect.x = -this->screenWidth / 2 + 335;
 		this->settingsBtnDestRect.x = -this->screenWidth / 2 + 450;
 		this->deleteBtnDestRect.x = -this->screenWidth / 2 + 565;
+
+		this->dlgButtonsOnRight = false;
+	}
+	else if (!this->dlgButtonsOnRight && this->currentDialogue != nullptr && this->currentDialogue->question) {
+		this->saveBtnDestRect.x = -this->screenWidth / 2 + 455;
+		this->settingsBtnDestRect.x = -this->screenWidth / 2 + 570;
+		this->deleteBtnDestRect.x = -this->screenWidth / 2 + 690;
+
+		this->dlgButtonsOnRight = true;
 	}
 
 	if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) this->inputManager.releaseKey(SDL_BUTTON_LEFT);
@@ -1147,7 +1146,7 @@ void MainProgram::drawMainScreen()
 	);
 
 	// Add new -button
-	if (!this->changingSettings) {
+	if (!this->changingSettings && !this->settingNextDialogue) {
 		this->spriteBatch.draw(
 			this->addNewDestRect,
 			this->mainUvRect,
@@ -1455,7 +1454,7 @@ void MainProgram::drawCurrentDialogue()
 			);
 		}
 
-		if (this->currentDialogue->question) {
+		if (this->currentDialogue->question && this->currentDialogue->background != "") {
 			// Black boxes so can see next dialogue text
 			glm::vec4 dim = this->firstAnswerBoxDestRect;
 

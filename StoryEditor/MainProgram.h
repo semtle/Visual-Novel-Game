@@ -58,6 +58,8 @@ private:
 	std::vector<std::string> getWrappedText(std::string text, Bengine::SpriteFont* spriteFont, const float& maxLength, const float& fontScale);
 	glm::vec4 getInputDimensions(glm::vec4 texture, bool swapy = true);
 
+	void resetCurrentDialogue();
+
 	Bengine::Window window; ///< Main window
 
 	Bengine::GLSLProgram shaderProgram; ///< Shaders
@@ -95,6 +97,7 @@ private:
 	bool clickedOnThirdAnswerBox = false;
 
 	bool changingSettings = false;
+	bool settingNextDialogue = false;
 
 	Dialogue* currentDialogue;
 	Dialogue* lastDialogue;
@@ -164,6 +167,9 @@ private:
 	// 'Add New' -button
 	glm::vec4 addNewDestRect = glm::vec4(-this->screenWidth / 2 + 31, -this->screenHeight / 2 + 20, 134, 34);
 
+	// 'Cancel Next Dialogue'
+	glm::vec4 cancelNextDlgBtnDestRect = glm::vec4(this->screenWidth / 2 - 200, -this->screenHeight / 2 + 20, this->BUTTON_WIDTH, this->BUTTON_HEIGHT);
+
 	// Box for scene information
 	glm::vec4 sceneBoxDestRect = glm::vec4(sceneBlockDrawStartPos, SCENE_BOX_WIDTH, SCENE_BOX_HEIGHT);
 
@@ -220,6 +226,9 @@ private:
 
 	int selectedSceneIdx = -1;
 	int selectedDialogueIdx = -1;
+
+	int lastSceneIdx = -1;
+	int lastDialogueIdx = -1;
 
 	ProgramState currentState = ProgramState::MAINSCREEN;
 };

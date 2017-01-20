@@ -230,5 +230,7 @@ private:
 	int lastSceneIdx = -1;
 	int lastDialogueIdx = -1;
 
+	bool dlgButtonsOnRight = false;
+
 	ProgramState currentState = ProgramState::MAINSCREEN;
 };

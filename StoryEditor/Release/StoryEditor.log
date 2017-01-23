@@ -1,13 +1,16 @@
 ﻿  MainProgram.cpp
-MainProgram.cpp(367): warning C4018: '<': signed/unsigned mismatch
-MainProgram.cpp(728): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(729): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(730): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(1192): warning C4018: '<': signed/unsigned mismatch
+MainProgram.cpp(373): warning C4018: '<': signed/unsigned mismatch
+MainProgram.cpp(725): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(726): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(727): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(732): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(733): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(734): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(1221): warning C4018: '<': signed/unsigned mismatch
   Generating code
-  2 of 2391 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+  5 of 2394 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
+    9 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   StoryEditor.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\StoryEditor.exe
   StoryEditor.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\StoryEditor.pdb (Full PDB)

@@ -259,11 +259,17 @@ void MainProgram::checkMainScreenInputs()
 
 					this->settingNextDialogue = true;
 
+					if (this->clickedOnFirstAnswerBox) this->selectedAnswerBox = 1;
+					else if (this->clickedOnSecondAnswerBox) this->selectedAnswerBox = 2;
+					else this->selectedAnswerBox = 3;
+
 					this->lastSceneIdx = this->selectedSceneIdx;
 					this->lastDialogueIdx = this->selectedDialogueIdx;
 					this->selectedDialogueIdx = -1;
-
+					
 					this->lastDialogue = this->currentDialogue;
+
+					this->currentDialogue = nullptr;
 				}
 			}
 		}
@@ -451,6 +457,7 @@ void MainProgram::checkMainScreenInputs()
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 					this->settingNextDialogue = false;
+					this->selectedAnswerBox = -1;
 					this->resetCurrentDialogue();
 				}
 			}
@@ -797,6 +804,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 	// This function handles writing text in many different places in the editor
 	if (this->currentState == ProgramState::ADD_DIALOGUE || this->currentState == ProgramState::ADDSCENE
 		|| this->clickedOnTalkerBox || this->clickedOnDialogueBox || this->clickedOnFirstAnswerBox || this->clickedOnSecondAnswerBox || this->clickedOnThirdAnswerBox
+		|| this->settingNextDialogue
 		) {
 		// Handle modifying the current scene name being given
 		std::string keyName = SDL_GetKeyName(keyID);
@@ -899,19 +907,41 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			else if (this->currentDialogue != nullptr && this->clickedOnFirstAnswerBox) {
 				this->clickedOnFirstAnswerBox = false;
 				this->settingNextDialogue = false;
+				this->selectedAnswerBox = -1;
 				this->resetCurrentDialogue();
 			}
 			// Second answer box
 			else if (this->currentDialogue != nullptr && this->clickedOnSecondAnswerBox) {
 				this->clickedOnSecondAnswerBox = false;
 				this->settingNextDialogue = false;
+				this->selectedAnswerBox = -1;
 				this->resetCurrentDialogue();
 			}
 			// Third answer box
 			else if (this->currentDialogue != nullptr && this->clickedOnThirdAnswerBox) {
 				this->clickedOnThirdAnswerBox = false;
 				this->settingNextDialogue = false;
+				this->selectedAnswerBox = -1;
 				this->resetCurrentDialogue();
+			}
+			// Setting dialogue
+			else if (this->settingNextDialogue) {
+				if (this->selectedDialogueIdx != -1) {
+					std::string nextScene = this->sceneManager->getScenes()[this->selectedSceneIdx].first;
+					std::string nextDlg = this->sceneManager->getDialogues(this->selectedSceneIdx)[this->selectedDialogueIdx]->name;
+					std::string next = this->currentFileName + "," + nextScene + "," + nextDlg;
+
+					std::cout << "FUCK YOUOUUUU\n";
+
+					this->resetCurrentDialogue();
+					
+					if (this->selectedAnswerBox == 1) this->currentDialogue->option1Next = next;
+					else if (this->selectedAnswerBox == 2) this->currentDialogue->option2Next = next;
+					else this->currentDialogue->option3Next = next;
+
+					this->selectedAnswerBox = -1;
+					this->settingNextDialogue = false;
+				}
 			}
 			// Dialogue name
 			else {
@@ -1926,7 +1956,10 @@ void MainProgram::drawMainScreenTexts()
 	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->question && !this->settingNextDialogue) {
 		const float fontScale = 0.7f;
 
-		sprintf_s(buffer, "%s", this->currentDialogue->option1Next.c_str());
+		// Get only dialogue name
+		std::string dlg = this->currentDialogue->option1Next;
+		if (dlg != "Not Selected") dlg = dlg.substr(dlg.find_last_of(",") + 1, dlg.length());
+		sprintf_s(buffer, "%s: %s", "Next Dialogue", dlg.c_str());
 
 		glm::vec4 dim = this->getInputDimensions(this->firstAnswerBoxDestRect);
 
@@ -1940,7 +1973,10 @@ void MainProgram::drawMainScreenTexts()
 			this->color
 		);
 
-		sprintf_s(buffer, "%s", this->currentDialogue->option2Next.c_str());
+		// Get only dialogue name
+		dlg = this->currentDialogue->option2Next;
+		if (dlg != "Not Selected") dlg = dlg.substr(dlg.find_last_of(",") + 1, dlg.length());
+		sprintf_s(buffer, "%s: %s", "Next Dialogue", dlg.c_str());
 
 		dim = this->getInputDimensions(this->secondAnswerBoxDestRect);
 
@@ -1954,7 +1990,10 @@ void MainProgram::drawMainScreenTexts()
 			this->color
 		);
 
-		sprintf_s(buffer, "%s", this->currentDialogue->option3Next.c_str());
+		// Get only dialogue name
+		dlg = this->currentDialogue->option3Next;
+		if (dlg != "Not Selected") dlg = dlg.substr(dlg.find_last_of(",") + 1, dlg.length());
+		sprintf_s(buffer, "%s: %s", "Next Dialogue", dlg.c_str());
 
 		dim = this->getInputDimensions(this->thirdAnswerBoxDestRect);
 
@@ -2181,13 +2220,13 @@ void MainProgram::submitDialogue()
 			"",
 			"",
 			1,
-			"Next Dialogue: ",
+			"Not Selected",
 			"",
 			1,
-			"Next Dialogue: ",
+			"Not Selected",
 			"",
 			1,
-			"Next Dialogue: "
+			"Not Selected"
 		)
 	);
 

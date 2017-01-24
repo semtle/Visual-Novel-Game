@@ -57,7 +57,7 @@ void Day::update()
 	processInputs();
 
 	// Reset the option box colors when not in question
-	if (this->dialogueNames[this->currentDialogueIdx] != "Question") {
+	if (this->dialogueNames[this->currentDialogueIdx].find("Question") != std::string::npos) {
 		this->greenBoxIdx = -1;
 		this->redBoxIdx = -1;
 	}
@@ -72,7 +72,7 @@ void Day::processInputs()
 		this->inputManager->releaseKey(SDL_BUTTON_LEFT);
 
 		// Other than questions
-		if (this->dialogueNames[this->currentDialogueIdx] != "Question") {
+		if (this->dialogueNames[this->currentDialogueIdx].find("Question") != std::string::npos) {
 			// Go to next scene
 			bool changeScene = false;
 			if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["next"] == nullptr) {

@@ -87,7 +87,7 @@ private:
 
 	std::string currentSceneName = "";
 	std::string currentDialogueName = "";
-	std::string currentFileName = "PLACEHOLDER_FILE.yaml";
+	std::string currentFileName = "";
 
 	bool clickedOnTalkerBox = false;
 	bool clickedOnDialogueBox = false;
@@ -234,5 +234,5 @@ private:
 
 	bool dlgButtonsOnRight = false;
 
-	ProgramState currentState = ProgramState::MAINSCREEN;
+	ProgramState currentState = ProgramState::FILESELECT;
 };

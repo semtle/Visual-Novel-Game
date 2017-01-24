@@ -156,7 +156,7 @@ void MainProgram::processInput()
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_QUIT:
-			this->sceneManager->saveScenes("TestDialogs/Monday.yaml");
+			if (this->currentFileName != "") this->sceneManager->saveScenes("../Visual Novel Game/Dialogues/" + this->currentFileName);
 			this->currentState = ProgramState::EXIT;
 			break; 
 		case SDL_KEYDOWN:
@@ -509,9 +509,17 @@ void MainProgram::checkMainScreenInputs()
 						filePath += static_cast<char>(c);
 					}
 
+					size_t pos = filePath.find("Characters");
+
+					std::string endPart = filePath.substr(pos + 11, filePath.length());
+					size_t dash = endPart.find("\\");
+
+					std::string charName = endPart.substr(0, dash);
+					std::string imageName = endPart.substr(dash + 1, endPart.length() - 4);
+
 					// Set the background
 					if (filePath.length() > 0) {
-						this->currentDialogue->left = filePath;
+						this->currentDialogue->left = charName + ", " + imageName;
 					}
 				}
 			}
@@ -536,9 +544,17 @@ void MainProgram::checkMainScreenInputs()
 						filePath += static_cast<char>(c);
 					}
 
+					size_t pos = filePath.find("Characters");
+
+					std::string endPart = filePath.substr(pos + 11, filePath.length());
+					size_t dash = endPart.find("\\");
+
+					std::string charName = endPart.substr(0, dash);
+					std::string imageName = endPart.substr(dash + 1, endPart.length() - 4);
+
 					// Set the background
 					if (filePath.length() > 0) {
-						this->currentDialogue->right = filePath;
+						this->currentDialogue->right = charName + ", " + imageName;
 					}
 				}
 			}
@@ -1375,23 +1391,27 @@ void MainProgram::drawCurrentDialogue()
 			);
 		}
 
+		std::string lc = this->currentDialogue->left;
+
 		// Left Character
 		if (this->currentDialogue->left != "" && !this->currentDialogue->question) {
 			this->spriteBatch.draw(
 				this->leftCharDestRect,
 				this->flippedXUvRect,
-				Bengine::ResourceManager::getTexture(this->currentDialogue->left).id,
+				Bengine::ResourceManager::getTexture("../Visual Novel Game/Textures/Characters/" + lc.substr(0, lc.find(",")) + "/" + lc.substr(lc.find(",") + 2, lc.length())).id,
 				0.0f,
 				this->color
 			);
 		}
+
+		std::string rc = this->currentDialogue->right;
 
 		// Right character
 		if (this->currentDialogue->right != "" && !this->currentDialogue->question) {
 			this->spriteBatch.draw(
 				this->rightCharDestRect,
 				this->mainUvRect,
-				Bengine::ResourceManager::getTexture(this->currentDialogue->right).id,
+				Bengine::ResourceManager::getTexture("../Visual Novel Game/Textures/Characters/" + rc.substr(0, rc.find(",")) + "/" + rc.substr(rc.find(",") + 2, rc.length())).id,
 				0.0f,
 				this->color
 			);

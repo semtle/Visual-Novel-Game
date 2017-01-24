@@ -1,0 +1,32 @@
+A Nice Scene:
+    Question:
+        asking: 
+        Option 1:
+            text: This is the first option dude. And it's neutral!
+            influence: 1
+            next: EditorTest.yaml,A Nice Scene,First Followup
+        Option 2:
+            text: Second option, bad
+            influence: 0
+            next: EditorTest.yaml,A Nice Scene,Second Followup
+        Option 3:
+            text: Goodest and thirdest option.
+            influence: 2
+            next: EditorTest.yaml,A Nice Scene,Third Followup
+    First Followup:
+        talking: 
+        left: 
+        right: 
+        message: 
+        next: Second Followup
+    Second Followup:
+        talking: 
+        left: 
+        right: 
+        message: 
+        next: Third Followup
+    Third Followup:
+        talking: 
+        left: 
+        right: 
+        message: 

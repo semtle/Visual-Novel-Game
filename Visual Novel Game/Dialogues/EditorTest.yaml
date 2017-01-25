@@ -1,7 +1,43 @@
-Mayo:
-    Background: cafe.png:
-    Lots Of Crisp:
-        talking: 
-        left: 
-        right: 
-        message: 
+Start:
+    next_scene: Bedroom
+Bedroom:
+    Background: bedroom.png
+    Start:
+        next: Sleeping
+    Sleeping:
+        next: Snoring
+    Snoring:
+        message: zzzZZZzzzz....
+        next: Wake Up
+    Wake Up:
+        message: ...huh?
+        next: Check Time
+    Check Time:
+        message: Boy, that dream was good! What time might it be?
+        next: Look Time
+    Look Time:
+        message: Oh shit it's already fucking 1pm! I'm late for school, shit! I better get going or my teacher won't be at all happy...
+        next_scene: Running
+Running:
+    Background: runningtoschool.png
+    Start:
+        next: Running
+    Running:
+        next_scene: School Yard
+School Yard:
+    Background: schoolyard.png
+    Start:
+        next: Arrive
+    Arrive:
+        message: Phew! I made it!
+        next: Makoto Shout
+    Makoto Shout:
+        message: Hey, player-kuuuun!!
+        next: Look Around
+    Look Around:
+        message: Huh? Who is that?
+        next: Makoto Arrive
+    Makoto Arrive:
+        talking: Makoto-kun
+        right: Makoto-kun, laughing_uniform.png
+        message: Hey player-kun! What up?

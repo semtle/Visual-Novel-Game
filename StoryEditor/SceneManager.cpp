@@ -45,8 +45,11 @@ void SceneManager::saveScenes(const std::string& filePath)
 	std::ofstream file(filePath);
 
 	if (file.is_open()) {
+		std::cout << "Saving...\n";
+
 		for (unsigned i = 0; i < this->scenes.size(); i++) {
 			file << this->scenes[i].first << ":\n";
+			file << "    " << "Background: " << this->sceneBackgrounds[i] << "\n";
 
 			std::vector<Dialogue *> dialogues = this->scenes[i].second;
 			for (unsigned j = 0; j < dialogues.size(); j++) {
@@ -89,6 +92,13 @@ void SceneManager::saveScenes(const std::string& filePath)
 				}
 			}
 		}
+
+		std::cout << "Story saved succesfully.\n";
+	}
+	else {
+		std::cout << "File " << filePath << " was not found!\n";
+		int x;
+		std::cin >> x;
 	}
 
 	file.close();

@@ -10,7 +10,7 @@ MainMenu::~MainMenu()
 }
 
 
-void MainMenu::init(Bengine::InputManager* manager, const std::map<std::string, Character *>& characters, const int& screenWidth, const int& screenHeight)
+void MainMenu::init(const std::string &fileName, Bengine::InputManager* manager, const std::map<std::string, Character *>& characters, const int& screenWidth, const int& screenHeight)
 {
 	this->fontBatch.init();
 	this->inputManager = manager;
@@ -293,7 +293,7 @@ void MainMenu::newGame()
 {
 	if (!this->fadingOut) {
 		if (this->playerName.length() >= 3) {
-			this->nextScene = "monday";
+			this->nextScene = "EditorTest";
 			std::cout << "Set next scene.\n";
 		}
 	}

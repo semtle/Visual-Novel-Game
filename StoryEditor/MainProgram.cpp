@@ -247,7 +247,7 @@ void MainProgram::checkMainScreenInputs()
 
 	// 'Set Next Dialogue' -button
 	// Do this here because need to check before clicks on answe boxes update
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->question
+	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->question
 		&& (this->clickedOnFirstAnswerBox || this->clickedOnSecondAnswerBox || this->clickedOnThirdAnswerBox) && !this->settingNextDialogue) {
 
 		dim = this->getInputDimensions(this->setNextBtnDestRect);
@@ -484,7 +484,18 @@ void MainProgram::checkMainScreenInputs()
 
 					// Set the background
 					if (filePath.length() > 0) {
-						this->currentDialogue->background = filePath;
+						std::string fileName = filePath.substr(filePath.find("Backgrounds") + 12, filePath.length());
+
+						std::vector<std::string> sceneBackgrounds = this->sceneManager->getSceneBackgrounds();
+
+						if (sceneBackgrounds.size() > this->selectedSceneIdx && sceneBackgrounds.size() > 0) {
+							sceneBackgrounds[this->selectedSceneIdx] = fileName;
+						}
+						else {
+							sceneBackgrounds.push_back(fileName);
+						}
+
+						this->sceneManager->setSceneBackgrounds(sceneBackgrounds);
 					}
 				}
 			}
@@ -492,7 +503,7 @@ void MainProgram::checkMainScreenInputs()
 	}
 
 	// Char 1 button
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && !this->currentDialogue->question && !this->settingNextDialogue) {
+	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && !this->currentDialogue->question && !this->settingNextDialogue) {
 		dim = this->getInputDimensions(this->char1BtnDestRect);
 
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
@@ -527,7 +538,7 @@ void MainProgram::checkMainScreenInputs()
 	}
 
 	// Char 2 button
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && !this->currentDialogue->question && !this->settingNextDialogue) {
+	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && !this->currentDialogue->question && !this->settingNextDialogue) {
 		dim = this->getInputDimensions(this->char2BtnDestRect);
 
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
@@ -582,7 +593,7 @@ void MainProgram::checkMainScreenInputs()
 	dim = this->getInputDimensions(this->talkerBoxDestRect);
 
 	// Talker box
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->talker) {
+	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->talker) {
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
@@ -600,7 +611,7 @@ void MainProgram::checkMainScreenInputs()
 	dim = this->getInputDimensions(this->textBoxDestRect);
 
 	// Dialogue box
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->showTextBox) {
+	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->showTextBox) {
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
@@ -618,7 +629,7 @@ void MainProgram::checkMainScreenInputs()
 	dim = this->getInputDimensions(this->firstAnswerBoxDestRect);
 
 	// First answer box
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->question && !this->settingNextDialogue) {
+	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->question && !this->settingNextDialogue) {
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
@@ -633,7 +644,7 @@ void MainProgram::checkMainScreenInputs()
 	dim = this->getInputDimensions(this->secondAnswerBoxDestRect);
 
 	// Second answer box
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->question && !this->settingNextDialogue) {
+	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->question && !this->settingNextDialogue) {
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
@@ -648,7 +659,7 @@ void MainProgram::checkMainScreenInputs()
 	dim = this->getInputDimensions(this->thirdAnswerBoxDestRect);
 
 	// Third answer box
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->question && !this->settingNextDialogue) {
+	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->question && !this->settingNextDialogue) {
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
@@ -1381,11 +1392,11 @@ void MainProgram::drawCurrentDialogue()
 		);
 
 		// Background
-		if (this->currentDialogue->background != "") {
+		if (this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx) {
 			this->spriteBatch.draw(
 				this->dialogueBgDestRect,
 				this->mainUvRect,
-				Bengine::ResourceManager::getTexture(this->currentDialogue->background).id,
+				Bengine::ResourceManager::getTexture("../Visual Novel Game/Textures/Backgrounds/" + this->sceneManager->getSceneBackgrounds()[this->selectedSceneIdx]).id,
 				0.0f,
 				this->color
 			);
@@ -1418,7 +1429,7 @@ void MainProgram::drawCurrentDialogue()
 		}
 
 		// Talker box
-		if (this->currentDialogue->background != "" && this->currentDialogue->talker) {
+		if (this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->talker) {
 			this->spriteBatch.draw(
 				this->talkerBoxDestRect,
 				this->mainUvRect,
@@ -1429,7 +1440,7 @@ void MainProgram::drawCurrentDialogue()
 		}
 
 		// Dialogue box
-		if (this->currentDialogue->background != "" && this->currentDialogue->showTextBox) {
+		if (this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->showTextBox) {
 			this->spriteBatch.draw(
 				this->textBoxDestRect,
 				this->mainUvRect,
@@ -1440,7 +1451,7 @@ void MainProgram::drawCurrentDialogue()
 		}
 
 		/* Question boxes */
-		if (this->currentDialogue->question && this->currentDialogue->background != "") {
+		if (this->currentDialogue->question && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx) {
 			unsigned int firstBox, secondBox, thirdBox;
 
 			// Determine first box color
@@ -1504,7 +1515,7 @@ void MainProgram::drawCurrentDialogue()
 			);
 		}
 
-		if (this->currentDialogue->question && this->currentDialogue->background != "") {
+		if (this->currentDialogue->question && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx) {
 			// Black boxes so can see next dialogue text
 			glm::vec4 dim = this->firstAnswerBoxDestRect;
 
@@ -1795,7 +1806,7 @@ void MainProgram::drawMainScreenTexts()
 	}
 
 	// 'Type talker name' -text
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->clickedOnTalkerBox) {
+	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->clickedOnTalkerBox) {
 		sprintf_s(buffer, "%s", "Type name");
 
 		this->spriteFont->draw(
@@ -1810,7 +1821,7 @@ void MainProgram::drawMainScreenTexts()
 	}
 
 	// 'Type message' -text
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->clickedOnDialogueBox) {
+	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->clickedOnDialogueBox) {
 		sprintf_s(buffer, "%s", "Type message");
 
 		this->spriteFont->draw(
@@ -1825,7 +1836,7 @@ void MainProgram::drawMainScreenTexts()
 	}
 
 	// Talker name
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->talker) {
+	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->talker) {
 		sprintf_s(buffer, "%s", this->currentDialogue->talking.c_str());
 
 		glm::vec4 dim = this->getInputDimensions(this->talkerBoxDestRect);
@@ -1842,7 +1853,7 @@ void MainProgram::drawMainScreenTexts()
 	}
 
 	// Dialogue message
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->showTextBox) {
+	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->showTextBox) {
 		glm::vec4 dim = this->getInputDimensions(this->textBoxDestRect);
 		const float fontScale = 0.6f;
 
@@ -1864,7 +1875,7 @@ void MainProgram::drawMainScreenTexts()
 	}
 
 	// Answer boxes
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->question && !this->settingNextDialogue) {
+	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->question && !this->settingNextDialogue) {
 		// First box
 		glm::vec4 dim = this->getInputDimensions(this->firstAnswerBoxDestRect);
 		const float fontScale = 0.6f;
@@ -1973,7 +1984,7 @@ void MainProgram::drawMainScreenTexts()
 	}
 
 	// Next dialogue texts for answers
-	if (this->currentDialogue != nullptr && this->currentDialogue->background != "" && this->currentDialogue->question && !this->settingNextDialogue) {
+	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->question && !this->settingNextDialogue) {
 		const float fontScale = 0.7f;
 
 		// Get only dialogue name
@@ -2228,7 +2239,6 @@ void MainProgram::submitDialogue()
 		new Dialogue(
 			-1,
 			this->currentDialogueName,
-			"",
 			"",
 			"",
 			"",

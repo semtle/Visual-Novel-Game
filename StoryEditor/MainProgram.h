@@ -60,7 +60,7 @@ private:
 
 	void resetCurrentDialogue();
 
-	ProgramState currentState = ProgramState::FILESELECT;
+	ProgramState currentState = ProgramState::MAINSCREEN;
 
 	Bengine::Window window; ///< Main window
 
@@ -100,6 +100,7 @@ private:
 
 	bool changingSettings = false;
 	bool settingNextDialogue = false;
+	bool customNextDlg = false;
 
 	Dialogue* currentDialogue;
 	Dialogue* lastDialogue;
@@ -206,13 +207,19 @@ private:
 	glm::vec4 thirdAnswerBoxDestRect = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 121, 560, 86);
 
 	// Show dialogue box checkbox
-	glm::vec4 firstCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 520, 32, 32);
+	glm::vec4 showDlgCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 520, 32, 32);
 
 	// Talker checkbox
-	glm::vec4 secondCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 440, 32, 32);
+	glm::vec4 talkerCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 440, 32, 32);
 
 	// Question checkbox
-	glm::vec4 thirdCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 360, 32, 32);
+	glm::vec4 questionCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 360, 32, 32);
+
+	// Custom next dlg checkbox
+	glm::vec4 customNextCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 280, 32, 32);
+
+	// Custom next dialogue button
+	glm::vec4 setNextCustomDlgDestRect = glm::vec4(-this->screenWidth / 2 + 225, -this->screenHeight / 2 + 220, 149, 37);
 
 	// Close icon
 	glm::vec4 closeIconDestRect = glm::vec4(this->screenWidth / 2 - 48, -this->screenHeight / 2 + 550, 32, 32);

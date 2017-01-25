@@ -380,7 +380,6 @@ void MainProgram::checkMainScreenInputs()
 							this->currentSceneListIdx++;
 						else {
 							this->currentDialogueListIdx++;
-							std::cout << "Added index\n";
 						}
 					}
 				}
@@ -420,7 +419,8 @@ void MainProgram::checkMainScreenInputs()
 							this->selectedDialogueIdx = this->shownDialogueIndexes[i];
 
 							// Set the current dialogue
-							this->currentDialogue = this->sceneManager->getDialogues(this->selectedSceneIdx)[this->selectedDialogueIdx];
+							if (!this->settingNextDialogue)
+								this->currentDialogue = this->sceneManager->getDialogues(this->selectedSceneIdx)[this->selectedDialogueIdx];
 						}
 					}
 				}
@@ -458,7 +458,9 @@ void MainProgram::checkMainScreenInputs()
 
 					this->settingNextDialogue = false;
 					this->selectedAnswerBox = -1;
-					this->resetCurrentDialogue();
+					if (this->customNextDlg) this->changingSettings = true;
+					else this->resetCurrentDialogue();
+					this->customNextDlg = false;
 				}
 			}
 		}
@@ -681,15 +683,17 @@ void MainProgram::checkMainScreenInputs()
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 					this->changingSettings = false;
-					this->currentDialogue = lastDialogue;
+					this->currentDialogue = this->lastDialogue;
+
+					std::cout << "This dialogue next: " << this->currentDialogue->nextDialogue << "\n";
 				}
 			}
 		}
 	}
 
-	// First checkbox
+	// Show dialogue box checkbox
 	if (this->changingSettings) {
-		dim = this->getInputDimensions(this->firstCheckBox);
+		dim = this->getInputDimensions(this->showDlgCheckBox);
 
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
@@ -708,9 +712,9 @@ void MainProgram::checkMainScreenInputs()
 		}
 	}
 
-	// Second checkbox
+	// Show talker box checkbox
 	if (this->changingSettings) {
-		dim = this->getInputDimensions(this->secondCheckBox);
+		dim = this->getInputDimensions(this->talkerCheckBox);
 
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
@@ -728,9 +732,9 @@ void MainProgram::checkMainScreenInputs()
 		}
 	}
 
-	// Third checkbox
+	// Question checkbox
 	if (this->changingSettings) {
-		dim = this->getInputDimensions(this->thirdCheckBox);
+		dim = this->getInputDimensions(this->questionCheckBox);
 
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
@@ -742,7 +746,48 @@ void MainProgram::checkMainScreenInputs()
 					if (this->lastDialogue->question) {
 						this->lastDialogue->showTextBox = false;
 						this->lastDialogue->talker = false;
+						this->lastDialogue->nextDialogue = "";
 					}
+				}
+			}
+		}
+	}
+
+	// Custom next dialogue checkbox
+	if (this->changingSettings) {
+		dim = this->getInputDimensions(this->customNextCheckBox);
+
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->lastDialogue->question = false;
+
+					this->lastDialogue->nextDialogue = (this->lastDialogue->nextDialogue == "") ? "Next Dialogue Not Set" : "";
+				}
+			}
+		}
+	}
+
+	// Custom next dialogue button
+	if (this->changingSettings && this->lastDialogue->nextDialogue != "") {
+		dim = this->getInputDimensions(this->setNextCustomDlgDestRect);
+
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->settingNextDialogue = true;
+					this->customNextDlg = true;
+
+					this->lastSceneIdx = this->selectedSceneIdx;
+					this->lastDialogueIdx = this->selectedDialogueIdx;
+					this->selectedDialogueIdx = -1;
+
+					this->changingSettings = false;
+					std::cout << "Is currentdlg nullptr: " << std::to_string(this->currentDialogue == nullptr) << "\n";
 				}
 			}
 		}
@@ -958,13 +1003,18 @@ void MainProgram::onKeyPress(unsigned int keyID)
 					std::string nextDlg = this->sceneManager->getDialogues(this->selectedSceneIdx)[this->selectedDialogueIdx]->name;
 					std::string next = this->currentFileName + "," + nextScene + "," + nextDlg;
 
-					std::cout << "FUCK YOUOUUUU\n";
-
-					this->resetCurrentDialogue();
+					if (this->customNextDlg) {
+						this->changingSettings = true;
+						this->currentDialogue = nullptr;
+					}
+					else this->resetCurrentDialogue();
 					
 					if (this->selectedAnswerBox == 1) this->currentDialogue->option1Next = next;
 					else if (this->selectedAnswerBox == 2) this->currentDialogue->option2Next = next;
-					else this->currentDialogue->option3Next = next;
+					else if (this->selectedAnswerBox == 3) this->currentDialogue->option3Next = next;
+					else this->lastDialogue->nextDialogue = next;
+
+					this->customNextDlg = false;
 
 					this->selectedAnswerBox = -1;
 					this->settingNextDialogue = false;
@@ -1560,7 +1610,7 @@ void MainProgram::drawCurrentDialogue()
 		}
 
 		this->spriteBatch.draw(
-			this->firstCheckBox,
+			this->showDlgCheckBox,
 			this->mainUvRect,
 			texture,
 			0.0f,
@@ -1574,7 +1624,7 @@ void MainProgram::drawCurrentDialogue()
 			texture = Bengine::ResourceManager::getTexture("Textures/checkbox_unchecked.png").id;
 
 		this->spriteBatch.draw(
-			this->secondCheckBox,
+			this->talkerCheckBox,
 			this->mainUvRect,
 			texture,
 			0.0f,
@@ -1588,12 +1638,37 @@ void MainProgram::drawCurrentDialogue()
 			texture = Bengine::ResourceManager::getTexture("Textures/checkbox_unchecked.png").id;
 
 		this->spriteBatch.draw(
-			this->thirdCheckBox,
+			this->questionCheckBox,
 			this->mainUvRect,
 			texture,
 			0.0f,
 			this->color
 		);
+
+		// Custom next dialogue box
+		if (this->lastDialogue->nextDialogue != "")
+			texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
+		else
+			texture = Bengine::ResourceManager::getTexture("Textures/checkbox_unchecked.png").id;
+
+		this->spriteBatch.draw(
+			this->customNextCheckBox,
+			this->mainUvRect,
+			texture,
+			0.0f,
+			this->color
+		);
+
+		// Set next dialogue button
+		if (this->lastDialogue->nextDialogue != "") {
+			this->spriteBatch.draw(
+				this->setNextCustomDlgDestRect,
+				this->mainUvRect,
+				Bengine::ResourceManager::getTexture("Textures/setnext.png").id,
+				0.0f,
+				this->color
+			);
+		}
 
 		// Close icon
 		this->spriteBatch.draw(
@@ -2075,6 +2150,39 @@ void MainProgram::drawMainScreenTexts()
 			0.0f,
 			Bengine::ColorRGBA8(0, 0, 0, 255)
 		);
+
+		// Custom next dialogue checkbox
+		sprintf_s(buffer, "%s", "Set custom next dialogue");
+
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(226, 310),
+			glm::vec2(0.8f),
+			0.0f,
+			Bengine::ColorRGBA8(0, 0, 0, 255)
+		);
+
+		// The custom next dialogue's name
+		if (this->lastDialogue->nextDialogue != "") {
+			std::string endPart = this->lastDialogue->nextDialogue;
+
+			if (this->lastDialogue->nextDialogue != "Next Dialogue Not Set") {
+				endPart = endPart.substr(endPart.find(",") + 1, endPart.length());
+				endPart = endPart.substr(endPart.find(",") + 1, endPart.length());
+			}
+
+			sprintf_s(buffer, "%s", endPart.c_str());
+
+			this->spriteFont->draw(
+				this->fontBatch,
+				buffer,
+				glm::vec2(385, 222),
+				glm::vec2(0.8f),
+				0.0f,
+				Bengine::ColorRGBA8(0, 0, 0, 255)
+			);
+		}
 	}
 
 	this->fontBatch.end();
@@ -2243,7 +2351,7 @@ void MainProgram::submitDialogue()
 			"",
 			"",
 			"",
-			-1,
+			"",
 			true,
 			false,
 			true,
@@ -2305,6 +2413,9 @@ std::wstring MainProgram::getOpenFileName(HWND owner, bool png)
 	TCHAR currentDirectory[MAX_PATH];
 	DWORD ret;
 	ret = GetCurrentDirectory(ARRSIZE(currentDirectory), currentDirectory);
+	if (!SetCurrentDirectory("C:/Users/Zentryn/Documents/Visual Studio 2015/Projects")) {
+		std::cout << "COULDNT SET THJE SHIT\n";
+	}
 
 	if (ret == 0) {
 		std::cout << "Error with saving directory: " << GetLastError() << "\n";

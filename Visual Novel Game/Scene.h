@@ -18,7 +18,7 @@ public:
 	Scene();
 	virtual ~Scene();
 
-	virtual void init(Bengine::InputManager* manager, const std::map<std::string, Character *>& characters, const int& screenWidth, const int& screenHeight) = 0;
+	virtual void init(const std::string &fileName, Bengine::InputManager* manager, const std::map<std::string, Character *>& characters, const int& screenWidth, const int& screenHeight) = 0;
 	virtual void update() = 0;
 	virtual bool exitGame() = 0;
 	virtual void doFading() = 0;

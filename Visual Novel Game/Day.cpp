@@ -10,18 +10,18 @@ Day::~Day()
 {
 }
 
-void Day::init(Bengine::InputManager* manager, const std::map<std::string, Character *>& characters, const int& screenWidth, const int& screenHeight)
+void Day::init(const std::string &fileName, Bengine::InputManager* manager, const std::map<std::string, Character *>& characters, const int& screenWidth, const int& screenHeight)
 {
 	this->fontBatch.init();
 
 	this->characters = characters;
 
-	std::string path = "Dialogues/" + this->day + ".yaml";
+	std::string path = "Dialogues/" + fileName + ".yaml";
 	this->file = YAML::LoadFile(path);
 
 	this->sceneNames.push_back(this->file["Start"]["next_scene"].as<std::string>());
 	std::cout << "Current scene: " << this->sceneNames[this->currentSceneIdx];
-	this->dialogueNames.push_back("Start");
+	this->dialogueNames.push_back(this->file[this->sceneNames[this->currentSceneIdx]]["Start"]["next"].as<std::string>());
 
 	if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["message"] != nullptr) {
 		this->dialogues.push_back(new Dialogue(this->playerName, this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["message"].as<std::string>()));
@@ -71,13 +71,16 @@ void Day::processInputs()
 		std::cout << "Size: " << this->dialogues.size() << "\n";
 		this->inputManager->releaseKey(SDL_BUTTON_LEFT);
 
+		std::cout << "Current scene: " << this->currentScene << "\n";
+		std::cout << "Current dialogue: " << this->currentDialogue << "\n";
+
 		// Other than questions
-		if (this->dialogueNames[this->currentDialogueIdx].find("Question") != std::string::npos) {
+		if (this->dialogueNames[this->currentDialogueIdx].find("Question") == std::string::npos) {
 			// Go to next scene
 			bool changeScene = false;
 			if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["next"] == nullptr) {
 				this->sceneNames.push_back(this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["next_scene"].as<std::string>());
-				this->dialogueNames.push_back("Start");
+				this->dialogueNames.push_back(this->file[this->sceneNames[this->currentSceneIdx + 1]]["Start"]["next"].as<std::string>());
 				changeScene = true;
 			}
 			// Go to next dialog
@@ -87,9 +90,9 @@ void Day::processInputs()
 
 			this->currentDialogueIdx++;
 
-			nextDialogue();
-
 			if (changeScene) this->currentSceneIdx++;
+
+			nextDialogue();
 		}
 		// Handle the question boxes
 		else {
@@ -166,7 +169,7 @@ void Day::drawTexts(Bengine::SpriteFont* spriteFont, Bengine::GLSLProgram* shade
 void Day::drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* hudCamera, Bengine::GLSLProgram* shaderProgram, const int& screenWidth, const int& screenHeight)
 {
 	static const unsigned int dayImage = Bengine::ResourceManager::getTexture("Textures/Backgrounds/Weekdays/" + this->day + ".png").id;
-	unsigned int background = Bengine::ResourceManager::getTexture("Textures/Backgrounds/" + this->file[this->sceneNames[this->currentSceneIdx]]["Background"].as<std::string>() + ".png").id;
+	unsigned int background = Bengine::ResourceManager::getTexture("Textures/Backgrounds/" + this->file[this->sceneNames[this->currentSceneIdx]]["Background"].as<std::string>()).id;
 	static const glm::vec4 destRect(-screenWidth / 2, -screenHeight / 2, screenWidth, screenHeight);
 	static const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 	static const Bengine::ColorRGBA8 color(255, 255, 255, 255);

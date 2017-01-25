@@ -68,7 +68,7 @@ void MainGame::initScenes()
 	this->currentScene = "menu";
 
 	// Create the menu
-	this->menuScene.init(&this->inputManager, this->characters, this->screenWidth, this->screenHeight);
+	this->menuScene.init("", &this->inputManager, this->characters, this->screenWidth, this->screenHeight);
 	this->scenes.emplace("menu", &this->menuScene);
 
 	// Boys
@@ -86,19 +86,16 @@ void MainGame::initScenes()
 
 void MainGame::initDays()
 {
-	this->days.emplace("monday", new Day());
-	this->days["monday"]->setDay("Monday");
-	this->days["monday"]->setPlayerName(this->playerName);
+	this->days.emplace("EditorTest", new Day());
+	this->days["EditorTest"]->setDay("Monday");
+	this->days["EditorTest"]->setPlayerName(this->playerName);
 
 	// Initialize all the scenes
 	for (std::pair<std::string, Day*> day : this->days) {
-		std::string dayName = day.first;
-		std::string capitalized = dayName[0] + day.first.substr(1, day.first.size() - 1);
-		day.second->setDay(capitalized);
 		day.second->setPlayerName(this->menuScene.getPlayerName());
-		day.second->init(&this->inputManager, this->characters, this->screenWidth, this->screenHeight);
+		day.second->init(day.first, &this->inputManager, this->characters, this->screenWidth, this->screenHeight);
 
-		this->scenes.emplace(capitalized, day.second);
+		this->scenes.emplace(day.first, day.second);
 	}
 }
 
@@ -201,7 +198,6 @@ void MainGame::drawGame()
 	this->spriteBatch.begin();
 	
 	if (!this->loading) {
-		// Draw all images in the current scene
 		this->scenes.find(this->currentScene)->second->drawImages(this->spriteBatch, &this->hudCamera, &this->shaderProgram, this->screenWidth, this->screenHeight);
 
 		this->spriteBatch.end();

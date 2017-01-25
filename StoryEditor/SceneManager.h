@@ -26,7 +26,7 @@ struct Dialogue {
 		left(""),
 		right(""),
 		message(""),
-		nextDialogue(-1),
+		nextDialogue(""),
 		showTextBox(true),
 		question(false),
 		talker(false),
@@ -52,7 +52,7 @@ struct Dialogue {
 		std::string Left,
 		std::string Right,
 		std::string Message,
-		int NextDialogue,
+		std::string NextDialogue,
 		bool ShowTextBox,
 		bool Question,
 		bool Talker,
@@ -101,7 +101,7 @@ struct Dialogue {
 	std::string left;
 	std::string right;
 	std::string message;
-	int nextDialogue;
+	std::string nextDialogue;
 
 	bool showTextBox;
 	bool question;

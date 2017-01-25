@@ -2169,7 +2169,7 @@ void MainProgram::drawMainScreenTexts()
 		if (this->lastDialogue->nextDialogue != "") {
 			std::string endPart = this->lastDialogue->nextDialogue;
 
-			if (this->lastDialogue->nextDialogue != "Next Dialogue Not Set") {
+			if (endPart != "Next Dialogue Not Set") {
 				endPart = endPart.substr(endPart.find(",") + 1, endPart.length());
 				endPart = endPart.substr(endPart.find(",") + 1, endPart.length());
 			}

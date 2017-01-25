@@ -21,7 +21,7 @@ public:
 	Day();
 	~Day();
 
-	void init(Bengine::InputManager* manager, const std::map<std::string, Character *>& characters, const int& screenWidth, const int& screenHeight) override;
+	void init(const std::string &fileName, Bengine::InputManager* manager, const std::map<std::string, Character *>& characters, const int& screenWidth, const int& screenHeight) override;
 	void update() override;
 	void processInputs();
 	void doFading() override;

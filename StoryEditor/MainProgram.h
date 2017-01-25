@@ -60,6 +60,8 @@ private:
 
 	void resetCurrentDialogue();
 
+	ProgramState currentState = ProgramState::FILESELECT;
+
 	Bengine::Window window; ///< Main window
 
 	Bengine::GLSLProgram shaderProgram; ///< Shaders
@@ -233,6 +235,4 @@ private:
 	int lastDialogueIdx = -1;
 
 	bool dlgButtonsOnRight = false;
-
-	ProgramState currentState = ProgramState::FILESELECT;
 };

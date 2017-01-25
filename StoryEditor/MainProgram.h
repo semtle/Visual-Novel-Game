@@ -60,7 +60,7 @@ private:
 
 	void resetCurrentDialogue();
 
-	ProgramState currentState = ProgramState::MAINSCREEN;
+	ProgramState currentState = ProgramState::FILESELECT;
 
 	Bengine::Window window; ///< Main window
 

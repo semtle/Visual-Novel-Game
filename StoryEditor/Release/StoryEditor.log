@@ -1,36 +1,36 @@
 ﻿  MainProgram.cpp
 MainProgram.cpp(250): warning C4018: '>': signed/unsigned mismatch
 MainProgram.cpp(373): warning C4018: '<': signed/unsigned mismatch
-MainProgram.cpp(491): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(506): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(541): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(596): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(614): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(632): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(647): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(662): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(752): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(753): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(754): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(759): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(760): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(761): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(1248): warning C4018: '<': signed/unsigned mismatch
-MainProgram.cpp(1395): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1432): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1443): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1454): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1518): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1809): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1824): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1839): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1856): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1878): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1987): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(493): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(508): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(543): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(598): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(616): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(634): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(649): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(664): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(797): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(798): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(799): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(804): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(805): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(806): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(1298): warning C4018: '<': signed/unsigned mismatch
+MainProgram.cpp(1445): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(1482): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(1493): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(1504): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(1568): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(1884): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(1899): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(1914): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(1931): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(1953): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(2062): warning C4018: '>': signed/unsigned mismatch
   Generating code
-  2 of 2456 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+  9 of 2456 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    8 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   StoryEditor.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\StoryEditor.exe
   StoryEditor.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\StoryEditor.pdb (Full PDB)

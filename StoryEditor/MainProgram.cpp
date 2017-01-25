@@ -684,8 +684,6 @@ void MainProgram::checkMainScreenInputs()
 
 					this->changingSettings = false;
 					this->currentDialogue = this->lastDialogue;
-
-					std::cout << "This dialogue next: " << this->currentDialogue->nextDialogue << "\n";
 				}
 			}
 		}
@@ -1006,6 +1004,10 @@ void MainProgram::onKeyPress(unsigned int keyID)
 					if (this->customNextDlg) {
 						this->changingSettings = true;
 						this->currentDialogue = nullptr;
+
+						// Reset the scene & dialogue
+						this->selectedSceneIdx = this->lastSceneIdx;
+						this->selectedDialogueIdx = this->lastDialogueIdx;
 					}
 					else this->resetCurrentDialogue();
 					
@@ -2413,9 +2415,6 @@ std::wstring MainProgram::getOpenFileName(HWND owner, bool png)
 	TCHAR currentDirectory[MAX_PATH];
 	DWORD ret;
 	ret = GetCurrentDirectory(ARRSIZE(currentDirectory), currentDirectory);
-	if (!SetCurrentDirectory("C:/Users/Zentryn/Documents/Visual Studio 2015/Projects")) {
-		std::cout << "COULDNT SET THJE SHIT\n";
-	}
 
 	if (ret == 0) {
 		std::cout << "Error with saving directory: " << GetLastError() << "\n";

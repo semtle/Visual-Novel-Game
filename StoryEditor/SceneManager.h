@@ -22,7 +22,6 @@ struct Dialogue {
 	Dialogue() :
 		index(-1),
 		name(""),
-		background(""),
 		talking(""),
 		left(""),
 		right(""),
@@ -49,7 +48,6 @@ struct Dialogue {
 	Dialogue(
 		int Index,
 		std::string Name,
-		std::string Background,
 		std::string Talking,
 		std::string Left,
 		std::string Right,
@@ -74,7 +72,6 @@ struct Dialogue {
 	) :
 		index(Index),
 		name(Name),
-		background(Background),
 		talking(Talking),
 		left(Left),
 		right(Right),
@@ -100,7 +97,6 @@ struct Dialogue {
 
 	int index;
 	std::string name;
-	std::string background;
 	std::string talking;
 	std::string left;
 	std::string right;
@@ -139,11 +135,15 @@ public:
 
 	void saveScenes(const std::string& filePath);
 
+	// Setters
+	void setSceneBackgrounds(std::vector<std::string> bgs) { this->sceneBackgrounds = bgs; }
+
 	// Getters
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> getScenes() const { return this->scenes; }
+	std::vector<std::string> getSceneBackgrounds() const { return this->sceneBackgrounds; }
 	std::vector<Dialogue *> getDialogues(int idx) { return this->scenes[idx].second; }
-
 	
 private:
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> scenes;
+	std::vector<std::string> sceneBackgrounds;
 };

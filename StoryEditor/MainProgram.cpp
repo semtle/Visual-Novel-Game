@@ -453,6 +453,10 @@ void MainProgram::checkMainScreenInputs()
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
+					if (this->selectedSceneIdx == -1 && !this->settingNextDialogue) {
+						this->resetEverything();
+					}
+
 					this->selectedSceneIdx = -1;
 					this->selectedDialogueIdx = -1;
 					this->changingSceneNameIdx = -1;
@@ -1453,7 +1457,7 @@ void MainProgram::drawMainScreen()
 	}
 
 	// Left arrow (back), only draw if no scene is selected
-	if (this->selectedSceneIdx != -1 && !this->changingSettings) {
+	if (!this->changingSettings && !(this->settingNextDialogue && this->selectedSceneIdx == -1)) {
 		this->spriteBatch.draw(
 			this->arrowLeftDestRect,
 			glm::vec4(0.0f, 0.0f, -1.0f, 1.0f),
@@ -2507,6 +2511,35 @@ glm::vec4 MainProgram::getInputDimensions(glm::vec4 texture, bool swapy)
 	}
 
 	return texture;
+}
+
+
+void MainProgram::resetEverything()
+{
+	this->sceneManager->saveToFile("../Visual Novel Game/Dialogues/" + this->currentFileName);
+	this->currentState = ProgramState::FILESELECT;
+	this->currentFileName = "";
+	delete this->sceneManager;
+	this->sceneManager = new SceneManager();
+
+	this->shownSceneIndexes.clear();
+	this->shownDialogueIndexes.clear();
+
+	this->currentSceneName = "";
+	this->currentDialogueName = "";
+	this->currentFileName = "";
+
+	this->clickedOnTalkerBox = false;
+	this->clickedOnDialogueBox = false;
+
+	this->clickedOnFirstAnswerBox = false;
+	this->clickedOnSecondAnswerBox = false;
+	this->clickedOnThirdAnswerBox = false;
+
+	this->changingSettings = false;
+	this->settingNextDialogue = false;
+	this->customNextDlg = false;
+	this->changingDialogueName = false;
 }
 
 

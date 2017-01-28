@@ -1,37 +1,36 @@
 ﻿  MainProgram.cpp
 MainProgram.cpp(252): warning C4018: '>': signed/unsigned mismatch
 MainProgram.cpp(381): warning C4018: '<': signed/unsigned mismatch
-MainProgram.cpp(533): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(548): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(583): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(639): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(657): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(675): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(690): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(705): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(839): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(840): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(841): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(846): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(847): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(848): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(1444): warning C4018: '<': signed/unsigned mismatch
-MainProgram.cpp(1603): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1640): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1651): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1662): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1726): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2056): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2071): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2086): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(537): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(552): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(587): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(643): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(661): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(679): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(694): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(709): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(843): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(844): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(845): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(850): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(851): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(852): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+MainProgram.cpp(1448): warning C4018: '<': signed/unsigned mismatch
+MainProgram.cpp(1620): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(1657): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(1668): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(1679): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(1743): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(2073): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(2088): warning C4018: '>': signed/unsigned mismatch
 MainProgram.cpp(2103): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2125): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2234): warning C4018: '>': signed/unsigned mismatch
-  main.cpp
+MainProgram.cpp(2120): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(2142): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(2251): warning C4018: '>': signed/unsigned mismatch
   Generating code
-  8 of 2880 functions ( 0.3%) were compiled, the rest were copied from previous compilation.
+  2 of 2883 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    5 functions had inline decision re-evaluated but remain unchanged
+    8 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 libyaml-cppmdd.lib(directives.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(directives.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
 libyaml-cppmdd.lib(exp.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(exp.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info

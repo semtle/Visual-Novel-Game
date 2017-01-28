@@ -267,11 +267,14 @@ void MainProgram::checkMainScreenInputs()
 
 					this->lastSceneIdx = this->selectedSceneIdx;
 					this->lastDialogueIdx = this->selectedDialogueIdx;
+					this->lastSceneListIdx = this->currentSceneListIdx;
+					this->lastDialogueListIdx = this->currentDialogueListIdx;
 					this->selectedDialogueIdx = -1;
 					
 					this->lastDialogue = this->currentDialogue;
 
 					this->currentDialogue = nullptr;
+					this->changingDialogueName = false;
 				}
 			}
 		}
@@ -331,11 +334,14 @@ void MainProgram::checkMainScreenInputs()
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
+					this->changingSceneNameIdx = -1;
+
 					if (this->selectedSceneIdx == -1) {
 						this->currentState = ProgramState::ADDSCENE;
 					}
 					else {
 						this->currentDialogue = nullptr;
+						this->changingDialogueName = false;
 						this->currentState = ProgramState::ADD_DIALOGUE;
 					}
 				}
@@ -396,11 +402,19 @@ void MainProgram::checkMainScreenInputs()
 
 			if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 				if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+					// Open scene
 					if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 						this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 						// Open the clicked scene
 						this->selectedSceneIdx = this->shownSceneIndexes[i];
+						this->changingSceneNameIdx = -1;
+					}
+					// Change scene name
+					else if (this->inputManager.isKeyDown(SDL_BUTTON_RIGHT)) {
+						this->inputManager.releaseKey(SDL_BUTTON_RIGHT);
+
+						this->changingSceneNameIdx = this->shownSceneIndexes[i];
 					}
 				}
 			}
@@ -441,9 +455,28 @@ void MainProgram::checkMainScreenInputs()
 
 					this->selectedSceneIdx = -1;
 					this->selectedDialogueIdx = -1;
+					this->changingSceneNameIdx = -1;
 					this->currentDialogueListIdx = 0;
 
 					this->currentDialogue = nullptr;
+					this->changingDialogueName = false;
+				}
+			}
+		}
+	}
+
+	// Current dialogue name
+	if (this->currentDialogue != nullptr) {
+		glm::vec2 fontSize = this->spriteFont->measure(this->currentDialogue->name.c_str());
+
+		dim = this->getInputDimensions(glm::vec4(this->screenWidth / 2 - 20 - fontSize.x * 0.8, -this->screenHeight / 2 + 540, fontSize.x * 0.8, fontSize.y * 0.8));
+
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->changingDialogueName = true;
 				}
 			}
 		}
@@ -463,6 +496,11 @@ void MainProgram::checkMainScreenInputs()
 					if (this->customNextDlg) this->changingSettings = true;
 					else this->resetCurrentDialogue();
 					this->customNextDlg = false;
+					this->selectedSceneIdx = this->lastSceneIdx;
+					this->selectedDialogueIdx = this->lastDialogueIdx;
+
+					this->currentSceneListIdx = this->lastSceneListIdx;
+					this->currentDialogueListIdx = this->lastDialogueListIdx;
 				}
 			}
 		}
@@ -589,6 +627,7 @@ void MainProgram::checkMainScreenInputs()
 
 					this->lastDialogue = this->currentDialogue;
 					this->currentDialogue = nullptr;
+					this->changingDialogueName = false;
 				}
 			}
 		}
@@ -784,6 +823,9 @@ void MainProgram::checkMainScreenInputs()
 
 					this->lastSceneIdx = this->selectedSceneIdx;
 					this->lastDialogueIdx = this->selectedDialogueIdx;
+					this->lastSceneListIdx = this->currentSceneListIdx;
+					this->lastDialogueListIdx = this->currentDialogueListIdx;
+
 					this->selectedDialogueIdx = -1;
 
 					this->changingSettings = false;
@@ -876,7 +918,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 	// This function handles writing text in many different places in the editor
 	if (this->currentState == ProgramState::ADD_DIALOGUE || this->currentState == ProgramState::ADDSCENE
 		|| this->clickedOnTalkerBox || this->clickedOnDialogueBox || this->clickedOnFirstAnswerBox || this->clickedOnSecondAnswerBox || this->clickedOnThirdAnswerBox
-		|| this->settingNextDialogue
+		|| this->settingNextDialogue || this->changingDialogueName || this->changingSceneNameIdx != -1
 		) {
 		// Handle modifying the current scene name being given
 		std::string keyName = SDL_GetKeyName(keyID);
@@ -895,6 +937,18 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			// Scene name
 			if (this->currentState == ProgramState::ADDSCENE) {
 				this->currentSceneName = this->currentSceneName.substr(0, this->currentSceneName.size() - 1);
+			}
+			// Dialogue name
+			if (this->currentState == ProgramState::ADD_DIALOGUE) {
+				this->currentDialogueName = this->currentDialogueName.substr(0, this->currentDialogueName.size() - 1);
+			}
+			// Changing dialogue name
+			else if (this->changingDialogueName) {
+				this->currentDialogue->name = this->currentDialogue->name.substr(0, this->currentDialogue->name.size() - 1);
+			}
+			else if (this->changingSceneNameIdx != -1) {
+				std::string sceneName = this->sceneManager->getScenes()[this->changingSceneNameIdx].first;
+				this->sceneManager->setSceneName(this->changingSceneNameIdx, sceneName.substr(0, sceneName.size() - 1));
 			}
 			// Talker
 			else if (this->currentDialogue != nullptr && this->clickedOnTalkerBox) {
@@ -938,6 +992,22 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				}
 			}
 
+			// Changing dialogue name
+			else if (this->changingDialogueName) {
+				if (this->currentDialogue->name.length() < 15) {
+					if (this->currentDialogue->name.length() > 0) this->currentDialogue->name += " ";
+				}
+			}
+
+			// Changing scene name
+			else if (this->changingSceneNameIdx != -1) {
+				std::string sceneName = this->sceneManager->getScenes()[this->changingSceneNameIdx].first;
+
+				if (sceneName.length() < 15) {
+					this->sceneManager->setSceneName(this->changingSceneNameIdx, sceneName + " ");
+				}
+			}
+
 			// Message
 			else if (this->currentDialogue != nullptr && this->clickedOnDialogueBox) {
 				this->currentDialogue->message += " ";
@@ -966,6 +1036,14 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				if (this->currentSceneName.length() >= 3 && this->currentSceneName.length() <= 16) {
 					std::cout << "Name was valid.\n";
 				}
+			}
+			// Changing dialogue name
+			else if (this->changingDialogueName) {
+				this->changingDialogueName = false;
+			}
+			// Changing scene name
+			else if (this->changingSceneNameIdx != -1) {
+				this->changingSceneNameIdx = -1;
 			}
 			// Talker
 			else if (this->currentDialogue != nullptr && this->clickedOnTalkerBox) {
@@ -1009,10 +1087,14 @@ void MainProgram::onKeyPress(unsigned int keyID)
 					if (this->customNextDlg) {
 						this->changingSettings = true;
 						this->currentDialogue = nullptr;
+						this->changingDialogueName = false;
 
 						// Reset the scene & dialogue
 						this->selectedSceneIdx = this->lastSceneIdx;
 						this->selectedDialogueIdx = this->lastDialogueIdx;
+
+						this->currentSceneListIdx = this->lastSceneListIdx;
+						this->currentDialogueListIdx = this->lastDialogueListIdx;
 					}
 					else this->resetCurrentDialogue();
 					
@@ -1041,6 +1123,25 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			if (this->currentState == ProgramState::ADDSCENE && keyName != "+" && keyName != "1" && keyName != ",") {
 				if (this->currentSceneName.length() < 16) {
 					this->currentSceneName += static_cast<char>(keyID);
+				}
+			}
+			// Dialogue name
+			if (this->currentState == ProgramState::ADD_DIALOGUE && keyName != "+" && keyName != "1" && keyName != ",") {
+				if (this->currentDialogueName.length() < 16) {
+					this->currentDialogueName += static_cast<char>(keyID);
+				}
+			}
+			// Changing dialogue name
+			else if (this->changingDialogueName) {
+				if (this->currentDialogue->name.length() < 16) {
+					this->currentDialogue->name += static_cast<char>(keyID);
+				}
+			}
+			// Changing scene name
+			else if (this->changingSceneNameIdx != -1) {
+				std::string sceneName = this->sceneManager->getScenes()[this->changingSceneNameIdx].first;
+				if (sceneName.length() < 16) {
+					this->sceneManager->setSceneName(this->changingSceneNameIdx, sceneName + static_cast<char>(keyID));
 				}
 			}
 			// Talker
@@ -1129,6 +1230,44 @@ void MainProgram::onKeyPress(unsigned int keyID)
 					if (i != this->currentSceneName.length() - 1) {
 						this->currentSceneName[i + 1] = toupper(this->currentSceneName[i + 1]);
 					}
+				}
+			}
+
+			// Changing dialogue name
+			if (this->changingDialogueName) {
+				if (this->currentDialogue->name.length() > 0) {
+					for (unsigned i = 0; i < this->currentDialogue->name.length(); i++) {
+						if (i == 0) {
+							this->currentDialogue->name[0] = toupper(this->currentDialogue->name[i]);
+						}
+
+						if (this->currentDialogue->name[i] == ' ') {
+							if (i != this->currentDialogue->name.length() - 1) {
+								this->currentDialogue->name[i + 1] = toupper(this->currentDialogue->name[i + 1]);
+							}
+						}
+					}
+				}
+			}
+
+			// Changing scene name
+			if (this->changingSceneNameIdx != -1) {
+				std::string sceneName = this->sceneManager->getScenes()[this->changingSceneNameIdx].first;
+
+				if (sceneName.length() > 0) {
+					for (unsigned i = 0; i < sceneName.length(); i++) {
+						if (i == 0) {
+							sceneName[0] = toupper(sceneName[i]);
+						}
+
+						if (sceneName[i] == ' ') {
+							if (i != sceneName.length() - 1) {
+								sceneName[i + 1] = toupper(sceneName[i + 1]);
+							}
+						}
+					}
+
+					this->sceneManager->setSceneName(this->changingSceneNameIdx, sceneName);
 				}
 			}
 
@@ -1333,13 +1472,25 @@ void MainProgram::drawMainScreen()
 
 		glm::vec4 originalDestRect = sceneBoxDestRect;
 		for (unsigned i = 0; i < shownScenes.size(); i++) {
-			this->spriteBatch.draw(
-				this->sceneBoxDestRect,
-				this->mainUvRect,
-				sceneBox,
-				0.0f,
-				this->color
-			);
+			if (this->shownSceneIndexes[i] == this->changingSceneNameIdx) {
+				this->spriteBatch.draw(
+					this->sceneBoxDestRect,
+					this->mainUvRect,
+					Bengine::ResourceManager::getTexture("Textures/scene-box-selected.png").id,
+					0.0f,
+					this->color
+				);
+			}
+			else {
+				this->spriteBatch.draw(
+					this->sceneBoxDestRect,
+					this->mainUvRect,
+					sceneBox,
+					0.0f,
+					this->color
+				);
+			}
+
 			sceneBoxDestRect.y -= this->sceneBlockPositionDiff;
 		}
 		sceneBoxDestRect = originalDestRect;
@@ -1356,7 +1507,7 @@ void MainProgram::drawMainScreen()
 				this->spriteBatch.draw(
 					destRect,
 					this->mainUvRect,
-					(i == this->selectedDialogueIdx && this->settingNextDialogue) ? greenBox : sceneBox,
+					(this->shownDialogueIndexes[i] == this->selectedDialogueIdx && this->settingNextDialogue) ? greenBox : sceneBox,
 					0.0f,
 					this->color
 				);
@@ -1829,6 +1980,20 @@ void MainProgram::drawMainScreenTexts()
 				currentY += 90;
 			}
 		}
+	}
+
+	// Write to change the scene name text
+	if (this->changingSceneNameIdx != -1) {
+		sprintf_s(buffer, "%s", "Write to change the name of the selected scene.");
+
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(210, 540),
+			glm::vec2(0.8f),
+			0.0f,
+			Bengine::ColorRGBA8(0, 0, 0, 255)
+		);
 	}
 
 	// Name of current dialogue
@@ -2337,6 +2502,9 @@ void MainProgram::resetCurrentDialogue()
 	this->currentDialogue = this->lastDialogue;
 	this->selectedSceneIdx = this->lastSceneIdx;
 	this->selectedDialogueIdx = this->lastDialogueIdx;
+
+	this->currentSceneListIdx = this->lastSceneListIdx;
+	this->currentDialogueListIdx = this->lastDialogueListIdx;
 }
 
 

@@ -57,6 +57,7 @@ private:
 	std::vector<Dialogue *> getShownDialogues(std::vector<Dialogue *> allDialogues);
 	std::vector<std::string> getWrappedText(std::string text, Bengine::SpriteFont* spriteFont, const float& maxLength, const float& fontScale);
 	glm::vec4 getInputDimensions(glm::vec4 texture, bool swapy = true);
+	void resetEverything();
 
 	void resetCurrentDialogue();
 

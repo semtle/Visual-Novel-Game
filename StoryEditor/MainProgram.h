@@ -101,6 +101,7 @@ private:
 	bool changingSettings = false;
 	bool settingNextDialogue = false;
 	bool customNextDlg = false;
+	bool changingDialogueName = false;
 
 	Dialogue* currentDialogue;
 	Dialogue* lastDialogue;
@@ -235,11 +236,14 @@ private:
 
 	int selectedAnswerBox = -1;
 
+	int changingSceneNameIdx = -1;
 	int selectedSceneIdx = -1;
 	int selectedDialogueIdx = -1;
 
 	int lastSceneIdx = -1;
 	int lastDialogueIdx = -1;
+	int lastSceneListIdx = -1;
+	int lastDialogueListIdx = -1;
 
 	bool dlgButtonsOnRight = false;
 };

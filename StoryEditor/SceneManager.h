@@ -8,6 +8,7 @@
 #include <vector>
 #include <map>
 #include <fstream>
+#include <yaml-cpp/yaml.h>
 
 #include <Bengine/Bengine.h>
 #include <Bengine/Window.h>
@@ -133,7 +134,8 @@ public:
 	void addScene(std::string sceneName);
 	void addDialogue(int idx, Dialogue *);
 
-	void saveScenes(const std::string& filePath);
+	void loadFromFile(const std::string& filePath);
+	void saveToFile(const std::string& filePath);
 
 	// Setters
 	void setSceneBackgrounds(std::vector<std::string> bgs) { this->sceneBackgrounds = bgs; }

@@ -86,9 +86,11 @@ void MainGame::initScenes()
 
 void MainGame::initDays()
 {
-	this->days.emplace("EditorTest", new Day());
-	this->days["EditorTest"]->setDay("Monday");
-	this->days["EditorTest"]->setPlayerName(this->playerName);
+	std::string fileName = "EditorTest";
+
+	this->days.emplace(fileName, new Day());
+	this->days[fileName]->setDay("Monday");
+	this->days[fileName]->setPlayerName(this->playerName);
 
 	// Initialize all the scenes
 	for (std::pair<std::string, Day*> day : this->days) {

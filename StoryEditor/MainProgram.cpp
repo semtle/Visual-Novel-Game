@@ -156,7 +156,7 @@ void MainProgram::processInput()
 	while (SDL_PollEvent(&event)) {
 		switch (event.type) {
 		case SDL_QUIT:
-			if (this->currentFileName != "") this->sceneManager->saveScenes("../Visual Novel Game/Dialogues/" + this->currentFileName);
+			if (this->currentFileName != "") this->sceneManager->saveToFile("../Visual Novel Game/Dialogues/" + this->currentFileName);
 			this->currentState = ProgramState::EXIT;
 			break; 
 		case SDL_KEYDOWN:
@@ -230,6 +230,8 @@ void MainProgram::checkFileSelectInputs()
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->sceneManager->loadFromFile("../Visual Novel Game/Dialogues/" + this->currentFileName);
 
 					this->currentState = ProgramState::MAINSCREEN;
 				}
@@ -998,8 +1000,11 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			else if (this->settingNextDialogue) {
 				if (this->selectedDialogueIdx != -1) {
 					std::string nextScene = this->sceneManager->getScenes()[this->selectedSceneIdx].first;
-					std::string nextDlg = this->sceneManager->getDialogues(this->selectedSceneIdx)[this->selectedDialogueIdx]->name;
-					std::string next = this->currentFileName + "," + nextScene + "," + nextDlg;
+					std::string next = std::to_string(this->selectedDialogueIdx);
+
+					if (this->selectedSceneIdx != this->lastSceneIdx && this->customNextDlg) {
+						next = std::to_string(this->selectedSceneIdx) += "otherscene";
+					}
 
 					if (this->customNextDlg) {
 						this->changingSettings = true;
@@ -2064,10 +2069,8 @@ void MainProgram::drawMainScreenTexts()
 	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->question && !this->settingNextDialogue) {
 		const float fontScale = 0.7f;
 
-		// Get only dialogue name
-		std::string dlg = this->currentDialogue->option1Next;
-		if (dlg != "Not Selected") dlg = dlg.substr(dlg.find_last_of(",") + 1, dlg.length());
-		sprintf_s(buffer, "%s: %s", "Next Dialogue", dlg.c_str());
+		// First option
+		sprintf_s(buffer, "%s: %s", "Next Dialogue", this->currentDialogue->option1Next.c_str());
 
 		glm::vec4 dim = this->getInputDimensions(this->firstAnswerBoxDestRect);
 
@@ -2081,10 +2084,8 @@ void MainProgram::drawMainScreenTexts()
 			this->color
 		);
 
-		// Get only dialogue name
-		dlg = this->currentDialogue->option2Next;
-		if (dlg != "Not Selected") dlg = dlg.substr(dlg.find_last_of(",") + 1, dlg.length());
-		sprintf_s(buffer, "%s: %s", "Next Dialogue", dlg.c_str());
+		// Second option
+		sprintf_s(buffer, "%s: %s", "Next Dialogue", this->currentDialogue->option2Next.c_str());
 
 		dim = this->getInputDimensions(this->secondAnswerBoxDestRect);
 
@@ -2098,10 +2099,8 @@ void MainProgram::drawMainScreenTexts()
 			this->color
 		);
 
-		// Get only dialogue name
-		dlg = this->currentDialogue->option3Next;
-		if (dlg != "Not Selected") dlg = dlg.substr(dlg.find_last_of(",") + 1, dlg.length());
-		sprintf_s(buffer, "%s: %s", "Next Dialogue", dlg.c_str());
+		// Third option
+		sprintf_s(buffer, "%s: %s", "Next Dialogue", this->currentDialogue->option3Next.c_str());
 
 		dim = this->getInputDimensions(this->thirdAnswerBoxDestRect);
 
@@ -2347,7 +2346,7 @@ void MainProgram::submitDialogue()
 	this->sceneManager->addDialogue(
 		this->selectedSceneIdx,
 		new Dialogue(
-			-1,
+			this->sceneManager->getDialogues(this->selectedSceneIdx).size(),
 			this->currentDialogueName,
 			"",
 			"",

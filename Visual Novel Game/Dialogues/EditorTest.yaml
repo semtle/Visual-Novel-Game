@@ -1,43 +1,60 @@
-Start:
-    next_scene: Bedroom
-Bedroom:
+0:
+    name: First Scene
+
     Background: bedroom.png
-    Start:
-        next: Sleeping
-    Sleeping:
-        next: Snoring
-    Snoring:
-        message: zzzZZZzzzz....
-        next: Wake Up
-    Wake Up:
-        message: ...huh?
-        next: Check Time
-    Check Time:
-        message: Boy, that dream was good! What time might it be?
-        next: Look Time
-    Look Time:
-        message: Oh shit it's already fucking 1pm! I'm late for school, shit! I better get going or my teacher won't be at all happy...
-        next_scene: Running
-Running:
-    Background: runningtoschool.png
-    Start:
-        next: Running
-    Running:
-        next_scene: School Yard
-School Yard:
-    Background: schoolyard.png
-    Start:
-        next: Arrive
-    Arrive:
-        message: Phew! I made it!
-        next: Makoto Shout
-    Makoto Shout:
-        message: Hey, player-kuuuun!!
-        next: Look Around
-    Look Around:
-        message: Huh? Who is that?
-        next: Makoto Arrive
-    Makoto Arrive:
-        talking: Makoto-kun
-        right: Makoto-kun, laughing_uniform.png
-        message: Hey player-kun! What uup?
+
+    0:
+        name: First First
+        message: first haha
+        next: 1
+    1:
+        name: Second First
+        message: second, has custom next
+        next_scene: 1
+
+    2:
+        name: Third First
+        talking: Has-talker
+        message: third in first
+        next_scene: 1
+1:
+    name: Second Scene
+
+    Background: cafe.png
+
+    0:
+        name: First Second
+        next_scene: 2
+2:
+    name: Third Scene
+
+    Background: cafeday.PNG
+
+    0:
+        name: Hahaaa
+        next: 1
+    1:
+        name: Question For U
+        Option 1:
+            text: first option yo
+            influence: 2
+            next: 3
+        Option 2:
+            text: second option hahahah
+            influence: 1
+            next: 2
+        Option 3:
+            text: the third one yeaaaa
+            influence: 0
+            next: 4
+    2:
+        name: Second Option
+        message: second option
+        next: 3
+    3:
+        name: First Option
+        message: first option
+        next: 4
+    4:
+        name: Third Option
+        message: third option

@@ -1502,15 +1502,28 @@ void MainProgram::drawMainScreen()
 			glm::vec4 destRect = this->sceneBoxDestRect;
 
 			static const unsigned int greenBox = Bengine::ResourceManager::getTexture("Textures/scene-box-green.png").id;
+			static const unsigned int blueBox = Bengine::ResourceManager::getTexture("Textures/scene-box-selected.png").id;
 
 			for (unsigned i = 0; i < dialogues.size(); i++) {
-				this->spriteBatch.draw(
-					destRect,
-					this->mainUvRect,
-					(this->shownDialogueIndexes[i] == this->selectedDialogueIdx && this->settingNextDialogue) ? greenBox : sceneBox,
-					0.0f,
-					this->color
-				);
+				if (this->shownDialogueIndexes[i] == this->selectedDialogueIdx && this->settingNextDialogue) {
+					this->spriteBatch.draw(
+						destRect,
+						this->mainUvRect,
+						greenBox,
+						0.0f,
+						this->color
+					);
+				}
+				else {
+					this->spriteBatch.draw(
+						destRect,
+						this->mainUvRect,
+						(this->shownDialogueIndexes[i] == this->selectedDialogueIdx) ? blueBox : sceneBox,
+						0.0f,
+						this->color
+					);
+				}
+				
 				destRect.y -= this->sceneBlockPositionDiff;
 			}
 		}

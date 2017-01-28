@@ -139,6 +139,7 @@ public:
 
 	// Setters
 	void setSceneBackgrounds(std::vector<std::string> bgs) { this->sceneBackgrounds = bgs; }
+	void setSceneName(int index, std::string name) { this->scenes[index].first = name; }
 
 	// Getters
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> getScenes() const { return this->scenes; }

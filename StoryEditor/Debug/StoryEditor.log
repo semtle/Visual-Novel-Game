@@ -1,13 +1,50 @@
-﻿  MainProgram.cpp
-c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(214): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
-c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(311): warning C4018: '<': signed/unsigned mismatch
-c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(399): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
-c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(426): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
-c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(453): warning C4244: 'initializing': conversion from 'wchar_t' to 'char', possible loss of data
-c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(877): warning C4018: '<': signed/unsigned mismatch
+﻿  SceneManager.cpp
+  MainProgram.cpp
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(252): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(375): warning C4018: '<': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(495): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(510): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(545): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(600): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(618): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(636): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(651): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(666): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(797): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(798): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(799): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(804): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(805): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(806): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(1305): warning C4018: '<': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(1452): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(1489): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(1500): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(1511): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(1575): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(1891): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(1906): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(1921): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(1938): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(1960): warning C4018: '>': signed/unsigned mismatch
+c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\storyeditor\mainprogram.cpp(2069): warning C4018: '>': signed/unsigned mismatch
   Generating Code...
-  Skipping... (no relevant changes detected)
-  main.cpp
-  SceneManager.cpp
+libyaml-cppmdd.lib(directives.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(directives.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(exp.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(exp.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(memory.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(memory.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(node_data.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(node_data.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(nodebuilder.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(nodebuilder.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(null.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(null.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(parse.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(parse.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(parser.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(parser.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(regex_yaml.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(regex_yaml.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(scanner.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scanner.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(scanscalar.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scanscalar.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(scantag.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scantag.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(scantoken.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(scantoken.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(simplekey.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(simplekey.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(singledocparser.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(singledocparser.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(stream.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(stream.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
+libyaml-cppmdd.lib(tag.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(tag.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\yaml-cpp static md.pdb'; linking object as if no debug info
   StoryEditor.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\StoryEditor.exe
   StoryEditor.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\StoryEditor.pdb (Partial PDB)

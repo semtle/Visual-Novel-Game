@@ -1,6 +1,4 @@
 ﻿  SpriteBatch.cpp
 c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\spritebatch.cpp(56): warning C4018: '<': signed/unsigned mismatch
 c:\users\zentryn\documents\visual studio 2015\projects\visual-novel-game-cpp\bengine\spritebatch.cpp(77): warning C4018: '<': signed/unsigned mismatch
-  ImageLoader.cpp
-  Generating Code...
   Bengine.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Debug\Bengine.lib

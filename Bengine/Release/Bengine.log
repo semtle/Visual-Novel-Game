@@ -1,1 +1,4 @@
-﻿  Bengine.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\Bengine.lib
+﻿  SpriteBatch.cpp
+SpriteBatch.cpp(56): warning C4018: '<': signed/unsigned mismatch
+SpriteBatch.cpp(77): warning C4018: '<': signed/unsigned mismatch
+  Bengine.vcxproj -> C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\Bengine.lib

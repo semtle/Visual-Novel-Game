@@ -104,6 +104,9 @@ private:
 	bool customNextDlg = false;
 	bool changingDialogueName = false;
 
+	bool duplicateSceneName = false;
+	bool duplicateDialogueName = false;
+
 	Dialogue* currentDialogue;
 	Dialogue* lastDialogue;
 

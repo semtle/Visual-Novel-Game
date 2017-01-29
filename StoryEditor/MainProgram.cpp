@@ -904,6 +904,10 @@ void MainProgram::checkSceneCreationScreenInputs()
 
 				if (this->currentState == ProgramState::ADDSCENE) {
 					this->sceneManager->addScene(this->currentSceneName);
+
+					if (this->sceneManager->getScenes().size() > 5) {
+						this->currentSceneListIdx = this->sceneManager->getScenes().size() - 5;
+					}
 				}
 				else if (this->currentState == ProgramState::ADD_DIALOGUE) {
 					this->submitDialogue();
@@ -920,6 +924,10 @@ void MainProgram::checkSceneCreationScreenInputs()
 
 		if (this->currentState == ProgramState::ADDSCENE) {
 			this->sceneManager->addScene(this->currentSceneName);
+
+			if (this->sceneManager->getScenes().size() > 5) {
+				this->currentSceneListIdx = this->sceneManager->getScenes().size() - 5;
+			}
 		}
 		else if (this->currentState == ProgramState::ADD_DIALOGUE) {
 			this->submitDialogue();
@@ -935,7 +943,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 	// This function handles writing text in many different places in the editor
 	if (this->currentState == ProgramState::ADD_DIALOGUE || this->currentState == ProgramState::ADDSCENE
 		|| this->clickedOnTalkerBox || this->clickedOnDialogueBox || this->clickedOnFirstAnswerBox || this->clickedOnSecondAnswerBox || this->clickedOnThirdAnswerBox
-		|| this->settingNextDialogue || this->changingDialogueName || this->changingSceneNameIdx != -1
+		|| this->settingNextDialogue || this->changingDialogueName || this->changingSceneNameIdx != -1 ||this->selectedDialogueIdx != -1 || this->selectedSceneIdx != -1
 		) {
 		// Handle modifying the current scene name being given
 		std::string keyName = SDL_GetKeyName(keyID);
@@ -1204,6 +1212,56 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				if (this->currentDialogueName.length() < 16 && keyName != "+" && keyName != "1" && keyName != ",") {
 					this->currentDialogueName += static_cast<char>(keyID);
 				}
+			}
+		}
+
+		// Move scene up or down
+		if (this->changingSceneNameIdx != -1) {
+			if (keyName == "Up" && this->changingSceneNameIdx > 0) {
+				this->sceneManager->moveSceneUp(this->changingSceneNameIdx);
+
+				std::vector<std::string> bgs = this->sceneManager->getSceneBackgrounds();
+
+				// Move backgrounds
+				if (bgs.size() > this->changingSceneNameIdx) {
+					std::string tempBg = bgs[this->changingSceneNameIdx - 1];
+					bgs[this->changingSceneNameIdx - 1] = bgs[this->changingSceneNameIdx];
+					bgs[this->changingSceneNameIdx] = tempBg;
+					this->sceneManager->setSceneBackgrounds(bgs);
+				}
+
+				this->changingSceneNameIdx--;
+				if (this->changingSceneNameIdx < this->currentSceneListIdx) this->currentSceneListIdx--;
+			}
+			else if (keyName == "Down" && this->changingSceneNameIdx < this->sceneManager->getScenes().size() - 1) {
+				this->sceneManager->moveSceneDown(this->changingSceneNameIdx);
+
+				std::vector<std::string> bgs = this->sceneManager->getSceneBackgrounds();
+
+				// Move backgrounds
+				if (bgs.size() > this->changingSceneNameIdx + 1) {
+					std::string tempBg = bgs[this->changingSceneNameIdx + 1];
+					bgs[this->changingSceneNameIdx + 1] = bgs[this->changingSceneNameIdx];
+					bgs[this->changingSceneNameIdx] = tempBg;
+					this->sceneManager->setSceneBackgrounds(bgs);
+				}
+
+				this->changingSceneNameIdx++;
+				if (this->changingSceneNameIdx > this->currentSceneListIdx + 4) this->currentSceneListIdx++;
+			}
+		}
+
+		// Move dialogues up or down
+		if (this->currentDialogue != nullptr && this->selectedDialogueIdx != -1 && this->selectedSceneIdx != -1) {
+			if (keyName == "Up" && this->selectedDialogueIdx > 0) {
+				this->sceneManager->moveDialogueUp(this->selectedSceneIdx, this->selectedDialogueIdx);
+				this->selectedDialogueIdx--;
+				if (this->selectedDialogueIdx < this->currentDialogueListIdx) this->currentDialogueListIdx--;
+			}
+			else if (keyName == "Down" && this->selectedDialogueIdx < this->sceneManager->getDialogues(this->selectedSceneIdx).size() - 1) {
+				this->sceneManager->moveDialogueDown(this->selectedSceneIdx, this->selectedDialogueIdx);
+				this->selectedDialogueIdx++;
+				if (this->selectedDialogueIdx > this->currentDialogueListIdx + 4) this->currentDialogueListIdx++;
 			}
 		}
 
@@ -2625,6 +2683,10 @@ void MainProgram::submitDialogue()
 	std::vector<Dialogue *> dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
 
 	this->currentDialogue = dialogues[dialogues.size() - 1];
+
+	this->selectedDialogueIdx = dialogues.size() - 1;
+
+	if (this->selectedDialogueIdx > 3) this->currentDialogueListIdx = this->selectedDialogueIdx - 4;
 }
 
 

@@ -6,7 +6,7 @@
     0:
         name: Hahaa Now Cant P
         message: first haha
-        next: 1
+        next_scene: 4
 
     1:
         name: Second First
@@ -41,7 +41,7 @@
         Option 1:
             text: first option yo
             influence: 2
-            next: 3
+            next: 3otherscene
         Option 2:
             text: second option hahahah
             influence: 1

@@ -407,11 +407,23 @@ void MainProgram::checkMainScreenInputs()
 						this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 						// Open the clicked scene
-						this->selectedSceneIdx = this->shownSceneIndexes[i];
-						this->changingSceneNameIdx = -1;
+						if (!this->settingNextDialogue) {
+							this->selectedSceneIdx = this->shownSceneIndexes[i];
+							this->changingSceneNameIdx = -1;
+						}
+						else {
+							if (this->shownSceneIndexes[i] == this->lastSceneIdx) {
+								this->selectedSceneIdx = this->shownSceneIndexes[i];
+								this->selectedNextSceneIdx = -1;
+							}
+							else {
+								this->selectedNextSceneIdx = this->shownSceneIndexes[i];
+								this->selectedSceneIdx = -1;
+							}
+						}
 					}
 					// Change scene name
-					else if (this->inputManager.isKeyDown(SDL_BUTTON_RIGHT)) {
+					else if (this->inputManager.isKeyDown(SDL_BUTTON_RIGHT) && !this->settingNextDialogue) {
 						this->inputManager.releaseKey(SDL_BUTTON_RIGHT);
 
 						this->changingSceneNameIdx = this->shownSceneIndexes[i];
@@ -447,7 +459,7 @@ void MainProgram::checkMainScreenInputs()
 	dim = getInputDimensions(this->arrowLeftDestRect);
 
 	// Check if the back arrow was clicked on
-	if (!this->changingSettings) {
+	if (!this->changingSettings && !(this->settingNextDialogue && !this->customNextDlg)) {
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
@@ -496,6 +508,7 @@ void MainProgram::checkMainScreenInputs()
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 					this->settingNextDialogue = false;
+					this->selectedNextSceneIdx = -1;
 					this->selectedAnswerBox = -1;
 					if (this->customNextDlg) this->changingSettings = true;
 					else this->resetCurrentDialogue();
@@ -1061,6 +1074,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			else if (this->currentDialogue != nullptr && this->clickedOnFirstAnswerBox) {
 				this->clickedOnFirstAnswerBox = false;
 				this->settingNextDialogue = false;
+				this->selectedNextSceneIdx = -1;
 				this->selectedAnswerBox = -1;
 				this->resetCurrentDialogue();
 			}
@@ -1068,6 +1082,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			else if (this->currentDialogue != nullptr && this->clickedOnSecondAnswerBox) {
 				this->clickedOnSecondAnswerBox = false;
 				this->settingNextDialogue = false;
+				this->selectedNextSceneIdx = -1;
 				this->selectedAnswerBox = -1;
 				this->resetCurrentDialogue();
 			}
@@ -1075,17 +1090,20 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			else if (this->currentDialogue != nullptr && this->clickedOnThirdAnswerBox) {
 				this->clickedOnThirdAnswerBox = false;
 				this->settingNextDialogue = false;
+				this->selectedNextSceneIdx = -1;
 				this->selectedAnswerBox = -1;
 				this->resetCurrentDialogue();
 			}
 			// Setting dialogue
 			else if (this->settingNextDialogue) {
-				if (this->selectedDialogueIdx != -1) {
-					std::string nextScene = this->sceneManager->getScenes()[this->selectedSceneIdx].first;
-					std::string next = std::to_string(this->selectedDialogueIdx);
+				if (this->selectedDialogueIdx != -1 || this->selectedNextSceneIdx != -1) {
+					std::string next = "";
 
-					if (this->selectedSceneIdx != this->lastSceneIdx && this->customNextDlg) {
-						next = std::to_string(this->selectedSceneIdx) += "otherscene";
+					if (this->selectedNextSceneIdx != -1) {
+						next = std::to_string(this->selectedNextSceneIdx) += "otherscene";
+					}
+					else {
+						next = std::to_string(this->selectedDialogueIdx);
 					}
 
 					if (this->customNextDlg) {
@@ -1111,6 +1129,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 
 					this->selectedAnswerBox = -1;
 					this->settingNextDialogue = false;
+					this->selectedNextSceneIdx = -1;
 				}
 			}
 			// Dialogue name
@@ -1457,7 +1476,7 @@ void MainProgram::drawMainScreen()
 	}
 
 	// Left arrow (back), only draw if no scene is selected
-	if (!this->changingSettings && !(this->settingNextDialogue && this->selectedSceneIdx == -1)) {
+	if (!this->changingSettings && !(this->settingNextDialogue && this->selectedSceneIdx == -1) && !(this->settingNextDialogue && !this->customNextDlg)) {
 		this->spriteBatch.draw(
 			this->arrowLeftDestRect,
 			glm::vec4(0.0f, 0.0f, -1.0f, 1.0f),
@@ -1474,6 +1493,8 @@ void MainProgram::drawMainScreen()
 	if (this->selectedSceneIdx == -1) {
 		std::map<int, std::pair<std::string, std::vector<Dialogue *>>> shownScenes = this->getShownScenes(allScenes);
 
+		static const unsigned int greenBox = Bengine::ResourceManager::getTexture("Textures/scene-box-green.png").id;
+
 		glm::vec4 originalDestRect = sceneBoxDestRect;
 		for (unsigned i = 0; i < shownScenes.size(); i++) {
 			if (this->shownSceneIndexes[i] == this->changingSceneNameIdx) {
@@ -1489,7 +1510,7 @@ void MainProgram::drawMainScreen()
 				this->spriteBatch.draw(
 					this->sceneBoxDestRect,
 					this->mainUvRect,
-					sceneBox,
+					(this->selectedNextSceneIdx == this->shownSceneIndexes[i]) ? greenBox : sceneBox,
 					0.0f,
 					this->color
 				);
@@ -2030,7 +2051,12 @@ void MainProgram::drawMainScreenTexts()
 
 	// Select dialogue guide text
 	if (this->settingNextDialogue) {
-		sprintf_s(buffer, "%s", "Browse and click on a dialogue on the left.");
+		if (!(this->settingNextDialogue && !this->customNextDlg)) {
+			sprintf_s(buffer, "%s", "Browse and click on a scene/dialogue on the left.");
+		}
+		else {
+			sprintf_s(buffer, "%s", "Browse and click on a dialogue on the left.");
+		}
 
 		this->spriteFont->draw(
 			this->fontBatch,
@@ -2041,7 +2067,12 @@ void MainProgram::drawMainScreenTexts()
 			Bengine::ColorRGBA8(0, 0, 0, 255)
 		);
 
-		sprintf_s(buffer, "%s", "Confirm selected dialogue with enter.");
+		if (!(this->settingNextDialogue && !this->customNextDlg)) {
+			sprintf_s(buffer, "%s", "Confirm selected scene/dialogue with enter.");
+		}
+		else {
+			sprintf_s(buffer, "%s", "Confirm selected dialogue with enter.");
+		}
 
 		this->spriteFont->draw(
 			this->fontBatch,
@@ -2055,8 +2086,16 @@ void MainProgram::drawMainScreenTexts()
 		if (this->selectedDialogueIdx != -1) {
 			sprintf_s(buffer, "%s: %s", "Selected dialogue", this->sceneManager->getDialogues(this->selectedSceneIdx)[this->selectedDialogueIdx]->name.c_str());
 		}
+		else if (this->selectedNextSceneIdx != -1) {
+			sprintf_s(buffer, "%s: %s", "Selected scene", this->sceneManager->getScenes()[this->selectedNextSceneIdx].first.c_str());
+		}
 		else {
-			sprintf_s(buffer, "%s", "No dialogue selected.");
+			if (!(this->settingNextDialogue && !this->customNextDlg)) {
+				sprintf_s(buffer, "%s", "No scene or dialogue selected.");
+			}
+			else {
+				sprintf_s(buffer, "%s", "No dialogue selected.");
+			}
 		}
 
 		this->spriteFont->draw(

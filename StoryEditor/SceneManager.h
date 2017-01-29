@@ -9,6 +9,7 @@
 #include <map>
 #include <fstream>
 #include <yaml-cpp/yaml.h>
+#include <iterator>
 
 #include <Bengine/Bengine.h>
 #include <Bengine/Window.h>
@@ -140,6 +141,10 @@ public:
 	// Setters
 	void setSceneBackgrounds(std::vector<std::string> bgs) { this->sceneBackgrounds = bgs; }
 	void setSceneName(int index, std::string name) { this->scenes[index].first = name; }
+	void moveSceneUp(int index);
+	void moveSceneDown(int index);
+	void moveDialogueUp(int sceneIdx, int dlgIndex);
+	void moveDialogueDown(int sceneIdx, int dlgIndex);
 
 	// Getters
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> getScenes() const { return this->scenes; }

@@ -307,9 +307,9 @@ void SceneManager::loadFromFile(const std::string& filePath)
 			std::string right = (currentDialogue["right"] != nullptr) ? currentDialogue["right"].as<std::string>() : "";
 			std::string message = (currentDialogue["message"] != nullptr) ? currentDialogue["message"].as<std::string>() : "";
 			std::string next = "";
-			bool dialogueBox = true;
+			bool dialogueBox = (message.length() > 0) ? true : false;
 			bool question = false;
-			bool talkerBox = true;
+			bool talkerBox = (talking.length() > 0) ? true : false;
 			std::string askingQuestion = (currentDialogue["asking"] != nullptr) ? currentDialogue["asking"].as<std::string>() : "";
 
 			// Set all question related variables here, because they're set only if the dialogue is a question
@@ -349,9 +349,9 @@ void SceneManager::loadFromFile(const std::string& filePath)
 				right,
 				message,
 				next,
-				dialogueBox, // TODO: Add 'show text box' to save file
+				dialogueBox,
 				question,
-				talkerBox, // TODO: Add 'show talker box' to save file
+				talkerBox,
 				askingQuestion,
 
 				option1Text,
@@ -403,7 +403,7 @@ void SceneManager::saveToFile(const std::string& filePath)
 
 				// A normal dialogue
 				if (!dialogues[j]->question) {
-					if (dialogues[j]->talking != "")
+					if (dialogues[j]->talking != "" && dialogues[j]->talker)
 						file << "        " << "talker: " << dialogues[j]->talking << "\n";
 
 					if (dialogues[j]->left != "")

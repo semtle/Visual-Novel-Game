@@ -236,6 +236,7 @@ private:
 	unsigned currentDialogueListIdx = 0;
 
 	int selectedAnswerBox = -1;
+	int selectedNextSceneIdx = -1;
 
 	int changingSceneNameIdx = -1;
 	int selectedSceneIdx = -1;

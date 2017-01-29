@@ -1,81 +1,67 @@
 0:
     name: First Scene
 
-    Background: bedroom.png
+    Background: beach_evening.png
 
     0:
-        name: Hahaa Now Cant P
-        message: first haha
-        next_scene: 4
-
+        name: First First
+        next: 1
     1:
         name: Second First
-        message: second, has custom next
-        next_scene: 2
+        message: has custom next scene
+        next_scene: 1
+        custom_next: true
 
     2:
         name: Third First
-        message: third in first
+        next: 3
+    3:
+        name: Fourth First
+        next: 4
+    4:
+        name: Fifth First
+        next: 5
+    5:
+        name: Sixth First
         next_scene: 1
-
 1:
-    name: Changed Name
+    name: Second Scene
 
     Background: cafe.png
 
     0:
         name: First Second
-        next_scene: 2
-
-2:
-    name: Third Scene
-
-    Background: cafeday.PNG
-
-    0:
-        name: Hahaaa
         next: 1
-
     1:
-        name: Question For U
-        Option 1:
-            text: first option yo
-            influence: 2
-            next: 3otherscene
-        Option 2:
-            text: second option hahahah
-            influence: 1
-            next: 2
-        Option 3:
-            text: the third one yeaaaa
-            influence: 0
-            next: 4
+        name: Second Secnod
+        next: 2
     2:
-        name: Second Option
-        message: second option
-        next: 3
-
+        name: Question
+        Option 1:
+            text: first option
+            influence: 1
+            next: 3
+        Option 2:
+            text: second option
+            influence: 1
+            next: 4
+        Option 3:
+            text: third option
+            influence: 1
+            next: 5
     3:
         name: First Option
-        message: first option
         next: 4
-
     4:
-        name: Third Option
-        message: third option
+        name: Second Option
         next: 5
-
     5:
-        name: Just To Fill
-        next: 6
+        name: Third Option
+        next_scene: 2
+2:
+    name: The Last
 
-3:
-    name: Helloed
+    Background: parkwinter.png
 
-    Background: BACKGROUND NOT SET
-
-4:
-    name: Hahaa
-
-    Background: BACKGROUND NOT SET
-
+    0:
+        name: My Nigga

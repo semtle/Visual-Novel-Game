@@ -23,11 +23,20 @@ void Day::init(const std::string &fileName, Bengine::InputManager* manager, cons
 	std::cout << "Current scene: " << this->sceneNames[this->currentSceneIdx] << "\n";
 	this->dialogueNames.push_back("0");
 
+	// Get talker name
+	std::string talker = "";
+	if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["talker"] != nullptr) {
+		talker = this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["talker"].as<std::string>();
+	}
+	if (talker == "Player") {
+		talker = this->playerName;
+	}
+
 	if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["message"] != nullptr) {
-		this->dialogues.push_back(new Dialogue(this->playerName, this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["message"].as<std::string>()));
+		this->dialogues.push_back(new Dialogue(talker, this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["message"].as<std::string>()));
 	}
 	else {
-		this->dialogues.push_back(new Dialogue(this->playerName, ""));
+		this->dialogues.push_back(new Dialogue(talker, ""));
 	}
 	
 	this->inputManager = manager;
@@ -260,12 +269,21 @@ void Day::nextDialogue()
 {
 	// Need to check if the message exists here, can't just pass it in because it can be null
 	if (this->currentDialogueIdx == this->dialogues.size()) {
-		std::cout << "Adding dialog...\n";
+
+		// Get talker name
+		std::string talker = "";
+		if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["talker"] != nullptr) {
+			talker = this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["talker"].as<std::string>();
+		}
+		if (talker == "Player") {
+			talker = this->playerName;
+		}
+
 		if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["message"] != nullptr) {
-			this->dialogues.push_back(new Dialogue(this->playerName, this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["message"].as<std::string>()));
+			this->dialogues.push_back(new Dialogue(talker, this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["message"].as<std::string>()));
 		}
 		else {
-			this->dialogues.push_back(new Dialogue(this->playerName, ""));
+			this->dialogues.push_back(new Dialogue(talker, ""));
 		}
 	}
 

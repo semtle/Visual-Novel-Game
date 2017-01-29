@@ -23,8 +23,11 @@ void Dialogue::drawImages(
 	const int& leftChar,
 	const int& rightChar)
 {
-	unsigned static const int box = Bengine::ResourceManager::getTexture("Textures/Visuals/TextBoxBlue.png").id;
-	static const glm::vec4 boxRect(-screenWidth / 2, -screenHeight / 2, screenWidth, screenHeight);
+	unsigned static const int talkerBox = Bengine::ResourceManager::getTexture("Textures/Visuals/NameBlue.png").id;
+	static const glm::vec4 talkerBoxDestRect(-screenWidth / 2 + 20, -screenHeight / 2 + 157, 159, 66);
+
+	unsigned static const int messageBox = Bengine::ResourceManager::getTexture("Textures/Visuals/BlueboxSLQ.png").id;
+	static const glm::vec4 messageBoxRect(-screenWidth / 2 + 6, -screenHeight / 2, 788, 177);
 
 	glm::vec4 leftCharRect(-screenWidth  / 2 + 50, -screenHeight / 2, leftCharWidth, 600);
 	glm::vec4 rightCharRect(screenWidth / 2 - 300, -screenHeight / 2, rightCharWidth, 600);
@@ -33,12 +36,23 @@ void Dialogue::drawImages(
 	static const glm::vec4 leftCharUvRect(0.0f, 0.0f, -1.0f, 1.0f);
 	static const Bengine::ColorRGBA8 color(255, 255, 255, 255);
 
+	/* The talker box */
+	if (this->talker != "") {
+		spriteBatch.draw(
+			talkerBoxDestRect,
+			uvRect,
+			talkerBox,
+			0.0f,
+			color
+		);
+	}
+
 	/* The dialogue box */
 	if (this->message != "") {
 		spriteBatch.draw(
-			boxRect,
+			messageBoxRect,
 			uvRect,
-			box,
+			messageBox,
 			0.0f,
 			color
 		);

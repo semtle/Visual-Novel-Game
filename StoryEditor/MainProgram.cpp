@@ -884,6 +884,9 @@ void MainProgram::checkSceneCreationScreenInputs()
 				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 				this->currentState = ProgramState::MAINSCREEN;
+
+				this->duplicateDialogueName = false;
+				this->duplicateSceneName = false;
 				
 				// Set the current dialogue to be the last one when cancelling
 				if (this->selectedSceneIdx != -1) {
@@ -903,37 +906,89 @@ void MainProgram::checkSceneCreationScreenInputs()
 				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 				if (this->currentState == ProgramState::ADDSCENE) {
-					this->sceneManager->addScene(this->currentSceneName);
+					auto scenes = this->sceneManager->getScenes();
 
-					if (this->sceneManager->getScenes().size() > 5) {
-						this->currentSceneListIdx = this->sceneManager->getScenes().size() - 5;
+					this->duplicateSceneName = false;
+
+					for (unsigned i = 0; i < scenes.size(); i++) {
+						if (scenes[i].first == this->currentSceneName) {
+							this->duplicateSceneName = true;
+							break;
+						}
+					}
+
+					if (!this->duplicateSceneName) {
+						this->sceneManager->addScene(this->currentSceneName);
+
+						if (this->sceneManager->getScenes().size() > 5) {
+							this->currentSceneListIdx = this->sceneManager->getScenes().size() - 5;
+						}
 					}
 				}
 				else if (this->currentState == ProgramState::ADD_DIALOGUE) {
-					this->submitDialogue();
+					auto dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
+
+					this->duplicateDialogueName = false;
+
+					for (unsigned i = 0; i < dialogues.size(); i++) {
+						if (dialogues[i]->name == currentDialogueName) {
+							this->duplicateDialogueName = true;
+							break;
+						}
+					}
+
+					if (!this->duplicateDialogueName) this->submitDialogue();
 				}
 
-				this->currentState = ProgramState::MAINSCREEN;
+				if (!this->duplicateSceneName && !this->duplicateDialogueName) {
+					this->currentState = ProgramState::MAINSCREEN;
+				}
 			}
 		}
 	}
 
 	// When pressing enter, submit the new scene
 	if (this->inputManager.isKeyDown(SDLK_RETURN)) {
-		this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+		this->inputManager.releaseKey(SDLK_RETURN);
 
 		if (this->currentState == ProgramState::ADDSCENE) {
-			this->sceneManager->addScene(this->currentSceneName);
+			auto scenes = this->sceneManager->getScenes();
 
-			if (this->sceneManager->getScenes().size() > 5) {
-				this->currentSceneListIdx = this->sceneManager->getScenes().size() - 5;
+			this->duplicateSceneName = false;
+
+			for (unsigned i = 0; i < scenes.size(); i++) {
+				if (scenes[i].first == this->currentSceneName) {
+					this->duplicateSceneName = true;
+					break;
+				}
+			}
+
+			if (!this->duplicateSceneName) {
+				this->sceneManager->addScene(this->currentSceneName);
+
+				if (this->sceneManager->getScenes().size() > 5) {
+					this->currentSceneListIdx = this->sceneManager->getScenes().size() - 5;
+				}
 			}
 		}
 		else if (this->currentState == ProgramState::ADD_DIALOGUE) {
-			this->submitDialogue();
+			auto dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
+
+			this->duplicateDialogueName = false;
+
+			for (unsigned i = 0; i < dialogues.size(); i++) {
+				if (dialogues[i]->name == currentDialogueName) {
+					this->duplicateDialogueName = true;
+					break;
+				}
+			}
+
+			if (!this->duplicateDialogueName) this->submitDialogue();
 		}
 
-		this->currentState = ProgramState::MAINSCREEN;
+		if (!this->duplicateSceneName && !this->duplicateDialogueName) {
+			this->currentState = ProgramState::MAINSCREEN;
+		}
 	}
 }
 
@@ -962,10 +1017,12 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			// Scene name
 			if (this->currentState == ProgramState::ADDSCENE) {
 				this->currentSceneName = this->currentSceneName.substr(0, this->currentSceneName.size() - 1);
+				this->duplicateSceneName = false;
 			}
 			// Dialogue name
 			if (this->currentState == ProgramState::ADD_DIALOGUE) {
 				this->currentDialogueName = this->currentDialogueName.substr(0, this->currentDialogueName.size() - 1);
+				this->duplicateDialogueName = false;
 			}
 			// Changing dialogue name
 			else if (this->changingDialogueName) {
@@ -1008,6 +1065,8 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				if (this->currentSceneName.length() < 16) {
 					if (this->currentSceneName.length() > 0) this->currentSceneName += " ";
 				}
+
+				this->duplicateSceneName = false;
 			}
 
 			// Dialogue name
@@ -1015,6 +1074,8 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				if (this->currentDialogueName.length() < 16) {
 					if (this->currentDialogueName.length() > 0) this->currentDialogueName += " ";
 				}
+
+				this->duplicateDialogueName = false;
 			}
 
 			// Changing dialogue name
@@ -1056,14 +1117,8 @@ void MainProgram::onKeyPress(unsigned int keyID)
 
 		// Validate the text
 		if (keyName == "Return") {
-			// Scene name
-			if (this->currentState == ProgramState::ADDSCENE) {
-				if (this->currentSceneName.length() >= 3 && this->currentSceneName.length() <= 16) {
-					std::cout << "Name was valid.\n";
-				}
-			}
 			// Changing dialogue name
-			else if (this->changingDialogueName) {
+			if (this->changingDialogueName) {
 				this->changingDialogueName = false;
 			}
 			// Changing scene name
@@ -1140,12 +1195,6 @@ void MainProgram::onKeyPress(unsigned int keyID)
 					this->selectedNextSceneIdx = -1;
 				}
 			}
-			// Dialogue name
-			else {
-				if (this->currentDialogueName.length() >= 3 && this->currentDialogueName.length() <= 16) {
-					std::cout << "Name was valid.\n";
-				}
-			}
 		}
 
 		// Add the character to the player's name
@@ -1154,12 +1203,17 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			if (this->currentState == ProgramState::ADDSCENE && keyName != "+" && keyName != "1" && keyName != ",") {
 				if (this->currentSceneName.length() < 16) {
 					this->currentSceneName += static_cast<char>(keyID);
+
+					this->duplicateSceneName = false;
 				}
+
 			}
 			// Dialogue name
 			if (this->currentState == ProgramState::ADD_DIALOGUE && keyName != "+" && keyName != "1" && keyName != ",") {
 				if (this->currentDialogueName.length() < 16) {
 					this->currentDialogueName += static_cast<char>(keyID);
+
+					this->duplicateDialogueName = false;
 				}
 			}
 			// Changing dialogue name
@@ -2501,6 +2555,26 @@ void MainProgram::drawSceneCreationScreenTexts()
 		Bengine::ColorRGBA8(0, 0, 0, 255),
 		Bengine::Justification::MIDDLE
 	);
+
+	// If name is duplicate
+	if (this->duplicateDialogueName) {
+		sprintf_s(buffer, "%s", "A dialogue with that name already exists in this scene!");
+	}
+	else if (this->duplicateSceneName) {
+		sprintf_s(buffer, "%s", "A scene with that name already exists!");
+	}
+
+	if (this->duplicateDialogueName || this->duplicateSceneName) {
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(this->screenWidth / 2, this->screenHeight / 2 + 150),
+			glm::vec2(0.8f),
+			0.0f,
+			Bengine::ColorRGBA8(0, 0, 0, 255),
+			Bengine::Justification::MIDDLE
+		);
+	}
 
 	this->fontBatch.end();
 	this->fontBatch.renderBatch();

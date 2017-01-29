@@ -40,6 +40,244 @@ void SceneManager::addDialogue(int idx, Dialogue* dialogue)
 }
 
 
+void SceneManager::moveSceneUp(int index)
+{
+	// Get iterators to elements
+	auto iHigh = this->scenes.find(index);
+	auto iLow = this->scenes.find(index - 1);
+
+	// Get values
+	auto highValue = iHigh->second;
+	auto lowValue = iLow->second;
+
+	// Remove both elements
+	this->scenes.erase(index);
+	this->scenes.erase(index - 1);
+
+	// Put elements back in reverse
+	this->scenes[index - 1] = highValue;
+	this->scenes[index] = lowValue;
+
+	// Go through all dialogues and change their custom next scenes and dialogues
+	for (unsigned i = 0; i < this->scenes.size(); i++) {
+		for (unsigned j = 0; j < this->scenes[i].second.size(); j++) {
+			// If has custom next scene/dialogue
+			std::string next = this->scenes[i].second[j]->nextDialogue;
+			if (next != "") {
+				// If next is in other scene
+				if (next.find("otherscene") != std::string::npos) {
+					int nextScene = stoi(next.substr(0, next.find("otherscene")));
+
+					if (nextScene == index) {
+						nextScene--;
+					}
+					else if (nextScene == index - 1) {
+						nextScene++;
+					}
+
+					this->scenes[i].second[j]->nextDialogue = std::to_string(nextScene) + "otherscene";
+				}
+			}
+		}
+	}
+}
+
+
+void SceneManager::moveSceneDown(int index)
+{
+	// Get iterators to elements
+	auto iHigh = this->scenes.find(index + 1);
+	auto iLow = this->scenes.find(index);
+
+	// Get values
+	auto highValue = iHigh->second;
+	auto lowValue = iLow->second;
+
+	// Remove both elements
+	this->scenes.erase(index);
+	this->scenes.erase(index + 1);
+
+	// Put elements back in reverse
+	this->scenes[index + 1] = lowValue;
+	this->scenes[index] = highValue;
+
+	// Go through all dialogues and change their custom next scenes and dialogues
+	for (unsigned i = 0; i < this->scenes.size(); i++) {
+		for (unsigned j = 0; j < this->scenes[i].second.size(); j++) {
+			// If has custom next scene/dialogue
+			std::string next = this->scenes[i].second[j]->nextDialogue;
+			if (next != "") {
+				// If next is in other scene
+				if (next.find("otherscene") != std::string::npos) {
+					int nextScene = stoi(next.substr(0, next.find("otherscene")));
+
+					if (nextScene == index) {
+						nextScene++;
+					}
+					else if (nextScene == index + 1) {
+						nextScene--;
+					}
+
+					this->scenes[i].second[j]->nextDialogue = std::to_string(nextScene) + "otherscene";
+				}
+			}
+		}
+	}
+}
+
+
+void SceneManager::moveDialogueUp(int sceneIdx, int dlgIndex)
+{
+	auto dialogues = this->scenes[sceneIdx].second;
+
+	auto otherDlg = dialogues[dlgIndex - 1];
+
+	dialogues[dlgIndex - 1] = dialogues[dlgIndex];
+	dialogues[dlgIndex] = otherDlg;
+
+	for (unsigned i = 0; i < dialogues.size(); i++) {
+		std::string next = dialogues[i]->nextDialogue;
+		if (next != "") {
+			// If custom next is in the same scene
+			if (next.find("otherscene") == std::string::npos) {
+				int idx = stoi(next);
+
+				if (idx == dlgIndex) {
+					idx--;
+				}
+				else if (idx == dlgIndex - 1) {
+					idx++;
+				}
+
+				dialogues[i]->nextDialogue = std::to_string(idx);
+			}
+		}
+		else if (dialogues[i]->question) {
+			auto dlg = dialogues[i];
+
+			if (dlg->option1Next != "" && dlg->option1Next != "Not Selected") {
+				int idx = stoi(dlg->option1Next);
+
+				if (idx == dlgIndex) {
+					idx--;
+				}
+				else if (idx == dlgIndex - 1) {
+					idx++;
+				}
+
+				dlg->option1Next = std::to_string(idx);
+			}
+
+			if (dlg->option2Next != "" && dlg->option2Next != "Not Selected") {
+				int idx = stoi(dlg->option2Next);
+
+				if (idx == dlgIndex) {
+					idx--;
+				}
+				else if (idx == dlgIndex - 1) {
+					idx++;
+				}
+
+				dlg->option2Next = std::to_string(idx);
+			}
+
+			if (dlg->option3Next != "" && dlg->option3Next != "Not Selected") {
+				int idx = stoi(dlg->option3Next);
+
+				if (idx == dlgIndex) {
+					idx--;
+				}
+				else if (idx == dlgIndex - 1) {
+					idx++;
+				}
+
+				dlg->option3Next = std::to_string(idx);
+			}
+
+			dialogues[i] = dlg;
+		}
+	}
+
+	this->scenes[sceneIdx].second = dialogues;
+}
+
+
+void SceneManager::moveDialogueDown(int sceneIdx, int dlgIndex)
+{
+	auto dialogues = this->scenes[sceneIdx].second;
+
+	auto otherDlg = dialogues[dlgIndex + 1];
+
+	dialogues[dlgIndex + 1] = dialogues[dlgIndex];
+	dialogues[dlgIndex] = otherDlg;
+
+	for (unsigned i = 0; i < dialogues.size(); i++) {
+		std::string next = dialogues[i]->nextDialogue;
+		if (next != "") {
+			// If custom next is in the same scene
+			if (next.find("otherscene") == std::string::npos) {
+				int idx = stoi(next);
+
+				if (idx == dlgIndex) {
+					idx++;
+				}
+				else if (idx == dlgIndex + 1) {
+					idx--;
+				}
+
+				dialogues[i]->nextDialogue = std::to_string(idx);
+			}
+		}
+		else if (dialogues[i]->question) {
+			auto dlg = dialogues[i];
+
+			if (dlg->option1Next != "" && dlg->option1Next != "Not Selected") {
+				int idx = stoi(dlg->option1Next);
+
+				if (idx == dlgIndex) {
+					idx++;
+				}
+				else if (idx == dlgIndex + 1) {
+					idx--;
+				}
+
+				dlg->option1Next = std::to_string(idx);
+			}
+
+			if (dlg->option2Next != "" && dlg->option2Next != "Not Selected") {
+				int idx = stoi(dlg->option2Next);
+
+				if (idx == dlgIndex) {
+					idx++;
+				}
+				else if (idx == dlgIndex + 1) {
+					idx--;
+				}
+
+				dlg->option2Next = std::to_string(idx);
+			}
+
+			if (dlg->option3Next != "" && dlg->option3Next != "Not Selected") {
+				int idx = stoi(dlg->option3Next);
+
+				if (idx == dlgIndex) {
+					idx++;
+				}
+				else if (idx == dlgIndex + 1) {
+					idx--;
+				}
+
+				dlg->option3Next = std::to_string(idx);
+			}
+
+			dialogues[i] = dlg;
+		}
+	}
+
+	this->scenes[sceneIdx].second = dialogues;
+}
+
+
 void SceneManager::loadFromFile(const std::string& filePath)
 {
 	YAML::Node file = YAML::LoadFile(filePath);
@@ -79,9 +317,9 @@ void SceneManager::loadFromFile(const std::string& filePath)
 			int option1Influence = 1, option2Influence = 1, option3Influence = 1;
 
 			// Set next dialogue or next scene
-			if (currentDialogue["next"] != nullptr)
+			if (currentDialogue["next"] != nullptr && currentDialogue["custom_next"] != nullptr)
 				next = currentDialogue["next"].as<std::string>();
-			else if (currentDialogue["next_scene"] != nullptr)
+			else if (currentDialogue["next_scene"] != nullptr && currentDialogue["custom_next"] != nullptr)
 				next = currentDialogue["next_scene"].as<std::string>() + "otherscene";
 
 			// Question related
@@ -193,8 +431,11 @@ void SceneManager::saveToFile(const std::string& filePath)
 							file << "        " << "next_scene: " << ndlg.substr(0, ndlg.find("otherscene")) << "\n";
 						}
 						else {
-							file << "        " << "next: " << ndlg.substr(0, ndlg.find("otherscene")) << "\n";
+							file << "        " << "next: " << ndlg << "\n";
 						}
+
+						// Add custom next flag
+						file << "        " << "custom_next: true\n";
 
 						file << "\n";
 					}

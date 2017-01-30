@@ -251,4 +251,5 @@ private:
 	int lastDialogueListIdx = -1;
 
 	bool dlgButtonsOnRight = false;
+	bool saved = false;
 };

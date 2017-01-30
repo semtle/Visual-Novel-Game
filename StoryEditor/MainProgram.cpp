@@ -1120,7 +1120,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 		// Scene name
 		if (keyName == "Space") {
 			if (this->currentState == ProgramState::ADDSCENE) {
-				if (this->currentSceneName.length() < 16) {
+				if (this->currentSceneName.length() < 20) {
 					if (this->currentSceneName.length() > 0) this->currentSceneName += " ";
 				}
 
@@ -1129,7 +1129,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 
 			// Dialogue name
 			else if (this->currentState == ProgramState::ADD_DIALOGUE) {
-				if (this->currentDialogueName.length() < 16) {
+				if (this->currentDialogueName.length() < 20) {
 					if (this->currentDialogueName.length() > 0) this->currentDialogueName += " ";
 				}
 
@@ -1138,7 +1138,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 
 			// Changing dialogue name
 			else if (this->changingDialogueName) {
-				if (this->currentDialogue->name.length() < 15) {
+				if (this->currentDialogue->name.length() < 19) {
 					if (this->currentDialogue->name.length() > 0) this->currentDialogue->name += " ";
 				}
 			}
@@ -1147,7 +1147,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			else if (this->changingSceneNameIdx != -1) {
 				std::string sceneName = this->sceneManager->getScenes()[this->changingSceneNameIdx].first;
 
-				if (sceneName.length() < 15) {
+				if (sceneName.length() < 19) {
 					this->sceneManager->setSceneName(this->changingSceneNameIdx, sceneName + " ");
 				}
 			}
@@ -1269,7 +1269,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 		if (keyName != "Return" && keyName != "Space" && keyName != "Backspace" && keyName != "Up" && keyName != "Down") {
 			// Scene name
 			if (this->currentState == ProgramState::ADDSCENE) {
-				if (this->currentSceneName.length() < 16) {
+				if (this->currentSceneName.length() < 20) {
 					this->currentSceneName += static_cast<char>(keyID);
 
 					this->duplicateSceneName = false;
@@ -1278,7 +1278,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			}
 			// Dialogue name
 			if (this->currentState == ProgramState::ADD_DIALOGUE) {
-				if (this->currentDialogueName.length() < 16) {
+				if (this->currentDialogueName.length() < 20) {
 					this->currentDialogueName += static_cast<char>(keyID);
 
 					this->duplicateDialogueName = false;
@@ -1286,14 +1286,14 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			}
 			// Changing dialogue name
 			else if (this->changingDialogueName) {
-				if (this->currentDialogue->name.length() < 16) {
+				if (this->currentDialogue->name.length() < 20) {
 					this->currentDialogue->name += static_cast<char>(keyID);
 				}
 			}
 			// Changing scene name
 			else if (this->changingSceneNameIdx != -1) {
 				std::string sceneName = this->sceneManager->getScenes()[this->changingSceneNameIdx].first;
-				if (sceneName.length() < 16) {
+				if (sceneName.length() < 20) {
 					this->sceneManager->setSceneName(this->changingSceneNameIdx, sceneName + static_cast<char>(keyID));
 				}
 			}
@@ -1333,7 +1333,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			}
 			// Dialogue name
 			else {
-				if (this->currentDialogueName.length() < 16) {
+				if (this->currentDialogueName.length() < 20) {
 					this->currentDialogueName += static_cast<char>(keyID);
 				}
 			}
@@ -2174,7 +2174,10 @@ void MainProgram::drawMainScreenTexts()
 	if (this->selectedSceneIdx == -1) {
 		for (unsigned i = 0; i < scenes.size(); i++) {
 			// Fill the buffer with the text
-			sprintf_s(buffer, "%s", scenes[i].first.c_str());
+
+			std::string text = this->getBoxSizeText(scenes[i].first, 0.7f);
+
+			sprintf_s(buffer, "%s", text.c_str());
 
 			this->spriteFont->draw(
 				this->fontBatch,
@@ -2205,8 +2208,10 @@ void MainProgram::drawMainScreenTexts()
 			std::vector<Dialogue *> dialogues = this->getShownDialogues(this->sceneManager->getDialogues(this->selectedSceneIdx));
 
 			for (unsigned i = 0; i < dialogues.size(); i++) {
-				// Fill the buffer with the text
-				sprintf_s(buffer, "%s", dialogues[i]->name.c_str());
+				
+				std::string text = this->getBoxSizeText(dialogues[i]->name, 0.7f);
+
+				sprintf_s(buffer, "%s", text.c_str());
 
 				this->spriteFont->draw(
 					this->fontBatch,
@@ -2307,36 +2312,6 @@ void MainProgram::drawMainScreenTexts()
 			glm::vec2(0.7f),
 			0.0f,
 			Bengine::ColorRGBA8(0, 0, 0, 255)
-		);
-	}
-
-	// 'Type talker name' -text
-	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->clickedOnTalkerBox) {
-		sprintf_s(buffer, "%s", "Type name");
-
-		this->spriteFont->draw(
-			this->fontBatch,
-			buffer,
-			glm::vec2(this->screenWidth / 2 - 20, 540),
-			glm::vec2(0.8f),
-			0.0f,
-			Bengine::ColorRGBA8(0, 0, 0, 255),
-			Bengine::Justification::LEFT
-		);
-	}
-
-	// 'Type message' -text
-	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->clickedOnDialogueBox) {
-		sprintf_s(buffer, "%s", "Type message");
-
-		this->spriteFont->draw(
-			this->fontBatch,
-			buffer,
-			glm::vec2(this->screenWidth / 2 - 20, 540),
-			glm::vec2(0.8f),
-			0.0f,
-			Bengine::ColorRGBA8(0, 0, 0, 255),
-			Bengine::Justification::LEFT
 		);
 	}
 
@@ -2784,6 +2759,30 @@ glm::vec4 MainProgram::getInputDimensions(glm::vec4 texture, bool swapy)
 	}
 
 	return texture;
+}
+
+
+std::string MainProgram::getBoxSizeText(std::string text, float scale)
+{
+	int maxWidth = 165;
+
+	int length = text.length() - 1;
+	int idx = length;
+	while (this->spriteFont->measure(text.c_str()).x * scale > maxWidth) {
+		text = text.substr(0, idx);
+
+		idx--;
+	}
+
+	if (idx < length) {
+		do {
+			text = text.substr(0, text.length() - 1);
+		} while (text[text.length() - 1] == ' ');
+
+		text += "...";
+	}
+
+	return text;
 }
 
 

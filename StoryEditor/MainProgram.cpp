@@ -289,6 +289,15 @@ void MainProgram::checkMainScreenInputs()
 		}
 	}
 
+	dim = this->getInputDimensions(this->saveBtnDestRect);
+
+	// Clicked something else than save button
+	if (mouseCoords.x < dim.x || mouseCoords.x > dim.x + dim.z || mouseCoords.y < dim.y || mouseCoords.y > dim.y + dim.a) {
+		if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+			this->saved = false;
+		}
+	}
+
 	dim = this->getInputDimensions(this->textBoxDestRect);
 
 	// Check if mouse clicked outside of dialogue box
@@ -626,6 +635,39 @@ void MainProgram::checkMainScreenInputs()
 					if (filePath.length() > 0) {
 						this->currentDialogue->right = charName + ", " + imageName;
 					}
+				}
+			}
+		}
+	}
+
+	// Save button
+	if (this->currentDialogue != nullptr && !this->saved) {
+		dim = this->getInputDimensions(this->saveBtnDestRect);
+
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->sceneManager->saveToFile("../Visual Novel Game/Dialogues/" + this->currentFileName);
+					this->saved = true;
+				}
+			}
+		}
+	}
+
+	// Delete button
+	if (this->currentDialogue != nullptr) {
+		dim = this->getInputDimensions(this->deleteBtnDestRect);
+
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->sceneManager->removeDialogue(this->selectedSceneIdx, this->selectedDialogueIdx);
+					this->selectedDialogueIdx = -1;
+					this->currentDialogue = nullptr;
 				}
 			}
 		}
@@ -1016,6 +1058,8 @@ void MainProgram::onKeyPress(unsigned int keyID)
 		}
 
 		if (!keyAllowed) return;
+
+		this->saved = false;
 
 		// Remove the last character from the player's name
 		if (keyName == "Backspace") {
@@ -1740,7 +1784,7 @@ void MainProgram::drawCurrentDialogue()
 		this->spriteBatch.draw(
 			this->saveBtnDestRect,
 			this->mainUvRect,
-			saveBtn,
+			(this->saved) ? Bengine::ResourceManager::getTexture("Textures/saved-button.png").id : saveBtn,
 			0.0f,
 			this->color
 		);

@@ -145,6 +145,8 @@ public:
 	void moveSceneDown(int index);
 	void moveDialogueUp(int sceneIdx, int dlgIndex);
 	void moveDialogueDown(int sceneIdx, int dlgIndex);
+	void removeDialogue(int sceneIdx, int dlgIndex);
+	void removeScene(int index);
 
 	// Getters
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> getScenes() const { return this->scenes; }

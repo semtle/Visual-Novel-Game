@@ -1,44 +1,9 @@
-﻿  MainProgram.cpp
-MainProgram.cpp(252): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(381): warning C4018: '<': signed/unsigned mismatch
-MainProgram.cpp(550): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(565): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(600): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(656): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(674): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(692): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(707): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(722): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(861): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(862): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(863): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(868): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(869): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(870): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-MainProgram.cpp(1285): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1293): warning C4018: '<': signed/unsigned mismatch
-MainProgram.cpp(1295): warning C4018: '<': signed/unsigned mismatch
-MainProgram.cpp(1301): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1309): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1318): warning C4018: '<': signed/unsigned mismatch
-MainProgram.cpp(1320): warning C4018: '<': signed/unsigned mismatch
-MainProgram.cpp(1323): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1584): warning C4018: '<': signed/unsigned mismatch
-MainProgram.cpp(1758): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1795): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1806): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1817): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(1881): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2238): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2253): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2268): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2285): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2307): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2416): warning C4018: '>': signed/unsigned mismatch
+﻿  SceneManager.cpp
+SceneManager.cpp(306): warning C4018: '>=': signed/unsigned mismatch
   Generating code
-  2 of 2941 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
+  2 of 2956 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    6 functions had inline decision re-evaluated but remain unchanged
+    1 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 libyaml-cppmdd.lib(directives.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(directives.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
 libyaml-cppmdd.lib(exp.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(exp.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info

@@ -5,27 +5,11 @@
 
     0:
         name: First First
+        talker: Retard-kun
         message: some player kun should be talking
         next: 1
     1:
-        name: Second First
-        message: doesn't have shit!!!
-        next: 2
-    2:
-        name: Third First
-        talker: Haha-test
-        message: there's someone talking here
-        next: 3
-    3:
-        name: Fourth First
-        talker: Player
-        message: should have player's name
-        next: 4
-    4:
-        name: Fifth First
-        next: 5
-    5:
-        name: Sixth First
+        name: Hey Broski
         next_scene: 1
 1:
     name: Second Scene

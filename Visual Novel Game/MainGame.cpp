@@ -68,7 +68,7 @@ void MainGame::initScenes()
 	this->currentScene = "menu";
 
 	// Create the menu
-	this->menuScene.init("", &this->inputManager, this->characters, this->screenWidth, this->screenHeight);
+	this->menuScene.init(this->fileName, &this->inputManager, this->characters, this->screenWidth, this->screenHeight);
 	this->scenes.emplace("menu", &this->menuScene);
 
 	// Boys
@@ -86,9 +86,7 @@ void MainGame::initScenes()
 
 void MainGame::initDays()
 {
-	std::string fileName = "EditorTest";
-
-	this->days.emplace(fileName, new Day());
+	this->days.emplace(this->fileName, new Day());
 	this->days[fileName]->setDay("Monday");
 	this->days[fileName]->setPlayerName(this->playerName);
 

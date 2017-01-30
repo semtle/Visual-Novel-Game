@@ -152,6 +152,7 @@ public:
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> getScenes() const { return this->scenes; }
 	std::vector<std::string> getSceneBackgrounds() const { return this->sceneBackgrounds; }
 	std::vector<Dialogue *> getDialogues(int idx) { return this->scenes[idx].second; }
+	int getScenesSize() { return this->scenes.size(); }
 	
 private:
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> scenes;

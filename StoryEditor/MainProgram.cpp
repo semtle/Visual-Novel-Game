@@ -789,14 +789,13 @@ void MainProgram::checkMainScreenInputs()
 	}
 
 	// Question checkbox
-	if (this->changingSettings) {
+	if (this->changingSettings && this->lastDialogue->name.find("Question") != std::string::npos) {
 		dim = this->getInputDimensions(this->questionCheckBox);
 
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
-
 					this->lastDialogue->question = !this->lastDialogue->question;
 
 					if (this->lastDialogue->question) {
@@ -812,6 +811,9 @@ void MainProgram::checkMainScreenInputs()
 	// Custom next dialogue checkbox
 	if (this->changingSettings) {
 		dim = this->getInputDimensions(this->customNextCheckBox);
+		if (this->lastDialogue->name.find("Question") == std::string::npos) {
+			dim.y -= 80;
+		}
 
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
@@ -829,6 +831,9 @@ void MainProgram::checkMainScreenInputs()
 	// Custom next dialogue button
 	if (this->changingSettings && this->lastDialogue->nextDialogue != "") {
 		dim = this->getInputDimensions(this->setNextCustomDlgDestRect);
+		if (this->lastDialogue->name.find("Question") == std::string::npos) {
+			dim.y -= 80;
+		}
 
 		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
 			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
@@ -1939,38 +1944,47 @@ void MainProgram::drawCurrentDialogue()
 			this->color
 		);
 
-		// Show dialogue box
-		if (this->lastDialogue->question)
-			texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
-		else
-			texture = Bengine::ResourceManager::getTexture("Textures/checkbox_unchecked.png").id;
+		// Question checkbox
+		if (this->lastDialogue->name.find("Question") != std::string::npos) {
+			if (this->lastDialogue->question)
+				texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
+			else
+				texture = Bengine::ResourceManager::getTexture("Textures/checkbox_unchecked.png").id;
 
-		this->spriteBatch.draw(
-			this->questionCheckBox,
-			this->mainUvRect,
-			texture,
-			0.0f,
-			this->color
-		);
+			this->spriteBatch.draw(
+				this->questionCheckBox,
+				this->mainUvRect,
+				texture,
+				0.0f,
+				this->color
+			);
+		}
 
 		// Custom next dialogue box
-		if (this->lastDialogue->nextDialogue != "")
+		if (this->lastDialogue->nextDialogue != "") {
 			texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
+		}
 		else
 			texture = Bengine::ResourceManager::getTexture("Textures/checkbox_unchecked.png").id;
 
+		glm::vec4 movedDestRect = this->customNextCheckBox;
+		movedDestRect.y += 80;
+
 		this->spriteBatch.draw(
-			this->customNextCheckBox,
+			(this->lastDialogue->name.find("Question") == std::string::npos) ? movedDestRect : this->customNextCheckBox,
 			this->mainUvRect,
 			texture,
 			0.0f,
 			this->color
 		);
+
+		movedDestRect = this->setNextCustomDlgDestRect;
+		movedDestRect.y += 80;
 
 		// Set next dialogue button
 		if (this->lastDialogue->nextDialogue != "") {
 			this->spriteBatch.draw(
-				this->setNextCustomDlgDestRect,
+				(this->lastDialogue->name.find("Question") == std::string::npos) ? movedDestRect : this->setNextCustomDlgDestRect,
 				this->mainUvRect,
 				Bengine::ResourceManager::getTexture("Textures/setnext.png").id,
 				0.0f,
@@ -2474,24 +2488,29 @@ void MainProgram::drawMainScreenTexts()
 		);
 
 		// Question checkbox
-		sprintf_s(buffer, "%s", "Make this a question");
+		if (this->lastDialogue->name.find("Question") != std::string::npos) {
+			sprintf_s(buffer, "%s", "Make this a question");
 
-		this->spriteFont->draw(
-			this->fontBatch,
-			buffer,
-			glm::vec2(226, 390),
-			glm::vec2(0.8f),
-			0.0f,
-			Bengine::ColorRGBA8(0, 0, 0, 255)
-		);
+			this->spriteFont->draw(
+				this->fontBatch,
+				buffer,
+				glm::vec2(226, 390),
+				glm::vec2(0.8f),
+				0.0f,
+				Bengine::ColorRGBA8(0, 0, 0, 255)
+			);
+		}
 
 		// Custom next dialogue checkbox
 		sprintf_s(buffer, "%s", "Set custom next dialogue");
 
+		int y = 310;
+		if (this->lastDialogue->name.find("Question") == std::string::npos) y += 80;
+
 		this->spriteFont->draw(
 			this->fontBatch,
 			buffer,
-			glm::vec2(226, 310),
+			glm::vec2(226, y),
 			glm::vec2(0.8f),
 			0.0f,
 			Bengine::ColorRGBA8(0, 0, 0, 255)
@@ -2508,10 +2527,13 @@ void MainProgram::drawMainScreenTexts()
 
 			sprintf_s(buffer, "%s", endPart.c_str());
 
+			int y = 222;
+			if (this->lastDialogue->name.find("Question") == std::string::npos) y += 80;
+
 			this->spriteFont->draw(
 				this->fontBatch,
 				buffer,
-				glm::vec2(385, 222),
+				glm::vec2(385, y),
 				glm::vec2(0.8f),
 				0.0f,
 				Bengine::ColorRGBA8(0, 0, 0, 255)

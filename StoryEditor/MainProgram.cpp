@@ -1177,6 +1177,10 @@ void MainProgram::onKeyPress(unsigned int keyID)
 		if (keyName == "Delete" && this->changingSceneNameIdx != -1) {
 			this->sceneManager->removeScene(this->changingSceneNameIdx);
 			this->changingSceneNameIdx = -1;
+
+			if (this->currentSceneListIdx > 0 && this->sceneManager->getScenes().size() < this->currentSceneListIdx + 5) {
+				this->currentSceneListIdx--;
+			}
 		}
 
 		// Validate the text

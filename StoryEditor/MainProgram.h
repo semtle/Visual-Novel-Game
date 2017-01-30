@@ -18,7 +18,7 @@
 #include <Bengine/Camera2D.h>
 #include <Bengine/SpriteFont.h>
 
-enum class ProgramState { FILESELECT, MAINSCREEN, ADDSCENE, ADD_DIALOGUE, EXIT };
+enum class ProgramState { FILESELECT, MAINSCREEN, ADDSCENE, ADD_DIALOGUE, DELETE_DIALOGUE, EXIT };
 
 class MainProgram
 {
@@ -37,11 +37,13 @@ public:
 	void checkFileSelectInputs();
 	void checkMainScreenInputs();
 	void checkSceneCreationScreenInputs();
+	void checkDialogueDeletionInputs();
 	void onKeyPress(unsigned int keyID);
 
 	void drawFileSelectScreen();
 	void drawMainScreen();
 	void drawCurrentDialogue();
+	void drawDialogueDeletionScreen();
 
 	void submitDialogue();
 
@@ -50,6 +52,7 @@ public:
 	void drawFileSelectTexts();
 	void drawMainScreenTexts();
 	void drawSceneCreationScreenTexts();
+	void drawDialogueDeletionTexts();
 
 	void scrolled(int yDir);
 
@@ -109,6 +112,8 @@ private:
 
 	bool duplicateSceneName = false;
 	bool duplicateDialogueName = false;
+
+	bool deletingScene = false;
 
 	Dialogue* currentDialogue;
 	Dialogue* lastDialogue;
@@ -199,8 +204,20 @@ private:
 	// Settings button
 	glm::vec4 settingsBtnDestRect = glm::vec4(-this->screenWidth / 2 + 450, -this->screenHeight / 2 + 20, buttonSize);
 
-	// Delete button
+	// Delete dialogue button
 	glm::vec4 deleteBtnDestRect = glm::vec4(-this->screenWidth / 2 + 565, -this->screenHeight / 2 + 20, buttonSize);
+
+	// Confirm dialogue delete
+	glm::vec4 confirmDlgDeleteBtnDestRect = glm::vec4(-100 - buttonSize.x / 2, -100, buttonSize);
+
+	// Cancel dialogue delete
+	glm::vec4 cancelDlgDeleteBtnDestRect = glm::vec4(100 - buttonSize.x / 2, -100, buttonSize);
+
+	// Delete scene button
+	glm::vec4 deleteSceneBtnDestRect = glm::vec4(-this->screenWidth / 2 + 207, -this->screenHeight / 2 + 355, buttonSize);
+
+	// Cancel scene delete
+	glm::vec4 cancelSceneDeleteBtnDestRect = glm::vec4(-this->screenWidth / 2 + 327, -this->screenHeight / 2 + 355, buttonSize);
 
 	// Char 2 button
 	glm::vec4 char2BtnDestRect = glm::vec4(-this->screenWidth / 2 + 680, -this->screenHeight / 2 + 20, buttonSize);

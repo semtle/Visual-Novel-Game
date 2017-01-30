@@ -195,7 +195,7 @@ void MainGame::drawGame()
 	// AHHHHHHHHH REMEMBER TO SEND BEFORE DRAWING THE FUCKING LEVEL JESUS FUCKING CHRIST GONNA KIKLL MY SELF
 	glUniformMatrix4fv(pLocation, 1, false, &cameraMatrix[0][0]);
 	
-	this->spriteBatch.begin();
+	this->spriteBatch.begin(Bengine::GlyphSortType::NONE);
 	
 	if (!this->loading) {
 		this->scenes.find(this->currentScene)->second->drawImages(this->spriteBatch, &this->hudCamera, &this->shaderProgram, this->screenWidth, this->screenHeight);

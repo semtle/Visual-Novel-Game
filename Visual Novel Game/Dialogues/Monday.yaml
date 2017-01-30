@@ -31,11 +31,11 @@
         next: 6
     6:
         name: Narrative 5
-        message: I genlty rub my head in confusion as I wondered how I ended up on the floor
+        message: I genlty rub my head in confusion as I wondered how I ended up on the floor.
         next: 7
     7:
         name: Narrative 6
-        message: Suddenly  I noticed my phone vibrating next to me.
+        message: Suddenly I noticed my phone vibrating next to me.
         next: 8
     8:
         name: Player 3
@@ -44,7 +44,7 @@
         next: 9
     9:
         name: Narrative 7
-        message: If you didn't know, my teacher is the scariest one in our school, so being late wasn't an good option.
+        message: If you didn't know, my teacher is the scariest one in our school, so being late wasn't a good option.
         next: 10
     10:
         name: Player 4
@@ -75,7 +75,7 @@
 
     0:
         name: Narrative 1
-        message: I can see the school's gates in the distance getting closer and closer
+        message: I can see the school's gates in the distance getting closer and closer.
         next: 1
     1:
         name: Player 1
@@ -170,13 +170,13 @@
         name: Makoto 3
         talker: Makoto-kun
         right: Makoto-kun, smiling_uniform.png
-        message: He even startled when I called him, and guess what's his ecxuse for being late is.
+        message: He even startled when I called him, and guess what's his ecxuse for being late was.
         next: 3
     3:
         name: Player 1
         talker: Player
         right: Makoto-kun, confident_left_uniform.png
-        message: I was exhausted because I ran all the way from home, and I already said tha tmy alarm didn't go off!
+        message: I was exhausted because I ran all the way from home, and I already said that my alarm didn't go off!
         next: 4
     4:
         name: Player 2
@@ -309,16 +309,16 @@
         talker: Makoto-kun
         left: Teemu-kun, sad_uniform.png
         right: Makoto-kun, surprised_uniform.png
-        message: Dude! Don't be so negative. Player what do you think?
+        message: Dude! Don't be so negative. Player, what do you think?
         next: 24
     24:
         name: Question 1
         Option 1:
-            text: Well, depends if she likes someone a big goofy, you might have a chance.
+            text: Well, depends if she likes someone a bit goofy, you might have a chance.
             influence: 1
-            next: 26
+            next: 25
         Option 2:
-            text: Teemu-kun is right, you woulnd't have a chance with her.
+            text: Teemu-kun is right, you wouldn't have a chance with her.
             influence: 1
             next: 30
         Option 3:

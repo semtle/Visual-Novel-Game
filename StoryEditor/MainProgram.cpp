@@ -1314,13 +1314,14 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				}
 			}
 			// Message
-			else if (this->currentDialogue != nullptr && (this->clickedOnDialogueBox || this->clickedOnFirstAnswerBox || this->clickedOnSecondAnswerBox || this->clickedOnThirdAnswerBox)) {
+			else if (this->currentDialogue != nullptr && (this->clickedOnDialogueBox || this->clickedOnFirstAnswerBox || this->clickedOnSecondAnswerBox || this->clickedOnThirdAnswerBox || this->clickedOnTalkerBox)) {
 				// Question mark
 				if (keyName == "+" && (this->inputManager.isKeyDown(SDLK_LSHIFT) || this->inputManager.isKeyDown(SDLK_RSHIFT))) {
 					if (this->clickedOnDialogueBox) this->currentDialogue->message += "?";
 					else if (this->clickedOnFirstAnswerBox) this->currentDialogue->option1Text += "?";
 					else if (this->clickedOnSecondAnswerBox) this->currentDialogue->option2Text += "?";
 					else if (this->clickedOnThirdAnswerBox) this->currentDialogue->option3Text += "?";
+					else if (this->clickedOnTalkerBox && this->currentDialogue->talking.length() < 11) this->currentDialogue->talking += "?";
 				}
 				// Exclamation mark
 				else if (keyName == "1" && (this->inputManager.isKeyDown(SDLK_LSHIFT) || this->inputManager.isKeyDown(SDLK_RSHIFT))) {

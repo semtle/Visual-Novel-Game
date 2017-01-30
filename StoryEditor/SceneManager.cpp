@@ -135,6 +135,9 @@ void SceneManager::moveDialogueUp(int sceneIdx, int dlgIndex)
 	dialogues[dlgIndex - 1] = dialogues[dlgIndex];
 	dialogues[dlgIndex] = otherDlg;
 
+	dialogues[dlgIndex - 1]->index--;
+	dialogues[dlgIndex]->index++;
+
 	for (unsigned i = 0; i < dialogues.size(); i++) {
 		std::string next = dialogues[i]->nextDialogue;
 		if (next != "") {
@@ -211,6 +214,9 @@ void SceneManager::moveDialogueDown(int sceneIdx, int dlgIndex)
 	dialogues[dlgIndex + 1] = dialogues[dlgIndex];
 	dialogues[dlgIndex] = otherDlg;
 
+	dialogues[dlgIndex + 1]->index++;
+	dialogues[dlgIndex]->index--;
+
 	for (unsigned i = 0; i < dialogues.size(); i++) {
 		std::string next = dialogues[i]->nextDialogue;
 		if (next != "") {
@@ -275,6 +281,40 @@ void SceneManager::moveDialogueDown(int sceneIdx, int dlgIndex)
 	}
 
 	this->scenes[sceneIdx].second = dialogues;
+}
+
+
+void SceneManager::removeDialogue(int sceneIdx, int dlgIndex)
+{
+	auto dialogues = this->scenes[sceneIdx].second;
+
+	dialogues.erase(dialogues.begin() + dlgIndex);
+
+	for (unsigned i = 0; i < dialogues.size(); i++) {
+		std::string next = dialogues[i]->nextDialogue;
+
+		if (next != "") {
+			if (next.find("otherscene") == std::string::npos) {
+				int idx = stoi(next);
+
+				if (idx > dlgIndex) dialogues[i]->nextDialogue = std::to_string(idx - 1);
+
+				if (idx == dlgIndex) dialogues[i]->nextDialogue = "";
+			}
+		}
+
+		if (i >= dlgIndex) {
+			dialogues[i]->index--;
+		}
+	}
+
+	this->scenes[sceneIdx].second = dialogues;
+}
+
+
+void SceneManager::removeScene(int index)
+{
+	// Empty
 }
 
 
@@ -395,7 +435,7 @@ void SceneManager::saveToFile(const std::string& filePath)
 			else
 				file << "    " << "Background: " << this->sceneBackgrounds[i] << "\n\n";
 
-			std::vector<Dialogue *> dialogues = this->scenes[i].second;
+			auto dialogues = this->scenes[i].second;
 
 			for (unsigned j = 0; j < dialogues.size(); j++) {
 				file << "    " << dialogues[j]->index << ":\n";

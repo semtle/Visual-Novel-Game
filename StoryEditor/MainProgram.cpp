@@ -609,6 +609,10 @@ void MainProgram::checkMainScreenInputs()
 						this->currentDialogue->left = charName + ", " + imageName;
 					}
 				}
+				else if (this->inputManager.isKeyDown(SDL_BUTTON_RIGHT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_RIGHT);
+					this->currentDialogue->left = "";
+				}
 			}
 		}
 	}
@@ -643,6 +647,11 @@ void MainProgram::checkMainScreenInputs()
 					if (filePath.length() > 0) {
 						this->currentDialogue->right = charName + ", " + imageName;
 					}
+				}
+
+				else if (this->inputManager.isKeyDown(SDL_BUTTON_RIGHT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_RIGHT);
+					this->currentDialogue->right = "";
 				}
 			}
 		}

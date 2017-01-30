@@ -1068,7 +1068,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 	// This function handles writing text in many different places in the editor
 	if (this->currentState == ProgramState::ADD_DIALOGUE || this->currentState == ProgramState::ADDSCENE
 		|| this->clickedOnTalkerBox || this->clickedOnDialogueBox || this->clickedOnFirstAnswerBox || this->clickedOnSecondAnswerBox || this->clickedOnThirdAnswerBox
-		|| this->settingNextDialogue || this->changingDialogueName || this->changingSceneNameIdx != -1 ||this->selectedDialogueIdx != -1 || this->selectedSceneIdx != -1
+		|| this->settingNextDialogue || this->changingDialogueName || this->changingSceneNameIdx != -1 ||this->selectedDialogueIdx != -1 || this->selectedSceneIdx != -1 || clickedOnDialogueBox
 		) {
 		// Handle modifying the current scene name being given
 		std::string keyName = SDL_GetKeyName(keyID);
@@ -1187,6 +1187,36 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			// Third answer box
 			else if (this->currentDialogue != nullptr && this->clickedOnThirdAnswerBox) {
 				this->currentDialogue->option3Text += " ";
+			}
+		}
+
+		// Paste
+		if (this->clickedOnDialogueBox || this->clickedOnFirstAnswerBox || this->clickedOnSecondAnswerBox || this->clickedOnThirdAnswerBox) {
+			if (this->inputManager.isKeyDown(SDLK_LCTRL)) {
+				if (this->inputManager.isKeyPressed(SDLK_v)) {
+					if (!OpenClipboard(nullptr)) {
+						std::cout << "Couldn't open clipboard!\n";
+					}
+
+					HANDLE h = GetClipboardData(CF_TEXT);
+					if (h == nullptr) {
+						std::cout << "Didn't get data!\n";
+					}
+
+					char *pszText = static_cast<char*>(GlobalLock(h));
+					if (pszText == nullptr) {
+						std::cout << "Couldn't cast to char!\n";
+					}
+
+					std::string text(pszText);
+
+					CloseClipboard();
+
+					if (this->clickedOnDialogueBox) this->currentDialogue->message += text;
+					else if (this->clickedOnFirstAnswerBox) this->currentDialogue->option1Text += text;
+					else if (this->clickedOnSecondAnswerBox) this->currentDialogue->option2Text += text;
+					else if (this->clickedOnThirdAnswerBox) this->currentDialogue->option3Text += text;
+				}
 			}
 		}
 
@@ -1342,10 +1372,12 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				else {
 					char letter = ((this->inputManager.isKeyDown(SDLK_LSHIFT) || this->inputManager.isKeyDown(SDLK_RSHIFT))) ? toupper(static_cast<char>(keyID)) : static_cast<char>(keyID);
 
-					if (this->clickedOnDialogueBox) this->currentDialogue->message += letter;
-					else if (this->clickedOnFirstAnswerBox) this->currentDialogue->option1Text += letter;
-					else if (this->clickedOnSecondAnswerBox) this->currentDialogue->option2Text += letter;
-					else if (this->clickedOnThirdAnswerBox) this->currentDialogue->option3Text += letter;
+					if (!(this->inputManager.isKeyDown(SDLK_LCTRL) && this->inputManager.isKeyPressed(SDLK_v))) {
+						if (this->clickedOnDialogueBox) this->currentDialogue->message += letter;
+						else if (this->clickedOnFirstAnswerBox) this->currentDialogue->option1Text += letter;
+						else if (this->clickedOnSecondAnswerBox) this->currentDialogue->option2Text += letter;
+						else if (this->clickedOnThirdAnswerBox) this->currentDialogue->option3Text += letter;
+					}
 				}
 			}
 			// Dialogue name

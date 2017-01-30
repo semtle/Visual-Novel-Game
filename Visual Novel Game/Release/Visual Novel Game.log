@@ -1,9 +1,8 @@
-﻿  Dialogue.cpp
-Dialogue.cpp(197): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+﻿  MainGame.cpp
   Generating code
-  1 of 3251 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  4 of 3252 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    3 functions had inline decision re-evaluated but remain unchanged
+    38 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 libyaml-cppmdd.lib(directives.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(directives.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
 libyaml-cppmdd.lib(exp.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(exp.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info

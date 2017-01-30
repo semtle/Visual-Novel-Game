@@ -43,6 +43,7 @@ private:
 	Bengine::InputManager* inputManager; ///< Input manager
 
 	std::string playerName = "Placeholder"; ///< The name of the player
+	std::string fileName = "";
 
 	std::string currentBackground = "menu"; ///< The current background of the menu
 	std::map<std::string, int> backgrounds; ///< All the backgrounds for the different menu states

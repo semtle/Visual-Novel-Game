@@ -29,16 +29,14 @@ MainProgram.cpp(1860): warning C4018: '>': signed/unsigned mismatch
 MainProgram.cpp(1871): warning C4018: '>': signed/unsigned mismatch
 MainProgram.cpp(1882): warning C4018: '>': signed/unsigned mismatch
 MainProgram.cpp(1946): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2314): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2329): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2344): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2361): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2383): warning C4018: '>': signed/unsigned mismatch
-MainProgram.cpp(2492): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(2319): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(2336): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(2358): warning C4018: '>': signed/unsigned mismatch
+MainProgram.cpp(2467): warning C4018: '>': signed/unsigned mismatch
   Generating code
-  1 of 2967 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  0 of 2968 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    1 functions had inline decision re-evaluated but remain unchanged
+    5 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
 libyaml-cppmdd.lib(directives.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(directives.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info
 libyaml-cppmdd.lib(exp.obj) : warning LNK4099: PDB 'yaml-cpp static md.pdb' was not found with 'libyaml-cppmdd.lib(exp.obj)' or at 'C:\Users\Zentryn\Documents\Visual Studio 2015\Projects\Visual-Novel-Game-Cpp\Release\yaml-cpp static md.pdb'; linking object as if no debug info

@@ -2168,7 +2168,7 @@ void MainProgram::drawMainScreenTexts()
 	// Get scenes to be shown
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> scenes = this->getShownScenes(this->sceneManager->getScenes());
 
-	int currentY = 196;
+	int currentY = 198;
 
 	// Scene names, only show if a scene isn't opened
 	if (this->selectedSceneIdx == -1) {
@@ -2181,6 +2181,17 @@ void MainProgram::drawMainScreenTexts()
 				buffer,
 				glm::vec2(25, this->screenHeight - currentY),
 				glm::vec2(0.7f),
+				0.0f,
+				Bengine::ColorRGBA8(0, 0, 0, 255)
+			);
+
+			sprintf_s(buffer, "%s dialogues", std::to_string(scenes[i].second.size()).c_str());
+
+			this->spriteFont->draw(
+				this->fontBatch,
+				buffer,
+				glm::vec2(25, this->screenHeight - currentY - 27),
+				glm::vec2(0.5f),
 				0.0f,
 				Bengine::ColorRGBA8(0, 0, 0, 255)
 			);

@@ -175,6 +175,10 @@ void MainProgram::processInput()
 		case SDL_MOUSEBUTTONUP:
 			this->inputManager.releaseKey(event.button.button);
 			break;
+		case SDL_MOUSEWHEEL:
+			if (this->currentState != ProgramState::FILESELECT)
+				this->scrolled(event.wheel.y);
+			break;
 		}
 	}
 }
@@ -463,6 +467,10 @@ void MainProgram::checkMainScreenInputs()
 				}
 			}
 		}
+	}
+
+	if (this->selectedSceneIdx == -1) {
+		//if (this->inputManager.)
 	}
 
 	dim = getInputDimensions(this->arrowLeftDestRect);
@@ -2655,6 +2663,33 @@ void MainProgram::drawSceneCreationScreenTexts()
 
 	this->fontBatch.end();
 	this->fontBatch.renderBatch();
+}
+
+
+void MainProgram::scrolled(int yDir)
+{
+	if (yDir > 0) {
+		if (this->selectedSceneIdx == -1) {
+			if (this->currentSceneListIdx > 0) this->currentSceneListIdx--;
+		}
+		else if (this->selectedSceneIdx != -1 && !this->changingSettings) {
+			if (this->currentDialogueListIdx > 0) this - currentDialogueListIdx--;
+		}
+	}
+	else if (yDir < 0) {
+		if (this->selectedSceneIdx == -1) {
+			int a = this->currentSceneListIdx;
+			int b = this->sceneManager->getScenesSize() - 5;
+
+			if (a < b) this->currentSceneListIdx++;
+		}
+		else if (this->selectedSceneIdx != -1 && !this->changingSettings) {
+			int a = this->currentDialogueListIdx;
+			int b = this->sceneManager->getDialogues(this->selectedSceneIdx).size() - 5;
+
+			if (a < b) this->currentDialogueListIdx++;
+		}
+	}
 }
 
 

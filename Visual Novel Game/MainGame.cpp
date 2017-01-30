@@ -71,16 +71,24 @@ void MainGame::initScenes()
 	this->menuScene.init(this->fileName, &this->inputManager, this->characters, this->screenWidth, this->screenHeight);
 	this->scenes.emplace("menu", &this->menuScene);
 
+	this->loading = true;
+
 	// Boys
+	this->drawLoading();
 	this->characters.emplace("Makoto-kun", new Character("Makoto-kun")); ///< Normal boy
 	this->characters.emplace("Teemu-kun", new Character("Teemu-kun"));   ///< Hidden nerd boy
+	this->drawLoading();
 	this->characters.emplace("Iwao-kun", new Character("Iwao-kun"));     ///< Badass boy
 	this->characters.emplace("Hideo-kun", new Character("Hideo-kun"));   ///< Model boy
+	this->drawLoading();
 
 	// Girls
 	this->characters.emplace("Fumiko-san", new Character("Fumiko-san"));   ///< Cute girl
 	this->characters.emplace("Maiko-san", new Character("Maiko-san"));     ///< Energic girl
+	this->drawLoading();
 	this->characters.emplace("Michiko-san", new Character("Michiko-san")); ///< Serious girl
+
+	this->loading = false;
 }
 
 
@@ -97,6 +105,13 @@ void MainGame::initDays()
 
 		this->scenes.emplace(day.first, day.second);
 	}
+}
+
+
+void MainGame::drawLoading()
+{
+	this->camera.update();
+	this->drawGame();
 }
 
 
@@ -207,16 +222,41 @@ void MainGame::drawGame()
 		this->scenes.find(this->currentScene)->second->drawTexts(this->spriteFont, &this->shaderProgram, this->screenWidth, this->screenHeight);
 	}
 	else {
+		std::string path = (this->loadingIndex % 2 != 0) ? "Textures/Characters/Chibi/chibiBlue1.png" : "Textures/Characters/Chibi/chibiBlue2.png";
+		unsigned int texture = Bengine::ResourceManager::getTexture(path).id;
+
+		glm::vec4 destRect = glm::vec4(-this->screenWidth / 2, -this->screenHeight / 2, 288, 400);
+		if (loadingIndex % 2 == 0) destRect.z = 309;
+
 		this->spriteBatch.draw(
-			glm::vec4(0, 0, 150, 150),
-			glm::vec4(0.0f, 0.0f, 1.0f, 2.0f),
-			Bengine::ResourceManager::getTexture("Textures/Visuals/LoadingSpinInner.png").id,
+			destRect,
+			glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+			texture,
+			0.0f,
+			Bengine::ColorRGBA8(255, 255, 255, 255)
+		);
+
+		path = (this->loadingIndex % 2 != 0) ? "Textures/Characters/Chibi/chibiAlt1.png" : "Textures/Characters/Chibi/chibiAlt2.png";
+		texture = Bengine::ResourceManager::getTexture(path).id;
+
+		destRect = glm::vec4(this->screenWidth / 2 - 288, -this->screenHeight / 2, 288, 400);
+		if (loadingIndex % 2 == 0) {
+			destRect.z = 309;
+			destRect.x -= 21;
+		}
+
+		this->spriteBatch.draw(
+			destRect,
+			glm::vec4(0.0f, 0.0f, -1.0f, 1.0f),
+			texture,
 			0.0f,
 			Bengine::ColorRGBA8(255, 255, 255, 255)
 		);
 
 		this->spriteBatch.end();
 		this->spriteBatch.renderBatch();
+
+		this->loadingIndex++;
 	}
 
 	// Unbind the texture

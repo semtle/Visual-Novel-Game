@@ -1282,7 +1282,6 @@ void MainProgram::onKeyPress(unsigned int keyID)
 
 					this->duplicateSceneName = false;
 				}
-
 			}
 			// Dialogue name
 			if (this->currentState == ProgramState::ADD_DIALOGUE) {

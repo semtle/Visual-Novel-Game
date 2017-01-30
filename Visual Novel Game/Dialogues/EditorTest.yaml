@@ -1,5 +1,5 @@
 0:
-    name: First Scene
+    name: 1 stupid idiot
 
     Background: beach_evening.png
 
@@ -7,7 +7,9 @@
         name: First First
         talker: Retard-kun
         message: some player kun should be talking
-        next: 1
+        next_scene: 2
+        custom_next: true
+
     1:
         name: Hey Broski
         next_scene: 1
@@ -52,3 +54,20 @@
 
     0:
         name: My Nigga
+        next: 1
+    1:
+        name: On Destroying
+        next_scene: 3
+        custom_next: true
+
+    2:
+        name: My White Boi
+        next: 3
+    3:
+        name: Hihi Xd
+        next_scene: 3
+3:
+    name: The Lastest
+
+    Background: BACKGROUND NOT SET
+

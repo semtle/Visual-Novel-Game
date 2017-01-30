@@ -82,7 +82,7 @@ void Dialogue::drawImages(
 }
 
 
-void Dialogue::drawTexts(Bengine::SpriteFont* spriteFont, Bengine::GLSLProgram* shaderProgram, Bengine::SpriteBatch* fontBatch, const int& screenWidth, const int& screenHeight)
+void Dialogue::drawTexts(Bengine::SpriteFont* spriteFont, Bengine::GLSLProgram* shaderProgram, Bengine::SpriteBatch* fontBatch, const std::string& playerName, const int& screenWidth, const int& screenHeight)
 {
 	if (this->message != "") {
 		static const glm::vec2 bottomLeft(-screenWidth / 2, -screenHeight / 2);
@@ -103,6 +103,18 @@ void Dialogue::drawTexts(Bengine::SpriteFont* spriteFont, Bengine::GLSLProgram* 
 			Bengine::ColorRGBA8(0, 0, 0, 255),
 			Bengine::Justification::MIDDLE
 		);
+
+		// Replace all "player's" with player's name
+		std::string::size_type n = 0;
+		while ((n = this->message.find("player", n)) != std::string::npos) {
+			this->message.replace(n, 6, playerName);
+			n += 6;
+		}
+		n = 0;
+		while ((n = this->message.find("Player", n)) != std::string::npos) {
+			this->message.replace(n, 6, playerName);
+			n += 6;
+		}
 
 		// Get the lines from the message if it overflows the dialog box
 		std::vector<std::string> wrappedMessage = getWrappedText(this->message, spriteFont, 700.0f, this->MESSAGE_SCALE);

@@ -666,6 +666,12 @@ void MainProgram::checkMainScreenInputs()
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 					this->sceneManager->removeDialogue(this->selectedSceneIdx, this->selectedDialogueIdx);
+
+					// Move down the list if removing dialogue from the end
+					if (this->currentDialogueListIdx > 0 && this->sceneManager->getDialogues(this->selectedSceneIdx).size() < this->currentDialogueListIdx + 5) {
+						this->currentDialogueListIdx--;
+					}
+
 					this->selectedDialogueIdx = -1;
 					this->currentDialogue = nullptr;
 				}
@@ -1049,7 +1055,10 @@ void MainProgram::onKeyPress(unsigned int keyID)
 		) {
 		// Handle modifying the current scene name being given
 		std::string keyName = SDL_GetKeyName(keyID);
-		static std::string allowedKeys[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "-", "Space", ".", ",", "'", "+", "1", "Backspace", "Return", "Up", "Down"};
+		static std::string allowedKeys[] = {
+			"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
+			"-", "Space", ".", ",", "'", "+", "1", "2", "3", "4", "5", "6", "7", "8", "9", "Backspace", "Return", "Up", "Down", "Delete"
+		};
 
 		bool keyAllowed = false;
 
@@ -1164,6 +1173,12 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			}
 		}
 
+		// Remove scene
+		if (keyName == "Delete" && this->changingSceneNameIdx != -1) {
+			this->sceneManager->removeScene(this->changingSceneNameIdx);
+			this->changingSceneNameIdx = -1;
+		}
+
 		// Validate the text
 		if (keyName == "Return") {
 			// Changing dialogue name
@@ -1249,7 +1264,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 		// Add the character to the player's name
 		if (keyName != "Return" && keyName != "Space" && keyName != "Backspace" && keyName != "Up" && keyName != "Down") {
 			// Scene name
-			if (this->currentState == ProgramState::ADDSCENE && keyName != "+" && keyName != "1" && keyName != ",") {
+			if (this->currentState == ProgramState::ADDSCENE) {
 				if (this->currentSceneName.length() < 16) {
 					this->currentSceneName += static_cast<char>(keyID);
 
@@ -1258,7 +1273,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 
 			}
 			// Dialogue name
-			if (this->currentState == ProgramState::ADD_DIALOGUE && keyName != "+" && keyName != "1" && keyName != ",") {
+			if (this->currentState == ProgramState::ADD_DIALOGUE) {
 				if (this->currentDialogueName.length() < 16) {
 					this->currentDialogueName += static_cast<char>(keyID);
 
@@ -1279,7 +1294,9 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				}
 			}
 			// Talker
-			else if (this->clickedOnTalkerBox && keyName != "+" && keyName != "1" && keyName != ",") {
+			else if (this->clickedOnTalkerBox && keyName != "+" && keyName != "1" && keyName != "2" && keyName != "3"
+				&& keyName != "4" && keyName != "5" && keyName != "6" && keyName != "7" && keyName != "8" && keyName != "9" && keyName != ","
+				) {
 				if (this->currentDialogue != nullptr && this->currentDialogue->talking.length() < 11) {
 					this->currentDialogue->talking += static_cast<char>(keyID);
 				}
@@ -1312,7 +1329,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			}
 			// Dialogue name
 			else {
-				if (this->currentDialogueName.length() < 16 && keyName != "+" && keyName != "1" && keyName != ",") {
+				if (this->currentDialogueName.length() < 16) {
 					this->currentDialogueName += static_cast<char>(keyID);
 				}
 			}
@@ -2562,14 +2579,18 @@ void MainProgram::drawMainScreenTexts()
 
 		// The custom next dialogue's name
 		if (this->lastDialogue->nextDialogue != "") {
-			std::string endPart = this->lastDialogue->nextDialogue;
-
-			if (endPart != "Next Dialogue Not Set") {
-				endPart = endPart.substr(endPart.find(",") + 1, endPart.length());
-				endPart = endPart.substr(endPart.find(",") + 1, endPart.length());
+			std::string next = this->lastDialogue->nextDialogue;
+			if (next != "Next Dialogue Not Set") {
+				if (next.find("otherscene") == std::string::npos) {
+					next = "Next Dialogue: " + this->sceneManager->getDialogues(this->selectedSceneIdx)[stoi(next)]->name;
+				}
+				else {
+					std::string idx = next.substr(0, next.find("otherscene"));
+					next = "Next Scene: " + this->sceneManager->getScenes()[stoi(idx)].first;
+				}
 			}
 
-			sprintf_s(buffer, "%s", endPart.c_str());
+			sprintf_s(buffer, "%s", next.c_str());
 
 			int y = 222;
 			if (this->lastDialogue->name.find("Question") == std::string::npos) y += 80;

@@ -302,6 +302,35 @@ void SceneManager::removeDialogue(int sceneIdx, int dlgIndex)
 				if (idx == dlgIndex) dialogues[i]->nextDialogue = "";
 			}
 		}
+		else if (dialogues[i]->question) {
+			auto dlg = dialogues[i];
+
+			if (dlg->option1Next != "" && dlg->option1Next != "Not Selected") {
+				int idx = stoi(dlg->option1Next);
+
+				if (idx > dlgIndex) dlg->option1Next = std::to_string(idx - 1);
+
+				else if (idx == dlgIndex) dlg->option1Next = "Not Selected";
+			}
+
+			if (dlg->option2Next != "" && dlg->option2Next != "Not Selected") {
+				int idx = stoi(dlg->option2Next);
+
+				if (idx > dlgIndex) dlg->option2Next = std::to_string(idx - 1);
+
+				else if (idx == dlgIndex) dlg->option2Next = "Not Selected";
+			}
+
+			if (dlg->option3Next != "" && dlg->option3Next != "Not Selected") {
+				int idx = stoi(dlg->option3Next);
+
+				if (idx > dlgIndex) dlg->option3Next = std::to_string(idx - 1);
+
+				else if (idx == dlgIndex) dlg->option3Next = "Not Selected";
+			}
+
+			dialogues[i] = dlg;
+		}
 
 		if (i >= dlgIndex) {
 			dialogues[i]->index--;
@@ -314,7 +343,41 @@ void SceneManager::removeDialogue(int sceneIdx, int dlgIndex)
 
 void SceneManager::removeScene(int index)
 {
-	// Empty
+	std::cout << "Scenes size: " << this->scenes.size();
+
+	auto newScenes = this->scenes;
+	newScenes.clear();
+
+	for (auto it = this->scenes.begin(); it != this->scenes.end(); ++it) {
+		if (it->first < index) newScenes[it->first] = it->second;
+
+		else if (it->first > index) {
+			newScenes[it->first - 1] = it->second;
+		}
+	}
+
+	this->scenes = newScenes;
+	std::cout << "Scenes size: " << this->scenes.size();
+
+	// Go through all dialogues and change their custom next scenes
+	for (unsigned i = 0; i < this->scenes.size(); i++) {
+		for (unsigned j = 0; j < this->scenes[i].second.size(); j++) {
+			// If has custom next scene/dialogue
+			std::string next = this->scenes[i].second[j]->nextDialogue;
+			if (next != "") {
+				// If next is in other scene
+				if (next.find("otherscene") != std::string::npos) {
+					int nextScene = stoi(next.substr(0, next.find("otherscene")));
+
+					if (nextScene == index) this->scenes[i].second[j]->nextDialogue = "";
+
+					else if (nextScene > index) this->scenes[i].second[j]->nextDialogue = std::to_string(nextScene - 1) + "otherscene";
+				}
+			}
+		}
+	}
+
+	std::cout << "Scenes size: " << this->scenes.size();
 }
 
 

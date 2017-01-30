@@ -155,7 +155,7 @@ std::string Day::changeScene()
 void Day::drawTexts(Bengine::SpriteFont* spriteFont, Bengine::GLSLProgram* shaderProgram, const int& screenWidth, const int& screenHeight)
 {
 	if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["name"].as<std::string>().find("Question") == std::string::npos) {
-		this->dialogues[this->currentDialogueIdx]->drawTexts(spriteFont, shaderProgram, &this->fontBatch, screenWidth, screenHeight);
+		this->dialogues[this->currentDialogueIdx]->drawTexts(spriteFont, shaderProgram, &this->fontBatch, this->playerName, screenWidth, screenHeight);
 	}
 	else {
 		this->answers.clear();

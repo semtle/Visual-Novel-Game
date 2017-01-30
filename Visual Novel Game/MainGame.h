@@ -86,7 +86,7 @@ private:
 	std::map<std::string, Scene*> scenes; ///< All the scenes in the game
 	std::map<std::string, Day*> days;
 
-	std::string fileName = "Test"; ///< The name of the current file
+	std::string fileName = "Monday"; ///< The name of the current file
 
 	bool loading = false;
 

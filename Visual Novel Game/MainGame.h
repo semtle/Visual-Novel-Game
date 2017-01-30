@@ -47,6 +47,8 @@ public:
 
 	void initDays();
 
+	void drawLoading();
+
 	// The main game loop
 	void gameLoop();
 
@@ -89,6 +91,8 @@ private:
 	std::string fileName = "Monday"; ///< The name of the current file
 
 	bool loading = false;
+
+	int loadingIndex = 1;
 
 	int screenWidth = 800;
 	int screenHeight = 600;

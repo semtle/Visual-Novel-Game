@@ -19,7 +19,7 @@ void Day::init(const std::string &fileName, Bengine::InputManager* manager, cons
 	std::string path = "Dialogues/" + fileName + ".yaml";
 	this->file = YAML::LoadFile(path);
 
-	this->sceneNames.push_back("0");
+	this->sceneNames.push_back("2");
 	std::cout << "Current scene: " << this->sceneNames[this->currentSceneIdx] << "\n";
 	this->dialogueNames.push_back("0");
 
@@ -185,32 +185,16 @@ void Day::drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* hudCa
 	if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["left"] != nullptr) {
 		std::string left = this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["left"].as<std::string>();
 
-		for (unsigned i = 0; i < left.length(); i++) {
-			if (left[i] == ',') {
-				charName = left.substr(0, i);
-
-				// Get the image from the Character class
-				leftChar = this->characters[charName]->getImages().find(left.substr(i + 2, left.size() - 1))->second;
-				break;
-			}
-		}
+		leftChar = Bengine::ResourceManager::getTexture("Textures/Characters/" + left.substr(0, left.find(",")) + "/" + left.substr(left.find(",") + 2, left.size() - 1)).id;
 	}
 
 	if (charName == "Teemu-kun") leftCharWidth = 275;
 	else leftCharWidth = 225;
 
 	if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["right"] != nullptr) {
-		std::string right = this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["right"].as<std::string>();
+ 		std::string right = this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["right"].as<std::string>();
 
-		for (unsigned i = 0; i < right.length(); i++) {
-			if (right[i] == ',') {
-				charName = right.substr(0, i);
-
-				// Get the image from the Character class
-				rightChar = this->characters[charName]->getImages().find(right.substr(i + 2, right.size() - 1))->second;
-				break;
-			}
-		}
+		rightChar = Bengine::ResourceManager::getTexture("Textures/Characters/" + right.substr(0, right.find(",")) + "/" + right.substr(right.find(",") + 2, right.size() - 1)).id;
 	}
 
 	if (charName == "Teemu-kun") rightCharWidth = 275;
@@ -228,7 +212,7 @@ void Day::drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* hudCa
 	spriteBatch.end();
 	spriteBatch.renderBatch();
 
-	spriteBatch.begin();
+	spriteBatch.begin(Bengine::GlyphSortType::NONE);
 
 	if (this->file[this->sceneNames[this->currentSceneIdx]][this->dialogueNames[this->currentDialogueIdx]]["name"].as<std::string>().find("Question") == std::string::npos) {
 		this->dialogues[this->currentDialogueIdx]->drawImages(spriteBatch, hudCamera, screenWidth, screenHeight, leftCharWidth, rightCharWidth, leftChar, rightChar);

@@ -103,6 +103,17 @@ void MainProgram::gameLoop()
 			this->drawScreen();
 		}
 
+		while (this->currentState == ProgramState::DELETE_DIALOGUE) {
+			this->camera.update();
+			this->fontCamera.update();
+			this->inputManager.update();
+
+			this->processInput();
+			this->checkDialogueDeletionInputs();
+
+			this->drawScreen();
+		}
+
 		this->currentSceneName = "";
 		this->currentDialogueName = "";
 	}
@@ -348,6 +359,7 @@ void MainProgram::checkMainScreenInputs()
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 					this->changingSceneNameIdx = -1;
+					this->deletingScene = false;
 
 					if (this->selectedSceneIdx == -1) {
 						this->currentState = ProgramState::ADDSCENE;
@@ -423,6 +435,7 @@ void MainProgram::checkMainScreenInputs()
 						if (!this->settingNextDialogue) {
 							this->selectedSceneIdx = this->shownSceneIndexes[i];
 							this->changingSceneNameIdx = -1;
+							this->deletingScene = false;
 						}
 						else {
 							if (this->shownSceneIndexes[i] == this->lastSceneIdx) {
@@ -440,6 +453,7 @@ void MainProgram::checkMainScreenInputs()
 						this->inputManager.releaseKey(SDL_BUTTON_RIGHT);
 
 						this->changingSceneNameIdx = this->shownSceneIndexes[i];
+						this->deletingScene = false;
 					}
 				}
 			}
@@ -489,10 +503,45 @@ void MainProgram::checkMainScreenInputs()
 					this->selectedSceneIdx = -1;
 					this->selectedDialogueIdx = -1;
 					this->changingSceneNameIdx = -1;
+					this->deletingScene = false;
 					this->currentDialogueListIdx = 0;
 
 					this->currentDialogue = nullptr;
 					this->changingDialogueName = false;
+				}
+			}
+		}
+	}
+
+	// Deleting scene buttons
+	if (this->deletingScene) {
+		dim = this->getInputDimensions(this->deleteSceneBtnDestRect);
+
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->sceneManager->removeScene(this->changingSceneNameIdx);
+					this->changingSceneNameIdx = -1;
+
+					if (this->currentSceneListIdx > 0 && this->sceneManager->getScenes().size() < this->currentSceneListIdx + 5) {
+						this->currentSceneListIdx--;
+					}
+
+					this->deletingScene = false;
+				}
+			}
+		}
+
+		dim = this->getInputDimensions(this->cancelSceneDeleteBtnDestRect);
+
+		if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+			if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+					this->deletingScene = false;
 				}
 			}
 		}
@@ -682,14 +731,8 @@ void MainProgram::checkMainScreenInputs()
 				if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
-					this->sceneManager->removeDialogue(this->selectedSceneIdx, this->selectedDialogueIdx);
-
-					// Move down the list if removing dialogue from the end
-					if (this->currentDialogueListIdx > 0 && this->sceneManager->getDialogues(this->selectedSceneIdx).size() < this->currentDialogueListIdx + 5) {
-						this->currentDialogueListIdx--;
-					}
-
-					this->selectedDialogueIdx = -1;
+					this->currentState = ProgramState::DELETE_DIALOGUE;
+					this->lastDialogue = this->currentDialogue;
 					this->currentDialogue = nullptr;
 				}
 			}
@@ -1063,6 +1106,48 @@ void MainProgram::checkSceneCreationScreenInputs()
 }
 
 
+void MainProgram::checkDialogueDeletionInputs()
+{
+	glm::vec2 mouseCoords = this->inputManager.getMouseCoords();
+
+	glm::vec4 dim = this->getInputDimensions(this->confirmDlgDeleteBtnDestRect);
+
+	// Confirm delete
+	if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+		if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+			if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+				this->sceneManager->removeDialogue(this->selectedSceneIdx, this->selectedDialogueIdx);
+
+				// Move down the list if removing dialogue from the end
+				if (this->currentDialogueListIdx > 0 && this->sceneManager->getDialogues(this->selectedSceneIdx).size() < this->currentDialogueListIdx + 5) {
+					this->currentDialogueListIdx--;
+				}
+
+				this->selectedDialogueIdx = -1;
+				
+				this->currentState = ProgramState::MAINSCREEN;
+			}
+		}
+	}
+
+	dim = this->getInputDimensions(this->cancelDlgDeleteBtnDestRect);
+
+	// Cancel delete
+	if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+		if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+			if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+				this->currentDialogue = this->lastDialogue;
+				this->currentState = ProgramState::MAINSCREEN;
+			}
+		}
+	}
+}
+
+
 void MainProgram::onKeyPress(unsigned int keyID)
 {
 	// This function handles writing text in many different places in the editor
@@ -1222,12 +1307,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 
 		// Remove scene
 		if (keyName == "Delete" && this->changingSceneNameIdx != -1) {
-			this->sceneManager->removeScene(this->changingSceneNameIdx);
-			this->changingSceneNameIdx = -1;
-
-			if (this->currentSceneListIdx > 0 && this->sceneManager->getScenes().size() < this->currentSceneListIdx + 5) {
-				this->currentSceneListIdx--;
-			}
+			this->deletingScene = true;
 		}
 
 		// Validate the text
@@ -1239,6 +1319,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			// Changing scene name
 			else if (this->changingSceneNameIdx != -1) {
 				this->changingSceneNameIdx = -1;
+				this->deletingScene = false;
 			}
 			// Talker
 			else if (this->currentDialogue != nullptr && this->clickedOnTalkerBox) {
@@ -1313,7 +1394,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 		}
 
 		// Add the character to the player's name
-		if (keyName != "Return" && keyName != "Space" && keyName != "Backspace" && keyName != "Up" && keyName != "Down") {
+		if (keyName != "Return" && keyName != "Space" && keyName != "Backspace" && keyName != "Up" && keyName != "Down" && keyName != "Delete") {
 			// Scene name
 			if (this->currentState == ProgramState::ADDSCENE) {
 				if (this->currentSceneName.length() < 20) {
@@ -1567,6 +1648,7 @@ void MainProgram::drawScreen()
 	if (this->currentState == ProgramState::FILESELECT) this->drawFileSelectScreen();
 	else if (this->currentState == ProgramState::MAINSCREEN) this->drawMainScreen();
 	else if (this->currentState == ProgramState::ADDSCENE || this->currentState == ProgramState::ADD_DIALOGUE) this->drawSceneCreationScreen();
+	else if (this->currentState == ProgramState::DELETE_DIALOGUE) this->drawDialogueDeletionScreen();
 
 	this->spriteBatch.end();
 	this->spriteBatch.renderBatch();
@@ -1574,6 +1656,7 @@ void MainProgram::drawScreen()
 	if (this->currentState == ProgramState::FILESELECT) this->drawFileSelectTexts();
 	else if (this->currentState == ProgramState::ADDSCENE || this->currentState == ProgramState::ADD_DIALOGUE) this->drawSceneCreationScreenTexts();
 	else if (this->currentState == ProgramState::MAINSCREEN) this->drawMainScreenTexts();
+	else if (this->currentState == ProgramState::DELETE_DIALOGUE) this->drawDialogueDeletionTexts();
 
 	// Unbind the texture
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -1658,6 +1741,28 @@ void MainProgram::drawMainScreen()
 			this->addNewDestRect,
 			this->mainUvRect,
 			add_new_button,
+			0.0f,
+			this->color
+		);
+	}
+
+	// Delete scene button
+	if (this->deletingScene) {
+		this->spriteBatch.draw(
+			this->deleteSceneBtnDestRect,
+			this->mainUvRect,
+			Bengine::ResourceManager::getTexture("Textures/delete-button.png").id,
+			0.0f,
+			this->color
+		);
+	}
+
+	// Cancel scene delete button
+	if (this->deletingScene) {
+		this->spriteBatch.draw(
+			this->cancelSceneDeleteBtnDestRect,
+			this->mainUvRect,
+			Bengine::ResourceManager::getTexture("Textures/cancel-button-normal.png").id,
 			0.0f,
 			this->color
 		);
@@ -2165,6 +2270,37 @@ void MainProgram::drawSceneCreationScreen()
 }
 
 
+void MainProgram::drawDialogueDeletionScreen()
+{
+	// BG
+	this->spriteBatch.draw(
+		this->mainBgDestRect,
+		this->mainUvRect,
+		Bengine::ResourceManager::getTexture("Textures/dialoguedelete.png").id,
+		0.0f,
+		this->color
+	);
+
+	// Delete dialogue
+	this->spriteBatch.draw(
+		this->confirmDlgDeleteBtnDestRect,
+		this->mainUvRect,
+		Bengine::ResourceManager::getTexture("Textures/delete-button.png").id,
+		0.0f,
+		this->color
+	);
+
+	// Cancel dialogue delete
+	this->spriteBatch.draw(
+		this->cancelDlgDeleteBtnDestRect,
+		this->mainUvRect,
+		Bengine::ResourceManager::getTexture("Textures/cancel-button-normal.png").id,
+		0.0f,
+		this->color
+	);
+}
+
+
 void MainProgram::drawFileSelectTexts()
 {
 	if (this->currentFileName != "") {
@@ -2284,6 +2420,45 @@ void MainProgram::drawMainScreenTexts()
 			this->fontBatch,
 			buffer,
 			glm::vec2(210, 540),
+			glm::vec2(0.8f),
+			0.0f,
+			Bengine::ColorRGBA8(0, 0, 0, 255)
+		);
+	}
+
+	// Press delete to remove scene
+	if (this->changingSceneNameIdx != -1) {
+		sprintf_s(buffer, "%s", "Press delete to remove the selected scene.");
+
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(210, 510),
+			glm::vec2(0.8f),
+			0.0f,
+			Bengine::ColorRGBA8(0, 0, 0, 255)
+		);
+	}
+
+	// Are you sure delete scene
+	if (this->deletingScene) {
+		sprintf_s(buffer, "%s", "Are you sure you want to");
+
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(210, 430),
+			glm::vec2(0.8f),
+			0.0f,
+			Bengine::ColorRGBA8(0, 0, 0, 255)
+		);
+
+		sprintf_s(buffer, "%s", "want to delete the selected scene ?");
+
+		this->spriteFont->draw(
+			this->fontBatch,
+			buffer,
+			glm::vec2(210, 400),
 			glm::vec2(0.8f),
 			0.0f,
 			Bengine::ColorRGBA8(0, 0, 0, 255)
@@ -2701,6 +2876,47 @@ void MainProgram::drawSceneCreationScreenTexts()
 			Bengine::Justification::MIDDLE
 		);
 	}
+
+	this->fontBatch.end();
+	this->fontBatch.renderBatch();
+}
+
+
+void MainProgram::drawDialogueDeletionTexts()
+{
+	char buffer[256];
+
+	GLint pLocation = this->shaderProgram.getUniformLocation("P");
+	glm::mat4 cameraMatrix = this->fontCamera.getCameraMatrix();
+
+	// Send the camera matrix
+	glUniformMatrix4fv(pLocation, 1, false, &cameraMatrix[0][0]);
+
+	this->fontBatch.begin();
+
+	sprintf_s(buffer, "%s", "Are you sure you want to delete the dialogue:");
+
+	this->spriteFont->draw(
+		this->fontBatch,
+		buffer,
+		glm::vec2(this->screenWidth / 2, this->screenHeight / 2 + 50),
+		glm::vec2(1.0f),
+		0.0f,
+		Bengine::ColorRGBA8(0, 0, 0, 255),
+		Bengine::Justification::MIDDLE
+	);
+
+	sprintf_s(buffer, "%s%s%s", "'", this->lastDialogue->name.c_str(), "'?");
+
+	this->spriteFont->draw(
+		this->fontBatch,
+		buffer,
+		glm::vec2(this->screenWidth / 2, this->screenHeight / 2),
+		glm::vec2(1.0f),
+		0.0f,
+		Bengine::ColorRGBA8(0, 0, 0, 255),
+		Bengine::Justification::MIDDLE
+	);
 
 	this->fontBatch.end();
 	this->fontBatch.renderBatch();

@@ -36,28 +36,6 @@ void Dialogue::drawImages(
 	static const glm::vec4 leftCharUvRect(0.0f, 0.0f, -1.0f, 1.0f);
 	static const Bengine::ColorRGBA8 color(255, 255, 255, 255);
 
-	/* The talker box */
-	if (this->talker != "") {
-		spriteBatch.draw(
-			talkerBoxDestRect,
-			uvRect,
-			talkerBox,
-			0.0f,
-			color
-		);
-	}
-
-	/* The dialogue box */
-	if (this->message != "") {
-		spriteBatch.draw(
-			messageBoxRect,
-			uvRect,
-			messageBox,
-			0.0f,
-			color
-		);
-	}
-
 	// The character on the left
 	if (leftChar != -1) {
 		spriteBatch.draw(
@@ -75,6 +53,28 @@ void Dialogue::drawImages(
 			rightCharRect,
 			uvRect,
 			rightChar,
+			0.0f,
+			color
+		);
+	}
+
+	/* The talker box */
+	if (this->talker != "") {
+		spriteBatch.draw(
+			talkerBoxDestRect,
+			uvRect,
+			talkerBox,
+			0.0f,
+			color
+		);
+	}
+
+	/* The dialogue box */
+	if (this->message != "") {
+		spriteBatch.draw(
+			messageBoxRect,
+			uvRect,
+			messageBox,
 			0.0f,
 			color
 		);

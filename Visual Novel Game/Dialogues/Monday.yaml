@@ -1,0 +1,153 @@
+0:
+    name: The Beginning
+
+    Background: bedroom.png
+
+    0:
+        name: Narrative 1
+        message: Bright, warm rays of light spills between my curtains.
+        next: 1
+    1:
+        name: Narrative 2
+        message: I can feel the warmth embracing my face as I start to wake up.
+        next: 2
+    2:
+        name: Narrative 3
+        message: Sudden urge to strecth my body overtakes me.
+        next: 3
+    3:
+        name: Narrative 4
+        message: As I straghten my arms, I could feel my body slowly going over the bed's edge.
+        next: 4
+    4:
+        name: Player 1
+        talker: Player
+        message: Huh !?!?
+        next: 5
+    5:
+        name: Player 2
+        talker: Player
+        message: Aahh, my head...
+        next: 6
+    6:
+        name: Narrative 5
+        message: I genlty rub my head in confusion as I wondered how I ended up on the floor
+        next: 7
+    7:
+        name: Narrative 6
+        message: Suddenly  I noticed my phone vibrating next to me.
+        next: 8
+    8:
+        name: Player 3
+        talker: Player
+        message: Wait a second, it's already 9am? I'm late for school!
+        next: 9
+    9:
+        name: Narrative 7
+        message: If you didn't know, my teacher is the scariest one in our school, so being late wasn't an good option.
+        next: 10
+    10:
+        name: Player 4
+        talker: Player
+        message: Why didn't that darn alarm work again!
+        next: 11
+    11:
+        name: Narrative 8
+        message: With haste I jumped up form the floor and started to get ready for school.
+        next: 12
+    12:
+        name: Player 5
+        talker: Player
+        message: Well, I better hurry and get going, but first, where's my pants at?
+        next: 13
+    13:
+        name: Run Boy
+        next_scene: 1
+1:
+    name: Run Boy
+
+    Background: runningtoschool.png
+
+    0:
+        name: Run Boy
+        next_scene: 2
+2:
+    name: Infrnt Of The School
+
+    Background: schoolyard.png
+
+    0:
+        name: Narrative 1
+        message: I can see the school's gates in the distance getting closer and closer
+        next: 1
+    1:
+        name: Player 1
+        talker: Player
+        message: Phew, I'm finally here.
+        next: 2
+    2:
+        name: Narrative 2
+        message: While trying to catch my breath, I could hear someone yelling my name from afar.
+        next: 3
+    3:
+        name: Makoto 1
+        talker: Someone
+        message: Hey! Player -kun!
+        next: 4
+    4:
+        name: Player 2
+        talker: Player
+        message: Huh, where?
+        next: 5
+    5:
+        name: Makoto 2
+        talker: Someone
+        message: Good morning, player -kun!
+        next: 6
+    6:
+        name: Narrative 3
+        message: oh, it's my good frien Makoto-kun.
+        next: 7
+    7:
+        name: Narrative 4
+        message: I've been friends with him since the school started, but I have to say that he can be a bit odd from time to time.
+        next: 8
+    8:
+        name: Makoto 3
+        talker: Makoto-kun
+        right: Makoto-kun, smiling_uniform.png
+        message: You are late by quite a bit.
+        next: 9
+    9:
+        name: Makoto 4
+        talker: Mokoto-kun
+        right: Makoto-kun, confident_left_uniform.png
+        message: You already missed the first class!
+        next: 10
+    10:
+        name: Player 3
+        talker: Player
+        right: Makoto-kun, disappointed_uniform.png
+        message: Yeah... Well... My alarm didn't go off, you know!
+        next: 11
+    11:
+        name: Makoto 5
+        talker: Makoto-kun
+        right: Makoto-kun, smiling_side_uniform.png
+        message: Yeah right, like I haven't heard that before.
+        next: 12
+    12:
+        name: Makoto 6
+        talker: Makoto-kun
+        right: Makoto-kun, laughing_uniform.png
+        message: Oh well, atleast you are in time for the next class.
+        next: 13
+    13:
+        name: Narrative 5
+        message: Just as he finished talking the school bell rang.
+        next: 14
+    14:
+        name: Makoto 7
+        talker: Makoto-kun
+        right: Makoto-kun, normal_uniform.png
+        message: We better get going before we both miss this one.

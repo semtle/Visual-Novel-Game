@@ -33,6 +33,7 @@ public:
 		Bengine::SpriteFont* spriteFont,
 		Bengine::GLSLProgram* shaderProgram,
 		Bengine::SpriteBatch* fontBatch,
+		const std::string& playerName,
 		const int& screenWidth,
 		const int& screenHeight
 	);

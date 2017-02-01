@@ -227,8 +227,6 @@ void MainProgram::checkFileSelectInputs()
 					filePath += static_cast<char>(c);;
 				}
 
-				std::cout << "File path: " << filePath << "\n";
-
 				size_t pos = filePath.find("Dialogues");
 
 				if (filePath.length() > 0)

@@ -1,0 +1,510 @@
+0:
+    name: The Beginning
+
+    Background: bedroom.png
+
+    0:
+        name: Narrative 1
+        message: Bright, warm rays of light spills between my curtains.
+        next: 1
+    1:
+        name: Narrative 2
+        message: I can feel the warmth embracing my face as I start to wake up.
+        next: 2
+    2:
+        name: Narrative 3
+        message: Sudden urge to strecth my body overtakes me.
+        next: 3
+    3:
+        name: Narrative 4
+        message: As I straghten my arms, I could feel my body slowly going over the bed's edge.
+        next: 4
+    4:
+        name: Player 1
+        talker: Player
+        message: Huh !?!?
+        next: 5
+    5:
+        name: Player 2
+        talker: Player
+        message: Aahh, my head...
+        next: 6
+    6:
+        name: Narrative 5
+        message: I genlty rub my head in confusion as I wondered how I ended up on the floor.
+        next: 7
+    7:
+        name: Narrative 6
+        message: Suddenly I noticed my phone vibrating next to me.
+        next: 8
+    8:
+        name: Player 3
+        talker: Player
+        message: Wait a second, it's already 9am? I'm late for school!
+        next: 9
+    9:
+        name: Narrative 7
+        message: If you didn't know, my teacher is the scariest one in our school, so being late wasn't a good option.
+        next: 10
+    10:
+        name: Player 4
+        talker: Player
+        message: Why didn't that darn alarm work again!
+        next: 11
+    11:
+        name: Narrative 8
+        message: With haste I jumped up from the floor and started to get ready for school.
+        next: 12
+    12:
+        name: Player 5
+        talker: Player
+        message: Well, I better hurry and get going, but first, where's my pants at?
+        next_scene: 1
+1:
+    name: Run Boy
+
+    Background: runningtoschool.png
+
+    0:
+        name: Run Boy
+        next_scene: 2
+2:
+    name: Infrnt Of The School
+
+    Background: schoolyard.png
+
+    0:
+        name: Narrative 1
+        message: I can see the school's gates in the distance getting closer and closer.
+        next: 1
+    1:
+        name: Player 1
+        talker: Player
+        message: Phew, I'm finally here.
+        next: 2
+    2:
+        name: Narrative 2
+        message: While trying to catch my breath, I could hear someone yelling my name from afar.
+        next: 3
+    3:
+        name: Makoto 1
+        talker: Someone
+        message: Hey! Player -kun!
+        next: 4
+    4:
+        name: Player 2
+        talker: Player
+        message: Huh, where?
+        next: 5
+    5:
+        name: Makoto 2
+        talker: Someone
+        message: Good morning, player -kun!
+        next: 6
+    6:
+        name: Narrative 3
+        message: Oh, it's my good friend Makoto-kun.
+        next: 7
+    7:
+        name: Narrative 4
+        message: I've been friends with him since the school started, but I have to say that he can be a bit odd from time to time.
+        next: 8
+    8:
+        name: Makoto 3
+        talker: Makoto-kun
+        right: Makoto-kun, smiling_uniform.png
+        message: You are late by quite a bit.
+        next: 9
+    9:
+        name: Makoto 4
+        talker: Mokoto-kun
+        right: Makoto-kun, confident_left_uniform.png
+        message: You already missed the first class!
+        next: 10
+    10:
+        name: Player 3
+        talker: Player
+        right: Makoto-kun, disappointed_uniform.png
+        message: Yeah... Well... My alarm didn't go off, you know!
+        next: 11
+    11:
+        name: Makoto 5
+        talker: Makoto-kun
+        right: Makoto-kun, smiling_side_uniform.png
+        message: Yeah right, like I haven't heard that before.
+        next: 12
+    12:
+        name: Makoto 6
+        talker: Makoto-kun
+        right: Makoto-kun, laughing_uniform.png
+        message: Oh well, atleast you are in time for the next class.
+        next: 13
+    13:
+        name: Narrative 5
+        message: Just as he finished talking the school bell rang.
+        next: 14
+    14:
+        name: Makoto 7
+        talker: Makoto-kun
+        right: Makoto-kun, normal_uniform.png
+        message: We better get going before we both miss this one.
+        next_scene: 3
+3:
+    name: Class
+
+    Background: classroom.png
+
+    0:
+        name: Makoto 1
+        talker: Makoto-kun
+        right: Makoto-kun, smiling_side_uniform.png
+        message: Guys, look who's finally here.
+        next: 1
+    1:
+        name: Makoto 2
+        talker: Makoto-kun
+        right: Makoto-kun, laughing_uniform.png
+        message: I found him derping around at the school's gate.
+        next: 2
+    2:
+        name: Makoto 3
+        talker: Makoto-kun
+        right: Makoto-kun, smiling_uniform.png
+        message: He even startled when I called him, and guess what's his ecxuse for being late was.
+        next: 3
+    3:
+        name: Player 1
+        talker: Player
+        right: Makoto-kun, confident_left_uniform.png
+        message: I was exhausted because I ran all the way from home, and I already said that my alarm didn't go off!
+        next: 4
+    4:
+        name: Player 2
+        talker: Player
+        right: Makoto-kun, laughing_uniform.png
+        message: There's nothing I could have done.
+        next: 5
+    5:
+        name: Narrative 1
+        right: Makoto-kun, laughing_uniform.png
+        message: Just look at his smirk, he's enjoying every second of this.
+        next: 6
+    6:
+        name: Narrative 2
+        right: Makoto-kun, confident_uniform.png
+        message: Usually he's a chill guy, but I guess that's his way of showing friendship.
+        next: 7
+    7:
+        name: Teemu 1
+        talker: Teemu-kun
+        left: Teemu-kun, angry_left_uniform.png
+        right: Makoto-kun, smiling_side_uniform.png
+        message: Every one of us gets those days at some point, so don't worry about it.
+        next: 8
+    8:
+        name: Narrative 3
+        left: Teemu-kun, happy_uniform.png
+        right: Makoto-kun, confident_left_uniform.png
+        message: Teemu-kun is my homie, he always helps out no matter what's the problem.
+        next: 9
+    9:
+        name: Narrative 4
+        left: Teemu-kun, normal_uniform.png
+        right: Makoto-kun, normal_uniform.png
+        message: Not only does he help everyone, he's super smart and I've known him since the elementy school.
+        next: 10
+    10:
+        name: Teemu 2
+        talker: Teemu-kun
+        left: Teemu-kun, normal_uniform.png
+        right: Makoto-kun, bored_uniform.png
+        message: Atleast you didn't miss anything important and you are here now.
+        next: 11
+    11:
+        name: Player 3
+        talker: Player
+        left: Teemu-kun, smiling_uniform.png
+        right: Makoto-kun, disappointed_uniform.png
+        message: See! Teemu-kun gets it, unlike certain someone...
+        next: 12
+    12:
+        name: Player 4
+        talker: Player
+        left: Teemu-kun, happy_uniform.png
+        right: Makoto-kun, bored_uniform.png
+        message: What is done is done, so let's get over it okey?
+        next: 13
+    13:
+        name: Makoto 4
+        talker: Makoto-kun
+        left: Teemu-kun, laughing_uniform.png
+        right: Makoto-kun, normal_uniform.png
+        message: Fine, I'll stop teasing for now.
+        next: 14
+    14:
+        name: Teemu 3
+        talker: Teemu-kun
+        left: Teemu-kun, happy_uniform.png
+        right: Makoto-kun, surprised_uniform.png
+        message: Now that we are finally over this, have you guys heard about the new transfer student?
+        next: 15
+    15:
+        name: Player 5
+        talker: Player
+        left: Teemu-kun, laughing_uniform.png
+        right: Makoto-kun, confident_left_uniform.png
+        message: Wait, a new transfer student? Where did you hear that?
+        next: 16
+    16:
+        name: Teemu 4
+        talker: Teemu-kun
+        left: Teemu-kun, surprised_uniform.png
+        right: Makoto-kun, surprised_uniform.png
+        message: I overheard a couple of teachears talking about it in the hallway. So I went and asked them what was going on.
+        next: 17
+    17:
+        name: Makoto 5
+        talker: Makoto-kun
+        left: Teemu-kun, happy_uniform.png
+        right: Makoto-kun, smiling_uniform.png
+        message: Well, what did they say?
+        next: 18
+    18:
+        name: Teemu 5
+        talker: Teemu-kun
+        left: Teemu-kun, worried_uniform.png
+        right: Makoto-kun, worried_uniform.png
+        message: They said that she'd transfer into our class, not much more.
+        next: 19
+    19:
+        name: Makoto 6
+        talker: Makoto-kun
+        left: Teemu-kun, normal_uniform.png
+        right: Makoto-kun, confident_left_uniform.png
+        message: So we'll be getting a new girl in the class, hehe.
+        next: 20
+    20:
+        name: Player 6
+        talker: Player
+        left: Teemu-kun, happy_uniform.png
+        right: Makoto-kun, blush_bored_center_uniform.png
+        message: Sorry Makoto-kun, but you won't have a chance with her.
+        next: 21
+    21:
+        name: Makoto 7
+        talker: Makoto-kun
+        left: Teemu-kun, sad_uniform.png
+        right: Makoto-kun, confident_left_uniform.png
+        message: Well, you never know if you get luckly or not, but in the end, I'll be the first one to get her attention, that's for sure.
+        next: 22
+    22:
+        name: Teemu 6
+        talker: Teemu-kun
+        left: Teemu-kun, happy_uniform.png
+        right: Makoto-kun, shouting_uniform.png
+        message: The only thing you'll be getting from her is a slap across your face.
+        next: 23
+    23:
+        name: Makoto 8
+        talker: Makoto-kun
+        left: Teemu-kun, sad_uniform.png
+        right: Makoto-kun, surprised_uniform.png
+        message: Dude! Don't be so negative. Player, what do you think?
+        next: 24
+    24:
+        name: Question 1
+        Option 1:
+            text: Well, depends if she likes someone a bit goofy, you might have a chance.
+            influence: 1
+            next: 25
+        Option 2:
+            text: Teemu-kun is right, you wouldn't have a chance with her.
+            influence: 1
+            next: 30
+        Option 3:
+            text: Sorry man, but I can't really say anything.
+            influence: 1
+            next: 35
+    25:
+        name: Makoto 1.1
+        talker: Makoto-kun
+        left: Teemu-kun, sad_uniform.png
+        right: Makoto-kun, normal_uniform.png
+        message: I knew that you would have my back, unlike Teemu-kun.
+        next: 26
+    26:
+        name: Teemu 1.1
+        talker: Teemu-kun
+        left: Teemu-kun, surprised_uniform.png
+        right: Makoto-kun, confident_left_uniform.png
+        message: What's that supposed to mean?
+        next: 27
+    27:
+        name: Makoto 1.2
+        talker: Makoto-kun
+        left: Teemu-kun, worried_uniform.png
+        right: Makoto-kun, confident_left_uniform.png
+        message: You know what it means.
+        next: 28
+    28:
+        name: Teemu 1.2
+        talker: Teemu-kun
+        left: Teemu-kun, worried_uniform.png
+        right: Makoto-kun, smiling_side_uniform.png
+        message: If you want to say something, say it outloud.
+        next: 29
+    29:
+        name: Player 1.1
+        talker: Player
+        left: Teemu-kun, sad_uniform.png
+        right: Makoto-kun, disappointed_uniform.png
+        message: Both of you calm down, take it easy.
+        next: 30
+    30:
+        name: Teemu 2.1
+        talker: Teemu-kun
+        left: Teemu-kun, laughing_uniform.png
+        right: Makoto-kun, bored_uniform.png
+        message: Even Player agrees that you can't handle girls haha.
+        next: 31
+    31:
+        name: Makoto 2.1
+        talker: Makoto-kun
+        left: Teemu-kun, normal_uniform.png
+        right: Makoto-kun, confident_left_uniform.png
+        message: That's not fair! I'll show you my game when I get the chance to prove them.
+        next: 32
+    32:
+        name: Makoto 2.2
+        talker: Makoto-kun
+        left: Teemu-kun, surprised_uniform.png
+        right: Makoto-kun, laughing_uniform.png
+        message: Atleast I'm not going after 3D girls unlike you.
+        next: 33
+    33:
+        name: Teemu 2.2
+        talker: Teemu-kun
+        left: Teemu-kun, angry_left_uniform.png
+        right: Makoto-kun, bored_uniform.png
+        message: Hey! There's nothing wrong with 2D girls!
+        next: 34
+    34:
+        name: Makoto 2.3
+        talker: Makoto-kun
+        left: Teemu-kun, happy_uniform.png
+        right: Makoto-kun, disappointed_uniform.png
+        message: Whatever floats your boat man.
+        next: 35
+    35:
+        name: Makoto 3.1
+        talker: Makoto-kun
+        left: Teemu-kun, sad_uniform.png
+        right: Makoto-kun, surprised_uniform.png
+        message: Huh, why?
+        next: 36
+    36:
+        name: Teemu 3.1
+        talker: Teemu-kun
+        left: Teemu-kun, happy_uniform.png
+        right: Makoto-kun, smiling_side_uniform.png
+        message: Looks like someone knows how to dodge a bullet.
+        next: 37
+    37:
+        name: Player 3.1
+        talker: Player
+        left: Teemu-kun, laughing_uniform.png
+        right: Makoto-kun, bored_uniform.png
+        message: I just want to get ready for the class, that's all.
+        next: 38
+    38:
+        name: Makoto 3.2
+        talker: Makoto-kun
+        left: Teemu-kun, normal_uniform.png
+        right: Makoto-kun, normal_uniform.png
+        message: Oh look, the teacher is coming.
+        next: 39
+    39:
+        name: Teemu 3.2
+        talker: Teemu-kun
+        left: Teemu-kun, happy_uniform.png
+        right: Makoto-kun, smiling_uniform.png
+        message: Yeah, let's just go to our places.
+        next_scene: 4
+4:
+    name: Teacher
+
+    Background: classroom.png
+
+    0:
+        name: Teacher 1
+        talker: Teacher
+        message: Silence in the classroom.
+        next_scene: 5
+5:
+    name: After Class
+
+    Background: classroom.png
+
+    0:
+        name: Makoto 1
+        talker: Makoto-kun
+        right: Makoto-kun, normal_uniform.png
+        message: Phew, it's finally over.
+        next_scene: 6
+6:
+    name: Cafeteria
+
+    Background: cafeday.PNG
+
+    0:
+        name: Eyylmao
+        talker: Memese
+        next_scene: 7
+7:
+    name: Leaving School
+
+    Background: schoolyard_evening.png
+
+    0:
+        name: Gates
+        talker: Xddd
+        message: NICE MEMES
+        next_scene: 8
+8:
+    name: Going Home 1
+
+    Background: train_inside.png
+
+    0:
+        name: Narrative
+        message: Finally some peace
+        next_scene: 9
+9:
+    name: Arcade
+
+    Background: park_valley.png
+
+    0:
+        name: Close To The Arcade
+        talker: Dankmemes
+        message: eyyy lmao
+        next_scene: 10
+10:
+    name: Park 1
+
+    Background: park_benches.png
+
+    0:
+        name: Narrative
+        talker: Eyylmao
+        message: adsffdasfds
+        next_scene: 11
+11:
+    name: Phone 1
+
+    Background: bedroom.png
+
+    0:
+        name: Narrative
+        talker: Asdfadfsfds
+        message: adsffads

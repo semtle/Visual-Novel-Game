@@ -6,6 +6,11 @@
 #include <string>
 #include <algorithm>
 
+#include <direct.h>  
+#include <stdio.h>  
+#include <stdlib.h>  
+#include <errno.h>
+
 #include <windows.h>
 #include <Commdlg.h>
 
@@ -56,7 +61,7 @@ public:
 
 	void scrolled(int yDir);
 
-	std::wstring getOpenFileName(HWND owner, bool png = true);
+	std::wstring getOpenFileName(std::string fileType);
 private:
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> getShownScenes(std::map<int, std::pair<std::string, std::vector<Dialogue *>>> allScenes);
 	std::vector<Dialogue *> getShownDialogues(std::vector<Dialogue *> allDialogues);

@@ -3077,19 +3077,6 @@ std::string MainProgram::getBoxSizeText(std::string text, float scale)
 }
 
 
-std::vector<std::string> MainProgram::getFilesInDir(const path& p)
-{
-    if (is_directory(p)) {
-        std::cout << p << " is a directory containing:\n";
-
-        for (auto& entry : boost::make_iterator_range(directory_iterator(p), {}))
-            std::cout << entry << "\n";
-    }
-
-    return std::vector<std::string>();
-}
-
-
 void MainProgram::resetEverything()
 {
 	this->sceneManager->saveToFile("../Visual Novel Game/Dialogues/" + this->currentFileName);

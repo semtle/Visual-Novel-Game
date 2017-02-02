@@ -219,7 +219,7 @@ void MainProgram::checkFileSelectInputs()
 				this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 				// Open up the file explorer to pick a yaml file
-				std::wstring wFilePath = this->getOpenFileName(NULL, false);
+				std::wstring wFilePath = this->getOpenFileName("dlg");
 
 				// Convert the filepath from a wide string to a regural string
 				std::string filePath = "";
@@ -227,10 +227,11 @@ void MainProgram::checkFileSelectInputs()
 					filePath += static_cast<char>(c);;
 				}
 
-				size_t pos = filePath.find("Dialogues");
+                if (filePath.length() > 0) {
+                    size_t pos = filePath.find("Dialogues");
 
-				if (filePath.length() > 0)
-					this->currentFileName = filePath.substr(pos + 10);
+                    this->currentFileName = filePath.substr(pos + 10);
+                }
 			}
 		}
 	}
@@ -597,7 +598,7 @@ void MainProgram::checkMainScreenInputs()
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 					// Open up the file explorer to pick a background image
-					std::wstring wFilePath = this->getOpenFileName(NULL);
+					std::wstring wFilePath = this->getOpenFileName("bg");
 
 					// Convert the filepath from a wide string to a regural string
 					std::string filePath = "";
@@ -635,7 +636,7 @@ void MainProgram::checkMainScreenInputs()
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 					// Open up the file explorer to pick a background image
-					std::wstring wFilePath = this->getOpenFileName(NULL);
+					std::wstring wFilePath = this->getOpenFileName("char");
 
 					// Convert the filepath from a wide string to a regural string
 					std::string filePath = "";
@@ -643,16 +644,16 @@ void MainProgram::checkMainScreenInputs()
 						filePath += static_cast<char>(c);
 					}
 
-					size_t pos = filePath.find("Characters");
+                    if (filePath.length() > 0) {
+					    size_t pos = filePath.find("Characters");
 
-					std::string endPart = filePath.substr(pos + 11, filePath.length());
-					size_t dash = endPart.find("\\");
+					    std::string endPart = filePath.substr(pos + 11, filePath.length());
+					    size_t dash = endPart.find("\\");
 
-					std::string charName = endPart.substr(0, dash);
-					std::string imageName = endPart.substr(dash + 1, endPart.length() - 4);
+					    std::string charName = endPart.substr(0, dash);
+					    std::string imageName = endPart.substr(dash + 1, endPart.length() - 4);
 
-					// Set the background
-					if (filePath.length() > 0) {
+					    // Set the character image
 						this->currentDialogue->left = charName + ", " + imageName;
 					}
 				}
@@ -674,7 +675,7 @@ void MainProgram::checkMainScreenInputs()
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 					// Open up the file explorer to pick a background image
-					std::wstring wFilePath = this->getOpenFileName(NULL);
+					std::wstring wFilePath = this->getOpenFileName("char");
 
 					// Convert the filepath from a wide string to a regural string
 					std::string filePath = "";
@@ -682,16 +683,16 @@ void MainProgram::checkMainScreenInputs()
 						filePath += static_cast<char>(c);
 					}
 
-					size_t pos = filePath.find("Characters");
+                    if (filePath.length() > 0) {
+                        size_t pos = filePath.find("Characters");
 
-					std::string endPart = filePath.substr(pos + 11, filePath.length());
-					size_t dash = endPart.find("\\");
+                        std::string endPart = filePath.substr(pos + 11, filePath.length());
+                        size_t dash = endPart.find("\\");
 
-					std::string charName = endPart.substr(0, dash);
-					std::string imageName = endPart.substr(dash + 1, endPart.length() - 4);
+                        std::string charName = endPart.substr(0, dash);
+                        std::string imageName = endPart.substr(dash + 1, endPart.length() - 4);
 
-					// Set the background
-					if (filePath.length() > 0) {
+					    // Set the character image
 						this->currentDialogue->right = charName + ", " + imageName;
 					}
 				}
@@ -3076,6 +3077,19 @@ std::string MainProgram::getBoxSizeText(std::string text, float scale)
 }
 
 
+std::vector<std::string> MainProgram::getFilesInDir(const path& p)
+{
+    if (is_directory(p)) {
+        std::cout << p << " is a directory containing:\n";
+
+        for (auto& entry : boost::make_iterator_range(directory_iterator(p), {}))
+            std::cout << entry << "\n";
+    }
+
+    return std::vector<std::string>();
+}
+
+
 void MainProgram::resetEverything()
 {
 	this->sceneManager->saveToFile("../Visual Novel Game/Dialogues/" + this->currentFileName);
@@ -3188,7 +3202,7 @@ std::vector<std::string> MainProgram::getWrappedText(std::string text, Bengine::
 }
 
 
-std::wstring MainProgram::getOpenFileName(HWND owner, bool png)
+std::wstring MainProgram::getOpenFileName(std::string fileType)
 {
 	// Save current working directory
 	TCHAR currentDirectory[MAX_PATH];
@@ -3202,21 +3216,39 @@ std::wstring MainProgram::getOpenFileName(HWND owner, bool png)
 		std::cout << "Error: buffer was too small when saving current directory!\n";
 	}
 
+    // Set the correct directory for the file type that is going to be opened
+    std::string currentPath = currentDirectory;
+    currentPath = currentPath.substr(0, currentPath.find("StoryEditor"));
+    currentPath += "Visual Novel Game\\";
+
+    if (fileType == "dlg") currentPath += "Dialogues";
+    else if (fileType == "char") currentPath += "Textures\\Characters";
+    else currentPath += "Textures\\Backgrounds";
+
+    // Convert file path to a wide string
+    std::wstring widePath = std::wstring(currentPath.begin(), currentPath.end());
+
 	wchar_t buffer[MAX_PATH];
 
 	OPENFILENAMEW ofn = { 0 };
 
 	ofn.lStructSize = sizeof(ofn);
-	ofn.hwndOwner = owner;
+	ofn.hwndOwner = NULL;
 
 	// Show only the appropriate file type
-	if (png) ofn.lpstrFilter = L"PNG Files\0*.png\0";
+	if (fileType == "char" || fileType == "bg") ofn.lpstrFilter = L"PNG Files\0*.png\0";
 	else ofn.lpstrFilter = L"Yaml Files\0*.yaml\0";
 
 	ofn.nFilterIndex = 1;
-	ofn.lpstrTitle = L"Select an image";
+
+    if (fileType == "char" || fileType == "bg")
+        ofn.lpstrTitle = L"Select an image";
+    else
+        ofn.lpstrTitle = L"Select a dialogue";
+
 	ofn.lpstrFile = buffer;
 	ofn.nMaxFile = MAX_PATH;
+    ofn.lpstrInitialDir = widePath.c_str();
 	ofn.Flags = OFN_HIDEREADONLY | OFN_FILEMUSTEXIST;
 
 	// Need to set the first character to null to avoid crashes

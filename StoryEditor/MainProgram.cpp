@@ -1002,6 +1002,7 @@ void MainProgram::checkSceneCreationScreenInputs()
 
 				this->duplicateDialogueName = false;
 				this->duplicateSceneName = false;
+                this->creationErrorMsg = "";
 				
 				// Set the current dialogue to be the last one when cancelling
 				if (this->selectedSceneIdx != -1) {
@@ -1034,11 +1035,19 @@ void MainProgram::checkSceneCreationScreenInputs()
 					}
 
 					if (!this->duplicateSceneName) {
-						this->sceneManager->addScene(this->currentSceneName);
+                        if (this->currentSceneName.find_first_not_of(' ') != std::string::npos) {
+                            this->sceneManager->addScene(this->currentSceneName);
 
-						if (this->sceneManager->getScenes().size() > 5) {
-							this->currentSceneListIdx = this->sceneManager->getScenes().size() - 5;
-						}
+                            if (this->sceneManager->getScenes().size() > 5) {
+                                this->currentSceneListIdx = this->sceneManager->getScenes().size() - 5;
+                            }
+
+                            this->currentState = ProgramState::MAINSCREEN;
+                            this->creationErrorMsg = "";
+                        }
+                        else {
+                            this->creationErrorMsg = "You have to set a name for your scene!";
+                        }
 					}
 				}
 				else if (this->currentState == ProgramState::ADD_DIALOGUE) {
@@ -1053,11 +1062,16 @@ void MainProgram::checkSceneCreationScreenInputs()
 						}
 					}
 
-					if (!this->duplicateDialogueName) this->submitDialogue();
-				}
-
-				if (!this->duplicateSceneName && !this->duplicateDialogueName) {
-					this->currentState = ProgramState::MAINSCREEN;
+                    if (!this->duplicateDialogueName) {
+                        if (this->currentDialogueName.find_first_not_of(' ') != std::string::npos) {
+                            this->submitDialogue();
+                            this->currentState = ProgramState::MAINSCREEN;
+                            this->creationErrorMsg = "";
+                        }
+                        else {
+                            this->creationErrorMsg = "You have to set a name for your dialogue!";
+                        }
+                    }
 				}
 			}
 		}
@@ -1080,11 +1094,18 @@ void MainProgram::checkSceneCreationScreenInputs()
 			}
 
 			if (!this->duplicateSceneName) {
-				this->sceneManager->addScene(this->currentSceneName);
+                if (this->currentSceneName.find_first_not_of(' ') != std::string::npos) {
+                    this->sceneManager->addScene(this->currentSceneName);
 
-				if (this->sceneManager->getScenes().size() > 5) {
-					this->currentSceneListIdx = this->sceneManager->getScenes().size() - 5;
-				}
+                    if (this->sceneManager->getScenes().size() > 5) {
+                        this->currentSceneListIdx = this->sceneManager->getScenes().size() - 5;
+                    }
+
+                    this->currentState = ProgramState::MAINSCREEN;
+                    this->creationErrorMsg = "";
+                } else {
+                    this->creationErrorMsg = "You have to set a name for your scene!";
+                }
 			}
 		}
 		else if (this->currentState == ProgramState::ADD_DIALOGUE) {
@@ -1099,11 +1120,16 @@ void MainProgram::checkSceneCreationScreenInputs()
 				}
 			}
 
-			if (!this->duplicateDialogueName) this->submitDialogue();
-		}
-
-		if (!this->duplicateSceneName && !this->duplicateDialogueName) {
-			this->currentState = ProgramState::MAINSCREEN;
+            if (!this->duplicateDialogueName) {
+                if (this->currentDialogueName.find_first_not_of(' ') != std::string::npos) {
+                    this->submitDialogue();
+                    this->currentState = ProgramState::MAINSCREEN;
+                    this->creationErrorMsg = "";
+                }
+                else {
+                    this->creationErrorMsg = "You have to set a name for your dialogue!";
+                }
+            }
 		}
 	}
 }
@@ -1181,11 +1207,13 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			if (this->currentState == ProgramState::ADDSCENE) {
 				this->currentSceneName = this->currentSceneName.substr(0, this->currentSceneName.size() - 1);
 				this->duplicateSceneName = false;
+                this->creationErrorMsg = "";
 			}
 			// Dialogue name
 			if (this->currentState == ProgramState::ADD_DIALOGUE) {
 				this->currentDialogueName = this->currentDialogueName.substr(0, this->currentDialogueName.size() - 1);
 				this->duplicateDialogueName = false;
+                this->creationErrorMsg = "";
 			}
 			// Changing dialogue name
 			else if (this->changingDialogueName) {
@@ -1230,6 +1258,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				}
 
 				this->duplicateSceneName = false;
+                this->creationErrorMsg = "";
 			}
 
 			// Dialogue name
@@ -1239,6 +1268,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				}
 
 				this->duplicateDialogueName = false;
+                this->creationErrorMsg = "";
 			}
 
 			// Changing dialogue name
@@ -1356,7 +1386,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				this->selectedAnswerBox = -1;
 				this->resetCurrentDialogue();
 			}
-			// Setting dialogue
+			// Setting next dialogue
 			else if (this->settingNextDialogue) {
 				if (this->selectedDialogueIdx != -1 || this->selectedNextSceneIdx != -1) {
 					std::string next = "";
@@ -1404,6 +1434,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 					this->currentSceneName += static_cast<char>(keyID);
 
 					this->duplicateSceneName = false;
+                    this->creationErrorMsg = "";
 				}
 			}
 			// Dialogue name
@@ -1412,6 +1443,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 					this->currentDialogueName += static_cast<char>(keyID);
 
 					this->duplicateDialogueName = false;
+                    this->creationErrorMsg = "";
 				}
 			}
 			// Changing dialogue name
@@ -2903,8 +2935,11 @@ void MainProgram::drawSceneCreationScreenTexts()
 	else if (this->duplicateSceneName) {
 		sprintf_s(buffer, "%s", "A scene with that name already exists!");
 	}
+    else if (this->creationErrorMsg != "") {
+        sprintf_s(buffer, "%s", this->creationErrorMsg.c_str());
+    }
 
-	if (this->duplicateDialogueName || this->duplicateSceneName) {
+	if (this->duplicateDialogueName || this->duplicateSceneName || this->creationErrorMsg != "") {
 		this->spriteFont->draw(
 			this->fontBatch,
 			buffer,

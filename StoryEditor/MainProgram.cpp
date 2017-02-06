@@ -364,6 +364,9 @@ void MainProgram::checkMainScreenInputs()
 						this->currentState = ProgramState::ADDSCENE;
 					}
 					else {
+                        this->lastDialogueIdx = this->selectedDialogueIdx;
+                        this->lastDialogueListIdx = this->currentDialogueListIdx;
+                        this->lastDialogue = this->currentDialogue;
 						this->currentDialogue = nullptr;
 						this->changingDialogueName = false;
 						this->currentState = ProgramState::ADD_DIALOGUE;
@@ -1002,8 +1005,9 @@ void MainProgram::checkSceneCreationScreenInputs()
 				
 				// Set the current dialogue to be the last one when cancelling
 				if (this->selectedSceneIdx != -1) {
-					std::vector<Dialogue *> dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
-					this->currentDialogue = dialogues[dialogues.size() - 1];
+                    this->currentDialogue = this->lastDialogue;
+                    this->currentDialogueListIdx = this->lastDialogueListIdx;
+                    this->selectedDialogueIdx = this->lastDialogueIdx;
 				}
 			}
 		}
@@ -2356,9 +2360,19 @@ void MainProgram::drawMainScreenTexts()
 
 	// Scene names, only show if a scene isn't opened
 	if (this->selectedSceneIdx == -1) {
-		for (unsigned i = 0; i < scenes.size(); i++) {
-			// Fill the buffer with the text
+        // Scene list text
+        sprintf_s(buffer, "%s", "Scene List");
 
+        this->spriteFont->draw(
+            this->fontBatch,
+            buffer,
+            glm::vec2(8, 615),
+            glm::vec2(0.7f),
+            0.0f,
+            Bengine::ColorRGBA8(0, 0, 0, 255)
+        );
+
+		for (unsigned i = 0; i < scenes.size(); i++) {
 			std::string text = this->getBoxSizeText(scenes[i].first, 0.7f);
 
 			sprintf_s(buffer, "%s", text.c_str());
@@ -2389,6 +2403,32 @@ void MainProgram::drawMainScreenTexts()
 	// Dialogue names, show if a scene is selected
 	else {
 		if (!this->changingSettings) {
+            // Dialogue list text
+            sprintf_s(buffer, "%s", "Dialogues");
+
+            this->spriteFont->draw(
+                this->fontBatch,
+                buffer,
+                glm::vec2(8, 615),
+                glm::vec2(0.7f),
+                0.0f,
+                Bengine::ColorRGBA8(0, 0, 0, 255)
+            );
+
+            if (this->selectedDialogueIdx != -1) {
+                // Dialogue content text
+                sprintf_s(buffer, "%s", "Dialogue Content");
+
+                this->spriteFont->draw(
+                    this->fontBatch,
+                    buffer,
+                    glm::vec2(208, 615),
+                    glm::vec2(0.7f),
+                    0.0f,
+                    Bengine::ColorRGBA8(0, 0, 0, 255)
+                );
+            }
+
 			std::vector<Dialogue *> dialogues = this->getShownDialogues(this->sceneManager->getDialogues(this->selectedSceneIdx));
 
 			for (unsigned i = 0; i < dialogues.size(); i++) {

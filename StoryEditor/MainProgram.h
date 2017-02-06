@@ -102,6 +102,7 @@ private:
 	std::string currentSceneName = "";
 	std::string currentDialogueName = "";
 	std::string currentFileName = "";
+    std::string creationErrorMsg = "";
 
 	bool clickedOnTalkerBox = false;
 	bool clickedOnDialogueBox = false;

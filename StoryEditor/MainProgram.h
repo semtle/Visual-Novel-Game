@@ -255,7 +255,7 @@ private:
 	glm::vec4 closeIconDestRect = glm::vec4(this->screenWidth / 2 - 48, -this->screenHeight / 2 + 550, 32, 32);
 
 	// Left arrow
-	glm::vec4 arrowLeftDestRect = glm::vec4(-this->screenWidth / 2 + 135, -this->screenHeight / 2 + 605, 49, 30);
+	glm::vec4 arrowLeftDestRect = glm::vec4(-this->screenWidth / 2 + 135, -this->screenHeight / 2 + 615, 49, 30);
 
 	// UV-Rect for up-arrow (rotate arrow 180 degrees)
 	glm::vec4 upArrowUvRect = glm::vec4(0.0f, 0.0f, 1.0f, -1.0f);

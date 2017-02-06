@@ -19,7 +19,7 @@ void Day::init(const std::string &fileName, Bengine::InputManager* manager, cons
 	std::string path = "Dialogues/" + fileName + ".yaml";
 	this->file = YAML::LoadFile(path);
 
-	this->sceneNames.push_back("2");
+	this->sceneNames.push_back("0");
 	std::cout << "Current scene: " << this->sceneNames[this->currentSceneIdx] << "\n";
 	this->dialogueNames.push_back("0");
 

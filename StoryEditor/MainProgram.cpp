@@ -3119,6 +3119,18 @@ void MainProgram::resetCurrentDialogue()
 
 void MainProgram::submitDialogue()
 {
+    std::string left = "", right = "";
+
+    // Set the characters to be the same as last dialogue's
+    if (this->selectedSceneIdx != -1) {
+        auto dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
+        
+        if (dialogues.size() > 0) {
+            left = dialogues[dialogues.size() - 1]->left;
+            right = dialogues[dialogues.size() - 1]->right;
+        }
+    }
+
 	// Create a new dialogue
 	this->sceneManager->addDialogue(
 		this->selectedSceneIdx,
@@ -3126,8 +3138,8 @@ void MainProgram::submitDialogue()
 			this->sceneManager->getDialogues(this->selectedSceneIdx).size(),
 			this->currentDialogueName,
 			"",
-			"",
-			"",
+			left,
+			right,
 			"",
 			"",
 			true,

@@ -60,14 +60,13 @@ public:
 	void drawDialogueDeletionTexts();
 
 	void onScroll(int yDir);
-
-	std::wstring getOpenFileName(std::string fileType);
 private:
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> getShownScenes(std::map<int, std::pair<std::string, std::vector<Dialogue *>>> allScenes);
 	std::vector<Dialogue *> getShownDialogues(std::vector<Dialogue *> allDialogues);
 	std::vector<std::string> getWrappedText(std::string text, Bengine::SpriteFont* spriteFont, const float& maxLength, const float& fontScale);
 	glm::vec4 getInputDimensions(glm::vec4 texture, bool swapy = true);
 	std::string getBoxSizeText(std::string text, float scale);
+    std::wstring getOpenFileName(std::string fileType);
 	void resetEverything();
 
 	void resetCurrentDialogue();
@@ -241,22 +240,37 @@ private:
 	glm::vec4 showDlgCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 520, 32, 32);
 
 	// Talker checkbox
-	glm::vec4 talkerCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 440, 32, 32);
+	glm::vec4 talkerCheckBox = glm::vec4(-this->screenWidth / 2 + 480, -this->screenHeight / 2 + 520, 32, 32);
 
     // Fade in checkbox
-    glm::vec4 fadeInCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 360, 32, 32);
+    glm::vec4 fadeInCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 440, 32, 32);
 
     // Fade out checkbox
-    glm::vec4 fadeOutCheckBox = glm::vec4(-this->screenWidth / 2 + 350, -this->screenHeight / 2 + 360, 32, 32);
+    glm::vec4 fadeOutCheckBox = glm::vec4(-this->screenWidth / 2 + 350, -this->screenHeight / 2 + 440, 32, 32);
 
 	// Question checkbox
-	glm::vec4 questionCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 280, 32, 32);
+	glm::vec4 questionCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 360, 32, 32);
 
 	// Custom next dlg checkbox
-	glm::vec4 customNextCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 200, 32, 32);
+	glm::vec4 customNextCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 280, 32, 32);
 
 	// Custom next dialogue button
-	glm::vec4 setNextCustomDlgDestRect = glm::vec4(-this->screenWidth / 2 + 225, -this->screenHeight / 2 + 140, 149, 37);
+	glm::vec4 setNextCustomDlgDestRect = glm::vec4(-this->screenWidth / 2 + 225, -this->screenHeight / 2 + 220, 149, 37);
+
+    // Start music checkbox
+    glm::vec4 startMusicCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 125, 32, 32);
+
+    // End music checkbox
+    glm::vec4 endMusicCheckBox = glm::vec4(-this->screenWidth / 2 + 420, -this->screenHeight / 2 + 125, 32, 32);
+
+    // Sound effect checkbox
+    glm::vec4 soundEffectCheckBox = glm::vec4(-this->screenWidth / 2 + 620, -this->screenHeight / 2 + 125, 32, 32);
+
+    // Open music file
+    glm::vec4 openMusicFileBtn = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 75, buttonSize);
+
+    // Open sound effect file
+    glm::vec4 openSoundEffectFileBtn = glm::vec4(-this->screenWidth / 2 + 620, -this->screenHeight / 2 + 75, buttonSize);
 
 	// Close icon
 	glm::vec4 closeIconDestRect = glm::vec4(this->screenWidth / 2 - 48, -this->screenHeight / 2 + 550, 32, 32);

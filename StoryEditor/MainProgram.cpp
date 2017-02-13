@@ -995,6 +995,130 @@ void MainProgram::checkMainScreenInputs()
 		}
 	}
 
+    // Start Music checkbox
+    if (this->changingSettings) {
+        dim = this->getInputDimensions(this->startMusicCheckBox);
+        if (this->lastDialogue->name.find("Question") == std::string::npos) {
+            dim.y -= 80;
+        }
+
+        if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+            if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+                if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+                    this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+                    if (this->lastDialogue->startMusic != "") this->lastDialogue->startMusic = "";
+                    else {
+                        this->lastDialogue->startMusic = "Not Set";
+                        this->lastDialogue->endMusic = false;
+                    }
+
+                    
+                }
+            }
+        }
+    }
+
+    // End Music checkbox
+    if (this->changingSettings) {
+        dim = this->getInputDimensions(this->endMusicCheckBox);
+        if (this->lastDialogue->name.find("Question") == std::string::npos) {
+            dim.y -= 80;
+        }
+
+        if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+            if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+                if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+                    this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+                    this->lastDialogue->endMusic = !this->lastDialogue->endMusic;
+                    if (this->lastDialogue->endMusic) this->lastDialogue->startMusic = "";
+                }
+            }
+        }
+    }
+
+    // Sound effect checkbox
+    if (this->changingSettings) {
+        dim = this->getInputDimensions(this->soundEffectCheckBox);
+        if (this->lastDialogue->name.find("Question") == std::string::npos) {
+            dim.y -= 80;
+        }
+
+        if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+            if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+                if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+                    this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+                    if (this->lastDialogue->soundEffect != "") this->lastDialogue->soundEffect = "";
+                    else this->lastDialogue->soundEffect = "Not Set";
+                }
+            }
+        }
+    }
+
+    // Open music file
+    if (this->changingSettings) {
+        dim = this->getInputDimensions(this->openMusicFileBtn);
+        if (this->lastDialogue->name.find("Question") == std::string::npos) {
+            dim.y -= 80;
+        }
+
+        if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+            if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+                if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+                    this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+                    // Open up the file explorer to pick a yaml file
+                    std::wstring wFilePath = this->getOpenFileName("music");
+
+                    // Convert the filepath from a wide string to a regural string
+                    std::string filePath = "";
+                    for (wchar_t c : wFilePath) {
+                        filePath += static_cast<char>(c);;
+                    }
+
+                    if (filePath.length() > 0) {
+                        size_t pos = filePath.find("Music");
+
+                        this->lastDialogue->startMusic = filePath.substr(pos + 6);
+                    }
+                }
+            }
+        }
+    }
+
+    // Open sound effect file
+    if (this->changingSettings) {
+        dim = this->getInputDimensions(this->openSoundEffectFileBtn);
+        if (this->lastDialogue->name.find("Question") == std::string::npos) {
+            dim.y -= 80;
+        }
+
+        if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+            if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+                if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+                    this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+                    // Open up the file explorer to pick a yaml file
+                    std::wstring wFilePath = this->getOpenFileName("soundeffect");
+
+                    // Convert the filepath from a wide string to a regural string
+                    std::string filePath = "";
+                    for (wchar_t c : wFilePath) {
+                        filePath += static_cast<char>(c);;
+                    }
+
+                    if (filePath.length() > 0) {
+                        size_t pos = filePath.find("Sound Effects");
+
+                        this->lastDialogue->soundEffect = filePath.substr(pos + 14);
+                    }
+                }
+            }
+        }
+    }
+
 	if (this->dlgButtonsOnRight && this->currentDialogue != nullptr && !this->currentDialogue->question) {
 		this->saveBtnDestRect.x = -this->screenWidth / 2 + 335;
 		this->settingsBtnDestRect.x = -this->screenWidth / 2 + 450;
@@ -2268,6 +2392,7 @@ void MainProgram::drawCurrentDialogue()
 				0.0f,
 				this->color
 			);
+
 		}
 
 		// Custom next dialogue box
@@ -2301,6 +2426,87 @@ void MainProgram::drawCurrentDialogue()
 				this->color
 			);
 		}
+
+        movedDestRect = this->startMusicCheckBox;
+        if (this->lastDialogue->name.find("Question") == std::string::npos)
+            movedDestRect.y += 80;
+
+        if (this->lastDialogue->startMusic != "")
+            texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
+        else
+            texture = Bengine::ResourceManager::getTexture("Textures/checkbox_unchecked.png").id;
+
+        this->spriteBatch.draw(
+            movedDestRect,
+            this->mainUvRect,
+            texture,
+            0.0f,
+            this->color
+        );
+
+        // Open music file button
+        if (this->lastDialogue->startMusic != "") {
+            glm::vec4 destRect = this->openMusicFileBtn;
+            if (this->lastDialogue->name.find("Question") == std::string::npos)
+                destRect.y += 80;
+
+            this->spriteBatch.draw(
+                destRect,
+                this->mainUvRect,
+                Bengine::ResourceManager::getTexture("Textures/openfile.png").id,
+                0.0f,
+                this->color
+            );
+        }
+
+        // Open sound effect file button
+        if (this->lastDialogue->soundEffect != "") {
+            glm::vec4 destRect = this->openSoundEffectFileBtn;
+            if (this->lastDialogue->name.find("Question") == std::string::npos)
+                destRect.y += 80;
+
+            this->spriteBatch.draw(
+                destRect,
+                this->mainUvRect,
+                Bengine::ResourceManager::getTexture("Textures/openfile.png").id,
+                0.0f,
+                this->color
+            );
+        }
+
+        movedDestRect = this->endMusicCheckBox;
+        if (this->lastDialogue->name.find("Question") == std::string::npos)
+            movedDestRect.y += 80;
+
+        if (this->lastDialogue->endMusic)
+            texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
+        else
+            texture = Bengine::ResourceManager::getTexture("Textures/checkbox_unchecked.png").id;
+
+        this->spriteBatch.draw(
+            movedDestRect,
+            this->mainUvRect,
+            texture,
+            0.0f,
+            this->color
+        );
+
+        movedDestRect = this->soundEffectCheckBox;
+        if (this->lastDialogue->name.find("Question") == std::string::npos)
+            movedDestRect.y += 80;
+
+        if (this->lastDialogue->soundEffect != "")
+            texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
+        else
+            texture = Bengine::ResourceManager::getTexture("Textures/checkbox_unchecked.png").id;
+
+        this->spriteBatch.draw(
+            movedDestRect,
+            this->mainUvRect,
+            texture,
+            0.0f,
+            this->color
+        );
 
 		// Close icon
 		this->spriteBatch.draw(
@@ -2818,8 +3024,13 @@ void MainProgram::drawMainScreenTexts()
 	if (this->currentDialogue != nullptr && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->question && !this->settingNextDialogue) {
 		const float fontScale = 0.7f;
 
+        auto dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
+
 		// First option
-		sprintf_s(buffer, "%s: %s", "Next Dialogue", this->currentDialogue->option1Next.c_str());
+        if (this->currentDialogue->option1Next != "Not Selected")
+		    sprintf_s(buffer, "%s: %s", "Next Dialogue", dialogues[stoi(this->currentDialogue->option1Next)]->name.c_str());
+        else
+            sprintf_s(buffer, "%s", "Next Dialogue Not Selected");
 
 		glm::vec4 dim = this->getInputDimensions(this->firstAnswerBoxDestRect);
 
@@ -2834,7 +3045,10 @@ void MainProgram::drawMainScreenTexts()
 		);
 
 		// Second option
-		sprintf_s(buffer, "%s: %s", "Next Dialogue", this->currentDialogue->option2Next.c_str());
+        if (this->currentDialogue->option2Next != "Not Selected")
+		    sprintf_s(buffer, "%s: %s", "Next Dialogue", dialogues[stoi(this->currentDialogue->option2Next)]->name.c_str());
+        else
+            sprintf_s(buffer, "%s", "Next Dialogue Not Selected");
 
 		dim = this->getInputDimensions(this->secondAnswerBoxDestRect);
 
@@ -2849,7 +3063,10 @@ void MainProgram::drawMainScreenTexts()
 		);
 
 		// Third option
-		sprintf_s(buffer, "%s: %s", "Next Dialogue", this->currentDialogue->option3Next.c_str());
+        if (this->currentDialogue->option3Next != "Not Selected")
+            sprintf_s(buffer, "%s: %s", "Next Dialogue", dialogues[stoi(this->currentDialogue->option3Next)]->name.c_str());
+        else
+            sprintf_s(buffer, "%s", "Next Dialogue Not Selected");
 
 		dim = this->getInputDimensions(this->thirdAnswerBoxDestRect);
 
@@ -2866,7 +3083,7 @@ void MainProgram::drawMainScreenTexts()
 
 	if (this->changingSettings) {
 		// Show dialogue box checkbox
-		sprintf_s(buffer, "%s", "Show the dialogue box");
+		sprintf_s(buffer, "%s", "Show dialogue box");
 
 		this->spriteFont->draw(
 			this->fontBatch,
@@ -2883,7 +3100,7 @@ void MainProgram::drawMainScreenTexts()
 		this->spriteFont->draw(
 			this->fontBatch,
 			buffer,
-			glm::vec2(226, 470),
+			glm::vec2(486, 550),
 			glm::vec2(0.8f),
 			0.0f,
 			Bengine::ColorRGBA8(0, 0, 0, 255)
@@ -2892,7 +3109,7 @@ void MainProgram::drawMainScreenTexts()
         this->spriteFont->draw(
             this->fontBatch,
             "Fade In",
-            glm::vec2(226, 390),
+            glm::vec2(226, 470),
             glm::vec2(0.8f),
             0.0f,
             Bengine::ColorRGBA8(0, 0, 0, 255)
@@ -2901,7 +3118,7 @@ void MainProgram::drawMainScreenTexts()
         this->spriteFont->draw(
             this->fontBatch,
             "Fade Out",
-            glm::vec2(356, 390),
+            glm::vec2(356, 470),
             glm::vec2(0.8f),
             0.0f,
             Bengine::ColorRGBA8(0, 0, 0, 255)
@@ -2914,7 +3131,7 @@ void MainProgram::drawMainScreenTexts()
 			this->spriteFont->draw(
 				this->fontBatch,
 				buffer,
-				glm::vec2(226, 310),
+				glm::vec2(226, 390),
 				glm::vec2(0.8f),
 				0.0f,
 				Bengine::ColorRGBA8(0, 0, 0, 255)
@@ -2924,7 +3141,7 @@ void MainProgram::drawMainScreenTexts()
 		// Custom next dialogue checkbox
 		sprintf_s(buffer, "%s", "Set custom next dialogue");
 
-		int y = 230;
+		int y = 310;
 		if (this->lastDialogue->name.find("Question") == std::string::npos) y += 80;
 
 		this->spriteFont->draw(
@@ -2951,7 +3168,7 @@ void MainProgram::drawMainScreenTexts()
 
 			sprintf_s(buffer, "%s", next.c_str());
 
-			int y = 142;
+			int y = 222;
 			if (this->lastDialogue->name.find("Question") == std::string::npos) y += 80;
 
 			this->spriteFont->draw(
@@ -2963,6 +3180,68 @@ void MainProgram::drawMainScreenTexts()
 				Bengine::ColorRGBA8(0, 0, 0, 255)
 			);
 		}
+
+        y = 157;
+        if (this->lastDialogue->name.find("Question") == std::string::npos) y += 80;
+
+        this->spriteFont->draw(
+            this->fontBatch,
+            "Begin Music",
+            glm::vec2(226, y),
+            glm::vec2(0.8f),
+            0.0f,
+            Bengine::ColorRGBA8(0, 0, 0, 255)
+        );
+
+        this->spriteFont->draw(
+            this->fontBatch,
+            "End Music",
+            glm::vec2(426, y),
+            glm::vec2(0.8f),
+            0.0f,
+            Bengine::ColorRGBA8(0, 0, 0, 255)
+        );
+
+        this->spriteFont->draw(
+            this->fontBatch,
+            "Sound Effect",
+            glm::vec2(626, y),
+            glm::vec2(0.8f),
+            0.0f,
+            Bengine::ColorRGBA8(0, 0, 0, 255)
+        );
+
+        // Start music file name
+        sprintf_s(buffer, "%s", this->lastDialogue->startMusic.c_str());
+
+        glm::vec2 pos(this->openMusicFileBtn.x + this->screenWidth / 2, this->openMusicFileBtn.y + this->screenHeight / 2 - 35);
+        if (this->lastDialogue->name.find("Question") == std::string::npos)
+            pos.y += 80;
+
+        this->spriteFont->draw(
+            this->fontBatch,
+            buffer,
+            pos,
+            glm::vec2(0.7f),
+            0.0f,
+            Bengine::ColorRGBA8(0, 0, 0, 255)
+        );
+
+        // Sound effect file name
+        sprintf_s(buffer, "%s", this->lastDialogue->soundEffect.c_str());
+
+        pos = glm::vec2(this->openSoundEffectFileBtn.x + this->screenWidth / 2, this->openSoundEffectFileBtn.y + this->screenHeight / 2 - 35);
+        if (this->lastDialogue->name.find("Question") == std::string::npos)
+            pos.y += 80;
+
+        this->spriteFont->draw(
+            this->fontBatch,
+            buffer,
+            pos,
+            glm::vec2(0.7f),
+            0.0f,
+            Bengine::ColorRGBA8(0, 0, 0, 255)
+        );
 	}
 
 	this->fontBatch.end();
@@ -3296,6 +3575,9 @@ void MainProgram::submitDialogue()
 			true,
             false,
             false,
+            "",
+            "",
+            false,
 			"",
 			"",
 			1,
@@ -3312,6 +3594,8 @@ void MainProgram::submitDialogue()
 	std::vector<Dialogue *> dialogues = this->sceneManager->getDialogues(this->selectedSceneIdx);
 
 	this->currentDialogue = dialogues[dialogues.size() - 1];
+
+    std::cout << "Current dialogue end shit: " << this->currentDialogue->endMusic << "\n";
 
 	this->selectedDialogueIdx = dialogues.size() - 1;
 
@@ -3373,6 +3657,8 @@ std::wstring MainProgram::getOpenFileName(std::string fileType)
 
     if (fileType == "dlg") currentPath += "Dialogues";
     else if (fileType == "char") currentPath += "Textures\\Characters";
+    else if (fileType == "music") currentPath += "Audio\\Music";
+    else if (fileType == "soundeffect") currentPath += "Audio\\Sound Effects";
     else currentPath += "Textures\\Backgrounds";
 
     // Convert file path to a wide string
@@ -3387,12 +3673,15 @@ std::wstring MainProgram::getOpenFileName(std::string fileType)
 
 	// Show only the appropriate file type
 	if (fileType == "char" || fileType == "bg") ofn.lpstrFilter = L"PNG Files\0*.png\0";
+    else if (fileType == "music" || fileType == "soundeffect") ofn.lpstrFilter = L"MP3 Files\0*.mp3\0WAV Files\0*.wav\0OGG Files\0*.ogg\0";
 	else ofn.lpstrFilter = L"Yaml Files\0*.yaml\0";
 
 	ofn.nFilterIndex = 1;
 
     if (fileType == "char" || fileType == "bg")
         ofn.lpstrTitle = L"Select an image";
+    else if (fileType == "music" || fileType == "soundeffect")
+        ofn.lpstrTitle = L"Select an audio file";
     else
         ofn.lpstrTitle = L"Select a dialogue";
 

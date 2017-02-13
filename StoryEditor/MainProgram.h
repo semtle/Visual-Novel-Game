@@ -59,7 +59,7 @@ public:
 	void drawSceneCreationScreenTexts();
 	void drawDialogueDeletionTexts();
 
-	void scrolled(int yDir);
+	void onScroll(int yDir);
 
 	std::wstring getOpenFileName(std::string fileType);
 private:
@@ -243,14 +243,20 @@ private:
 	// Talker checkbox
 	glm::vec4 talkerCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 440, 32, 32);
 
+    // Fade in checkbox
+    glm::vec4 fadeInCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 360, 32, 32);
+
+    // Fade out checkbox
+    glm::vec4 fadeOutCheckBox = glm::vec4(-this->screenWidth / 2 + 350, -this->screenHeight / 2 + 360, 32, 32);
+
 	// Question checkbox
-	glm::vec4 questionCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 360, 32, 32);
+	glm::vec4 questionCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 280, 32, 32);
 
 	// Custom next dlg checkbox
-	glm::vec4 customNextCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 280, 32, 32);
+	glm::vec4 customNextCheckBox = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 200, 32, 32);
 
 	// Custom next dialogue button
-	glm::vec4 setNextCustomDlgDestRect = glm::vec4(-this->screenWidth / 2 + 225, -this->screenHeight / 2 + 220, 149, 37);
+	glm::vec4 setNextCustomDlgDestRect = glm::vec4(-this->screenWidth / 2 + 225, -this->screenHeight / 2 + 140, 149, 37);
 
 	// Close icon
 	glm::vec4 closeIconDestRect = glm::vec4(this->screenWidth / 2 - 48, -this->screenHeight / 2 + 550, 32, 32);

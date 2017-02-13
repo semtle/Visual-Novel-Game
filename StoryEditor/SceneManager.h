@@ -34,6 +34,9 @@ struct Dialogue {
 		talker(false),
         fadeIn(false),
         fadeOut(false),
+        startMusic(""),
+        soundEffect(""),
+        endMusic(false),
 		charAskingQuestion(""),
 
 		option1Text(""),
@@ -62,6 +65,9 @@ struct Dialogue {
 		bool Talker,
         bool FadeIn,
         bool FadeOut,
+        std::string StartMusic,
+        std::string SoundEffect,
+        bool EndMusic,
 		std::string CharAskingQuestion,
 
 		std::string Option1Text,
@@ -86,8 +92,11 @@ struct Dialogue {
 		showTextBox(ShowTextBox),
 		question(Question),
 		talker(Talker),
-        fadeIn(FadeIn),
+        fadeIn(FadeIn),    
         fadeOut(FadeOut),
+        startMusic(StartMusic),
+        soundEffect(SoundEffect),
+        endMusic(EndMusic),
 		charAskingQuestion(CharAskingQuestion),
 
 		option1Text(Option1Text),
@@ -116,6 +125,9 @@ struct Dialogue {
 	bool talker;
     bool fadeIn;
     bool fadeOut;
+    std::string startMusic;
+    bool endMusic;
+    std::string soundEffect;
 
 	std::string charAskingQuestion;
 

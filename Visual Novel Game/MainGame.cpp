@@ -253,6 +253,15 @@ void MainGame::drawGame()
 			Bengine::ColorRGBA8(255, 255, 255, 255)
 		);
 
+        destRect = glm::vec4(-198, 134, 396, 124);
+        this->spriteBatch.draw(
+            destRect,
+            glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+            Bengine::ResourceManager::getTexture("Textures/Visuals/LoadingText.PNG").id,
+            0.0f,
+            Bengine::ColorRGBA8(255, 255, 255, 255)
+        );
+
 		this->spriteBatch.end();
 		this->spriteBatch.renderBatch();
 

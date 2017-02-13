@@ -409,12 +409,15 @@ void SceneManager::loadFromFile(const std::string& filePath)
 			std::string left = (currentDialogue["left"] != nullptr) ? currentDialogue["left"].as<std::string>() : "";
 			std::string right = (currentDialogue["right"] != nullptr) ? currentDialogue["right"].as<std::string>() : "";
 			std::string message = (currentDialogue["message"] != nullptr) ? currentDialogue["message"].as<std::string>() : "";
+            std::string startMusic = (currentDialogue["StartMusic"] != nullptr) ? currentDialogue["StartMusic"].as<std::string>() : "";
+            std::string soundEffect = (currentDialogue["SoundEffect"] != nullptr) ? currentDialogue["SoundEffect"].as<std::string>() : "";
 			std::string next = "";
 			bool dialogueBox = (message.length() > 0) ? true : false;
 			bool question = false;
 			bool talkerBox = (talking.length() > 0) ? true : false;
             bool fadeIn = (currentDialogue["FadeIn"] != nullptr) ? true : false;
             bool fadeOut = (currentDialogue["FadeOut"] != nullptr) ? true : false;
+            bool endMusic = (currentDialogue["EndMusic"] != nullptr) ? true : false;
 			std::string askingQuestion = (currentDialogue["asking"] != nullptr) ? currentDialogue["asking"].as<std::string>() : "";
 
 			// Set all question related variables here, because they're set only if the dialogue is a question
@@ -433,17 +436,36 @@ void SceneManager::loadFromFile(const std::string& filePath)
 				dialogueBox = false;
 				talkerBox = false;
 
-				option1Text = currentDialogue["Option 1"]["text"].as<std::string>();
-				option1Influence = currentDialogue["Option 1"]["influence"].as<int>();
-				option1Next = currentDialogue["Option 1"]["next"].as<std::string>();
+                if (currentDialogueName.find("Question 4 U") != std::string::npos) {
+                    std::cout << "hi\n";
+                }
 
-				option2Text = currentDialogue["Option 2"]["text"].as<std::string>();
-				option2Influence = currentDialogue["Option 2"]["influence"].as<int>();
-				option2Next = currentDialogue["Option 2"]["next"].as<std::string>();
+                YAML::Node n = currentDialogue["Option 1"];
 
-				option3Text = currentDialogue["Option 3"]["text"].as<std::string>();
-				option3Influence = currentDialogue["Option 3"]["influence"].as<int>();
-				option3Next = currentDialogue["Option 3"]["next"].as<std::string>();
+                if (n["text"] != nullptr)
+				    option1Text = n["text"].as<std::string>();
+                if (n["influence"] != nullptr)
+				    option1Influence = n["influence"].as<int>();
+                if (n["next"] != nullptr)
+				    option1Next = n["next"].as<std::string>();
+
+                n = currentDialogue["Option 2"];
+
+                if (n["text"] != nullptr)
+				    option2Text = n["text"].as<std::string>();
+                if (n["influence"] != nullptr)
+				    option2Influence = n["influence"].as<int>();
+                if (n["next"] != nullptr)
+				    option2Next = n["next"].as<std::string>();
+
+                n = currentDialogue["Option 3"];
+
+                if (n["text"] != nullptr)
+                    option3Text = n["text"].as<std::string>();
+                if (n["influence"] != nullptr)
+                    option3Influence = n["influence"].as<int>();
+                if (n["next"] != nullptr)
+                    option3Next = n["next"].as<std::string>();
 			}
 
 			Dialogue* dialogue = new Dialogue(
@@ -459,6 +481,9 @@ void SceneManager::loadFromFile(const std::string& filePath)
 				talkerBox,
                 fadeIn,
                 fadeOut,
+                startMusic,
+                soundEffect,
+                endMusic,
                 
 				askingQuestion,
 
@@ -515,6 +540,15 @@ void SceneManager::saveToFile(const std::string& filePath)
                 if (dialogues[j]->fadeOut)
                     file << "        " << "FadeOut: true" << "\n";
 
+                if (dialogues[j]->startMusic != "" && dialogues[j]->startMusic != "Not Set")
+                    file << "        " << "StartMusic: " << dialogues[j]->startMusic << "\n";
+
+                if (dialogues[j]->soundEffect != "" && dialogues[j]->soundEffect != "Not Set")
+                    file << "        " << "SoundEffect: " << dialogues[j]->soundEffect << "\n";
+
+                if (dialogues[j]->endMusic)
+                    file << "        " << "EndMusic: true" << "\n";
+
 				// A normal dialogue
 				if (!dialogues[j]->question) {
 					if (dialogues[j]->talking != "" && dialogues[j]->talker)
@@ -561,20 +595,32 @@ void SceneManager::saveToFile(const std::string& filePath)
 
 					// First option
 					file << "        " << "Option 1:\n";
-					file << "            " << "text: " << dialogues[j]->option1Text << "\n";
+
+                    if (dialogues[j]->option1Text == "") dialogues[j]->option1Text = "Option not set.";
+                    file << "            " << "text: " << dialogues[j]->option1Text << "\n";
 					file << "            " << "influence: " << dialogues[j]->option1Influence << "\n";
+
+                    if (dialogues[j]->option1Next == "") dialogues[j]->option1Next = "Not Selected";
 					file << "            " << "next: " << dialogues[j]->option1Next << "\n";
 
 					// Second option
 					file << "        " << "Option 2:\n";
+
+                    if (dialogues[j]->option2Text == "") dialogues[j]->option2Text = "Option not set.";
 					file << "            " << "text: " << dialogues[j]->option2Text << "\n";
 					file << "            " << "influence: " << dialogues[j]->option2Influence << "\n";
+
+                    if (dialogues[j]->option2Next == "") dialogues[j]->option2Next = "Not Selected";
 					file << "            " << "next: " << dialogues[j]->option2Next << "\n";
 
 					// Third option
 					file << "        " << "Option 3:\n";
+
+                    if (dialogues[j]->option3Text == "") dialogues[j]->option3Text = "Option not set.";
 					file << "            " << "text: " << dialogues[j]->option3Text << "\n";
 					file << "            " << "influence: " << dialogues[j]->option3Influence << "\n";
+
+                    if (dialogues[j]->option3Next == "") dialogues[j]->option3Next = "Not Selected";
 					file << "            " << "next: " << dialogues[j]->option3Next << "\n";
 				}
 			}

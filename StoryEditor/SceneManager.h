@@ -32,6 +32,8 @@ struct Dialogue {
 		showTextBox(true),
 		question(false),
 		talker(false),
+        fadeIn(false),
+        fadeOut(false),
 		charAskingQuestion(""),
 
 		option1Text(""),
@@ -58,6 +60,8 @@ struct Dialogue {
 		bool ShowTextBox,
 		bool Question,
 		bool Talker,
+        bool FadeIn,
+        bool FadeOut,
 		std::string CharAskingQuestion,
 
 		std::string Option1Text,
@@ -82,6 +86,8 @@ struct Dialogue {
 		showTextBox(ShowTextBox),
 		question(Question),
 		talker(Talker),
+        fadeIn(FadeIn),
+        fadeOut(FadeOut),
 		charAskingQuestion(CharAskingQuestion),
 
 		option1Text(Option1Text),
@@ -108,6 +114,8 @@ struct Dialogue {
 	bool showTextBox;
 	bool question;
 	bool talker;
+    bool fadeIn;
+    bool fadeOut;
 
 	std::string charAskingQuestion;
 

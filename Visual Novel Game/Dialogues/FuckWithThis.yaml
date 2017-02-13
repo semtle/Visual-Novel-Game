@@ -6,16 +6,25 @@
     0:
         name: Narrative 1
         FadeOut: true
+        SoundEffect: Rain.wav
         message: Bright, warm rays of light spills between my curtains.
-        next: 1
+        next: Next Dialogue Not Set
+        custom_next: true
+
     1:
         name: Narrative 2
         message: I can feel the warmth embracing my face as I start to wake up.
         next: 2
     2:
         name: Narrative 3
+        FadeIn: true
+        FadeOut: true
+        SoundEffect: Rain.wav
+        EndMusic: true
         message: Sudden urge to strecth my body overtakes me.
-        next: 3
+        next: 4
+        custom_next: true
+
     3:
         name: Narrative 4
         message: As I straghten my arms, I could feel my body slowly going over the bed's edge.
@@ -314,18 +323,20 @@
         next: 24
     24:
         name: Question 1
+        StartMusic: sleepy_dream.mp3
+        SoundEffect: Rain.wav
         Option 1:
-            text: Well, depends if she likes someone a bit goofy, you might have a chance.
+            text: Option not set.
             influence: 1
-            next: 25
+            next: Not Selected
         Option 2:
-            text: Teemu-kun is right, you wouldn't have a chance with her.
+            text: Option not set.
             influence: 1
-            next: 30
+            next: Not Selected
         Option 3:
-            text: Sorry man, but I can't really say anything.
+            text: Option not set.
             influence: 1
-            next: 35
+            next: Not Selected
     25:
         name: Makoto 1.1
         talker: Makoto-kun
@@ -430,7 +441,21 @@
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, smiling_uniform.png
         message: Yeah, let's just go to our places.
-        next_scene: 4
+        next: 40
+    40:
+        name: Question 4 U
+        Option 1:
+            text: hahaahaha
+            influence: 1
+            next: 39
+        Option 2:
+            text: Option not set.
+            influence: 1
+            next: Not Selected
+        Option 3:
+            text: Option not set.
+            influence: 1
+            next: Not Selected
 4:
     name: Teacher
 

@@ -188,7 +188,7 @@ void MainProgram::processInput()
 			break;
 		case SDL_MOUSEWHEEL:
 			if (this->currentState != ProgramState::FILESELECT)
-				this->scrolled(event.wheel.y);
+				this->onScroll(event.wheel.y);
 			break;
 		}
 	}
@@ -897,6 +897,34 @@ void MainProgram::checkMainScreenInputs()
 			}
 		}
 	}
+
+    // Fade In checkbox
+    if (this->changingSettings) {
+        dim = this->getInputDimensions(this->fadeInCheckBox);
+
+        if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+            if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+                if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+                    this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+                    this->lastDialogue->fadeIn = !this->lastDialogue->fadeIn;
+                }
+            }
+        }
+    }
+
+    // Fade Out checkbox
+    if (this->changingSettings) {
+        dim = this->getInputDimensions(this->fadeOutCheckBox);
+
+        if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+            if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+                if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+                    this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+                    this->lastDialogue->fadeOut = !this->lastDialogue->fadeOut;
+                }
+            }
+        }
+    }
 
 	// Question checkbox
 	if (this->changingSettings && this->lastDialogue->name.find("Question") != std::string::npos) {
@@ -2198,6 +2226,34 @@ void MainProgram::drawCurrentDialogue()
 			this->color
 		);
 
+        // Fade In checkbox
+        if (this->lastDialogue->fadeIn)
+            texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
+        else
+            texture = Bengine::ResourceManager::getTexture("Textures/checkbox_unchecked.png").id;
+
+        this->spriteBatch.draw(
+            this->fadeInCheckBox,
+            this->mainUvRect,
+            texture,
+            0.0f,
+            this->color
+        );
+
+        // Fade Out checkbox
+        if (this->lastDialogue->fadeOut)
+            texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
+        else
+            texture = Bengine::ResourceManager::getTexture("Textures/checkbox_unchecked.png").id;
+
+        this->spriteBatch.draw(
+            this->fadeOutCheckBox,
+            this->mainUvRect,
+            texture,
+            0.0f,
+            this->color
+        );
+
 		// Question checkbox
 		if (this->lastDialogue->name.find("Question") != std::string::npos) {
 			if (this->lastDialogue->question)
@@ -2833,6 +2889,24 @@ void MainProgram::drawMainScreenTexts()
 			Bengine::ColorRGBA8(0, 0, 0, 255)
 		);
 
+        this->spriteFont->draw(
+            this->fontBatch,
+            "Fade In",
+            glm::vec2(226, 390),
+            glm::vec2(0.8f),
+            0.0f,
+            Bengine::ColorRGBA8(0, 0, 0, 255)
+        );
+
+        this->spriteFont->draw(
+            this->fontBatch,
+            "Fade Out",
+            glm::vec2(356, 390),
+            glm::vec2(0.8f),
+            0.0f,
+            Bengine::ColorRGBA8(0, 0, 0, 255)
+        );
+
 		// Question checkbox
 		if (this->lastDialogue->name.find("Question") != std::string::npos) {
 			sprintf_s(buffer, "%s", "Make this a question");
@@ -2840,7 +2914,7 @@ void MainProgram::drawMainScreenTexts()
 			this->spriteFont->draw(
 				this->fontBatch,
 				buffer,
-				glm::vec2(226, 390),
+				glm::vec2(226, 310),
 				glm::vec2(0.8f),
 				0.0f,
 				Bengine::ColorRGBA8(0, 0, 0, 255)
@@ -2850,7 +2924,7 @@ void MainProgram::drawMainScreenTexts()
 		// Custom next dialogue checkbox
 		sprintf_s(buffer, "%s", "Set custom next dialogue");
 
-		int y = 310;
+		int y = 230;
 		if (this->lastDialogue->name.find("Question") == std::string::npos) y += 80;
 
 		this->spriteFont->draw(
@@ -2877,7 +2951,7 @@ void MainProgram::drawMainScreenTexts()
 
 			sprintf_s(buffer, "%s", next.c_str());
 
-			int y = 222;
+			int y = 142;
 			if (this->lastDialogue->name.find("Question") == std::string::npos) y += 80;
 
 			this->spriteFont->draw(
@@ -2997,7 +3071,7 @@ void MainProgram::drawDialogueDeletionTexts()
 }
 
 
-void MainProgram::scrolled(int yDir)
+void MainProgram::onScroll(int yDir)
 {
 	if (yDir > 0) {
 		if (this->selectedSceneIdx == -1) {
@@ -3220,6 +3294,8 @@ void MainProgram::submitDialogue()
 			true,
 			false,
 			true,
+            false,
+            false,
 			"",
 			"",
 			1,

@@ -413,6 +413,8 @@ void SceneManager::loadFromFile(const std::string& filePath)
 			bool dialogueBox = (message.length() > 0) ? true : false;
 			bool question = false;
 			bool talkerBox = (talking.length() > 0) ? true : false;
+            bool fadeIn = (currentDialogue["FadeIn"] != nullptr) ? true : false;
+            bool fadeOut = (currentDialogue["FadeOut"] != nullptr) ? true : false;
 			std::string askingQuestion = (currentDialogue["asking"] != nullptr) ? currentDialogue["asking"].as<std::string>() : "";
 
 			// Set all question related variables here, because they're set only if the dialogue is a question
@@ -455,6 +457,9 @@ void SceneManager::loadFromFile(const std::string& filePath)
 				dialogueBox,
 				question,
 				talkerBox,
+                fadeIn,
+                fadeOut,
+                
 				askingQuestion,
 
 				option1Text,
@@ -503,6 +508,12 @@ void SceneManager::saveToFile(const std::string& filePath)
 			for (unsigned j = 0; j < dialogues.size(); j++) {
 				file << "    " << dialogues[j]->index << ":\n";
 				file << "        " << "name: " << dialogues[j]->name << "\n";
+
+                if (dialogues[j]->fadeIn)
+                    file << "        " << "FadeIn: true" << "\n";
+
+                if (dialogues[j]->fadeOut)
+                    file << "        " << "FadeOut: true" << "\n";
 
 				// A normal dialogue
 				if (!dialogues[j]->question) {

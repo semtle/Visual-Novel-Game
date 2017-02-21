@@ -34,7 +34,7 @@ bool InputManager::isKeyDown(unsigned int keyID)
 		return it->second;
 	}
 	else {
-		false;
+		return false;
 	}
 }
 

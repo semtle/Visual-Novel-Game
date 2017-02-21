@@ -239,7 +239,6 @@ glm::vec2 SpriteFont::measure(const char* s) {
 void SpriteFont::draw(SpriteBatch& batch, const char* s, glm::vec2 position, glm::vec2 scaling,
 	float depth, ColorRGBA8 tint, Justification just /* = Justification::LEFT */) {
 	glm::vec2 tp = position;
-
 	// Apply justification
 	if (just == Justification::MIDDLE) {
 		tp.x -= measure(s).x * scaling.x / 2;

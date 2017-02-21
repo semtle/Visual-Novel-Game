@@ -32,7 +32,6 @@ namespace Bengine {
 			return newTexture;
 		}
 
-		//std::cout << "Loaded cached texture!\n";
 		// Return the texture
 		return mit->second;
 	}

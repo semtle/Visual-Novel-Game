@@ -1,4 +1,4 @@
-#include "Window.h"
+#include "Window.h" 
 #include "BengineErrors.h"
 
 namespace Bengine {
@@ -17,7 +17,7 @@ int Window::create(std::string windowName, int screenWidth, int screenHeight, un
 {
 	_screenWidth = screenWidth;
 	_screenHeight = screenHeight;
-
+    
 	Uint32 flags = SDL_WINDOW_OPENGL;
 
 	// Set the flags
@@ -49,9 +49,9 @@ int Window::create(std::string windowName, int screenWidth, int screenHeight, un
 	}
 
 	// Sets up the OpenGL Context
-	_glContext = SDL_GL_CreateContext(_sdlWindow);
+	SDL_GLContext glContext = SDL_GL_CreateContext(_sdlWindow);
 
-	if (_glContext == nullptr) {
+	if (glContext == nullptr) {
 		fatalError("SDL GL Context could not be created.");
 	}
 
@@ -66,7 +66,7 @@ int Window::create(std::string windowName, int screenWidth, int screenHeight, un
 	std::printf("***   OpenGL version: %s   ***\n", glGetString(GL_VERSION));
 
 	// Sets the background color that the window clears to
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
 
 	// Set Vertical Synchronization (V-SYNC). 1 = ON, 0 = OFF
 	SDL_GL_SetSwapInterval(static_cast<int>(vSync));
@@ -76,31 +76,6 @@ int Window::create(std::string windowName, int screenWidth, int screenHeight, un
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	return 0;
-}
-
-
-void Window::destroy()
-{
-	SDL_DestroyWindow(_sdlWindow);
-}
-
-
-void Window::setActive()
-{
-	SDL_GL_MakeCurrent(_sdlWindow, _glContext);
-}
-
-
-void Window::resize(const int& w, const int& h)
-{
-	glViewport(0, 0, w, h);
-	glMatrixMode(GL_PROJECTION);
-	glOrtho(0, w, 0, h, -1, 1);
-	glLoadIdentity();
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glClear(GL_COLOR_BUFFER_BIT);
-	glLoadIdentity();
 }
 
 

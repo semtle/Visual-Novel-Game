@@ -1,8 +1,74 @@
 #include "SpriteBatch.h"
 #include <algorithm>
-#include <iostream>
 
 namespace Bengine {
+
+
+Glyph::Glyph(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint Texture, float Depth, const ColorRGBA8& Color)
+    : texture(Texture), depth(Depth)
+{
+    // Set up the Glyph
+    topLeft.color = Color;
+    topLeft.setPosition(destRect.x, destRect.y + destRect.w);
+    topLeft.setUV(uvRect.x, uvRect.y + uvRect.w);
+
+    topRight.color = Color;
+    topRight.setPosition(destRect.x + destRect.z, destRect.y + destRect.w);
+    topRight.setUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
+
+    bottomLeft.color = Color;
+    bottomLeft.setPosition(destRect.x, destRect.y);
+    bottomLeft.setUV(uvRect.x, uvRect.y);
+
+    bottomRight.color = Color;
+    bottomRight.setPosition(destRect.x + destRect.z, destRect.y);
+    bottomRight.setUV(uvRect.x + uvRect.z, uvRect.y);
+}
+
+
+Glyph::Glyph(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint Texture, float Depth, const ColorRGBA8& Color, float angle)
+    : texture(Texture), depth(Depth)
+{
+    glm::vec2 halfDims(destRect.z / 2.0f, destRect.w / 2.0f);
+
+    // Get points centered at origin
+    glm::vec2 tl(-halfDims.x, halfDims.y);
+    glm::vec2 tr(halfDims.x, halfDims.y);
+    glm::vec2 bl(-halfDims.x, -halfDims.y);
+    glm::vec2 br(halfDims.x, -halfDims.y);
+
+    // Rotate points
+    tl = rotatePoint(tl, angle) + halfDims;
+    br = rotatePoint(br, angle) + halfDims;
+    bl = rotatePoint(bl, angle) + halfDims;
+    tr = rotatePoint(tr, angle) + halfDims;
+
+    topLeft.color = Color;
+    topLeft.setPosition(destRect.x + tl.x, destRect.y + tl.y);
+    topLeft.setUV(uvRect.x, uvRect.y + uvRect.w);
+
+    topRight.color = Color;
+    topRight.setPosition(destRect.x + tr.x, destRect.y + tr.y);
+    topRight.setUV(uvRect.x + uvRect.z, uvRect.y + uvRect.w);
+
+    bottomLeft.color = Color;
+    bottomLeft.setPosition(destRect.x + bl.x, destRect.y + bl.y);
+    bottomLeft.setUV(uvRect.x, uvRect.y);
+
+    bottomRight.color = Color;
+    bottomRight.setPosition(destRect.x + br.x, destRect.y + br.y);
+    bottomRight.setUV(uvRect.x + uvRect.z, uvRect.y);
+}
+
+
+glm::vec2 Glyph::rotatePoint(glm::vec2 pos, float angle)
+{
+    glm::vec2 newV;
+    newV.x = pos.x * cos(angle) - pos.y * sin(angle);
+    newV.y = pos.x * sin(angle) + pos.y * cos(angle);
+    return newV;
+}
+
 
 SpriteBatch::SpriteBatch() : _vbo(0), _vao(0)
 {
@@ -45,15 +111,43 @@ void SpriteBatch::end()
 void SpriteBatch::draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color)
 {
 	// Add the new Glyph to the glyphs
-	_glyphs.emplace_back(Glyph(destRect, uvRect, texture, depth, color));
+	_glyphs.emplace_back(destRect, uvRect, texture, depth, color);
 }
 
+
+void SpriteBatch::draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color, float angle)
+{
+    _glyphs.emplace_back(destRect, uvRect, texture, depth, color, angle);
+}
+
+
+void SpriteBatch::draw(const glm::vec4& destRect, const glm::vec4& uvRect, GLuint texture, float depth, const ColorRGBA8& color, const glm::vec2& dir)
+{
+    const glm::vec2 right(1.0f, 0.0f);
+    float angle = acos(glm::dot(right, dir));
+    if (dir.y < 0.0f) angle = -angle;
+
+    _glyphs.emplace_back(destRect, uvRect, texture, depth, color, angle);
+}
+
+void SpriteBatch::dispose()
+{
+    if (_vao != 0) {
+        glDeleteVertexArrays(1, &_vao);
+        _vao = 0;
+    }
+
+    if (_vbo != 0) {
+        glDeleteBuffers(1, &_vbo);
+        _vbo = 0;
+    }
+}
 
 void SpriteBatch::renderBatch()
 {
 	glBindVertexArray(_vao);
 
-	for (auto i = 0; i < _renderBatches.size(); i++) {
+	for (size_t i = 0; i < _renderBatches.size(); i++) {
 		glBindTexture(GL_TEXTURE_2D, _renderBatches[i].texture);
 
 		glDrawArrays(GL_TRIANGLES, _renderBatches[i].offset, _renderBatches[i].numVertices);
@@ -74,7 +168,7 @@ void SpriteBatch::createRenderBatches()
 	int cv = 0; // Current vertex
 	_renderBatches.emplace_back(0, 6, _glyphPointers[0]->texture);
 
-	for (int cg = 0; cg < _glyphPointers.size(); cg++) {
+	for (size_t cg = 0; cg < _glyphPointers.size(); cg++) {
 		if (cg > 0) {
 			if (_glyphPointers[cg]->texture != _glyphPointers[cg - 1]->texture) {
 				_renderBatches.emplace_back(offset, 6, _glyphPointers[cg]->texture);

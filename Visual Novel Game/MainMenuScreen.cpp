@@ -1,5 +1,6 @@
 #include "MainMenuScreen.h"
 #include "Indices.h"
+#include <Bengine/IMainGame.h>
 
 MainMenuScreen::MainMenuScreen(Bengine::Window* window) :
     m_window(window)
@@ -98,10 +99,40 @@ void MainMenuScreen::checkInput()
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
+        m_game->onSDLEvent(event);
+
         switch (event.type) {
         case SDL_QUIT:
             m_currentState = Bengine::ScreenState::EXIT_APPLICATION;
             break;
+        }
+    }
+
+    glm::vec2 mouseCoords = m_game->inputManager.getMouseCoords();
+
+    if (m_game->inputManager.isKeyPressed(SDL_BUTTON_LEFT)) {
+        // All buttons are at the same x position and have same width
+        if (mouseCoords.x > 305 && mouseCoords.x < 478) {
+            // New game
+            if (mouseCoords.y > 410 && mouseCoords.y < 453) {
+                m_nextScreen = SCREEN_INDEX_NEW_GAME;
+                m_currentState = Bengine::ScreenState::CHANGE_NEXT;
+            }
+
+            // Load game
+            if (mouseCoords.y > 460 && mouseCoords.y < 500) {
+                // TODO: Implement
+            }
+
+            // Options
+            if (mouseCoords.y > 507 && mouseCoords.y < 546) {
+                // TODO: Implement
+            }
+
+            // Exit
+            if (mouseCoords.y > 553 && mouseCoords.y < 593) {
+                m_currentState = Bengine::ScreenState::EXIT_APPLICATION;
+            }
         }
     }
 }

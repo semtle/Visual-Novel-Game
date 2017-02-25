@@ -1,10 +1,11 @@
 #include "NewGameScreen.h"
 #include "Indices.h"
+#include <Bengine/IMainGame.h>
 
 NewGameScreen::NewGameScreen(Bengine::Window* window) :
     m_window(window)
 {
-    m_screenIndex = SCREEN_INDEX_MAIN_MENU;
+    m_screenIndex = SCREEN_INDEX_NEW_GAME;
 }
 
 NewGameScreen::~NewGameScreen()
@@ -98,9 +99,19 @@ void NewGameScreen::checkInput()
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
+        m_game->onSDLEvent(event);
+
         switch (event.type) {
         case SDL_QUIT:
             m_currentState = Bengine::ScreenState::EXIT_APPLICATION;
+            break;
+        case SDL_TEXTINPUT:
+            if (m_playerName.length() < 16) m_playerName += event.text.text;
+            break;
+        case SDL_KEYDOWN:
+            // Doing this here because outside here would not work properly
+            if (event.key.keysym.sym == SDLK_BACKSPACE)
+                m_playerName = m_playerName.substr(0, m_playerName.length() - 1);
             break;
         }
     }

@@ -23,7 +23,7 @@ void Dialogue::drawImages(
 	const int& leftChar,
 	const int& rightChar)
 {
-	unsigned static const int talkerBox = Bengine::ResourceManager::getTexture("Textures/Visuals/NameBlue.png").id;
+	Bengine::GLTexture talkerBox = Bengine::ResourceManager::getTexture("Textures/Visuals/NameBlue.png");
 	static const glm::vec4 talkerBoxDestRect(-screenWidth / 2 + 20, -screenHeight / 2 + 157, 159, 66);
 
 	unsigned static const int messageBox = Bengine::ResourceManager::getTexture("Textures/Visuals/BlueboxSLQ.png").id;
@@ -63,7 +63,7 @@ void Dialogue::drawImages(
 		spriteBatch.draw(
 			talkerBoxDestRect,
 			uvRect,
-			talkerBox,
+			talkerBox.id,
 			0.0f,
 			color
 		);

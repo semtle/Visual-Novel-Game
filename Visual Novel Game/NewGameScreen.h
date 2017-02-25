@@ -28,6 +28,7 @@ private:
     void initShaders();
 
     int m_nextScreen = SCREEN_INDEX_NO_SCREEN;
+    std::string m_playerName = "";
 
     Bengine::Window* m_window;
     Bengine::Camera2D m_camera;

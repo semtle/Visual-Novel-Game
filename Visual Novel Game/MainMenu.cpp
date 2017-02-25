@@ -17,8 +17,8 @@ void MainMenu::init(const std::string &fileName, Bengine::InputManager* manager,
 	this->inputManager = manager;
 	this->camera.init(screenWidth, screenHeight);
 	this->camera.setPosition(glm::vec2(screenWidth / 2, screenHeight / 2));
-	this->backgrounds["menu"] = Bengine::ResourceManager::getTexture("Textures/Backgrounds/mainscreen.png").id;
-	this->backgrounds["newgame"] = Bengine::ResourceManager::getTexture("Textures/Backgrounds/entername.png").id;
+	this->backgrounds["menu"] = Bengine::ResourceManager::getTexture("Textures/Backgrounds/Main Menu/mainscreen.png").id;
+	this->backgrounds["newgame"] = Bengine::ResourceManager::getTexture("Textures/Backgrounds/Main Menu/entername.png").id;
 }
 
 
@@ -127,8 +127,8 @@ void MainMenu::enterName(unsigned int keyID)
 
 void MainMenu::drawImages(Bengine::SpriteBatch& spriteBatch, Bengine::Camera2D* hudCamera, Bengine::GLSLProgram* shaderProgram, const int& screenWidth, const int& screenHeight)
 {
-	static const int newGameButton = Bengine::ResourceManager::getTexture("Textures/Visuals/newgame.png").id;
-	static const int backButton = Bengine::ResourceManager::getTexture("Textures/Visuals/backbutton.png").id;
+	static const int newGameButton = Bengine::ResourceManager::getTexture("Textures/Visuals/Main Menu/newgame.png").id;
+	static const int backButton = Bengine::ResourceManager::getTexture("Textures/Visuals/Main Menu/backbutton.png").id;
 
 	Bengine::ColorRGBA8 color = Bengine::ColorRGBA8(255, 255, 255, this->trasparency);
 

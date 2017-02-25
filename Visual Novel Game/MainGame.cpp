@@ -54,7 +54,7 @@ void MainGame::initSystems()
 
 void MainGame::initShaders()
 {
-	this->shaderProgram.compileShaders("Shaders/colorShading.vert", "Shaders/colorShading.frag");
+	this->shaderProgram.compileShaders("Shaders/textureShading.vert", "Shaders/textureShading.frag");
 	this->shaderProgram.addAttribute("vertexPosition");
 	this->shaderProgram.addAttribute("vertexColor");
 	this->shaderProgram.addAttribute("vertexUV");

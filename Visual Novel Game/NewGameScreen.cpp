@@ -19,7 +19,7 @@ int NewGameScreen::getNextScreenIndex() const
 
 int NewGameScreen::getPreviousScreenIndex() const
 {
-    return SCREEN_INDEX_NO_SCREEN;
+    return SCREEN_INDEX_MAIN_MENU;
 }
 
 void NewGameScreen::build()
@@ -40,13 +40,18 @@ void NewGameScreen::onEntry()
     // Init spritebatch
     m_spriteBatch.init();
 
+    // Init font
+    m_spriteFont = std::make_unique<Bengine::SpriteFont>("Fonts/Chapaza/Chapaza.ttf", 32);
+
     // Initialize shaders
     initShaders();
 }
 
 void NewGameScreen::onExit()
 {
-
+    m_spriteBatch.dispose();
+    m_textureProgram.dispose();
+    m_spriteFont->dispose();
 }
 
 void NewGameScreen::update()
@@ -61,7 +66,7 @@ void NewGameScreen::draw()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     m_textureProgram.use();
-    m_spriteBatch.begin();
+    m_spriteBatch.begin(Bengine::GlyphSortType::NONE);
 
     // Upload texture uniform
     GLint textureUniform = m_textureProgram.getUniformLocation("mySampler");
@@ -74,16 +79,54 @@ void NewGameScreen::draw()
     glUniformMatrix4fv(pUniform, 1, GL_FALSE, &projectionMatrix[0][0]);
 
     static const Bengine::ColorRGBA8 color(255, 255, 255, 255);
+    static const glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 
     // Start screen
     {
         glm::vec4 destRect(-m_window->getScreenWidth() / 2, -m_window->getScreenHeight() / 2, m_window->getScreenWidth(), m_window->getScreenHeight());
-        glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 
         m_spriteBatch.draw(
             destRect,
             uvRect,
             Bengine::ResourceManager::getTexture("Textures/Backgrounds/Main Menu/entername.png").id,
+            0.0f,
+            color
+        );
+    }
+
+    { // Player Name
+        m_spriteFont->draw(
+            m_spriteBatch,
+            m_playerName.c_str(),
+            glm::vec2(0, 18),
+            glm::vec2(1.0f),
+            1.0f,
+            Bengine::ColorRGBA8(0, 0, 0, 255),
+            Bengine::Justification::MIDDLE
+        );
+    }
+
+    // New game button
+    if (isPlayerNameValid()) {
+        static const glm::vec2 NEWGAME_DIMENSIONS(195, 38);
+        glm::vec4 destRect(-NEWGAME_DIMENSIONS.x / 2, -98, NEWGAME_DIMENSIONS);
+
+        m_spriteBatch.draw(
+            destRect,
+            uvRect,
+            Bengine::ResourceManager::getTexture("Textures/Visuals/Main Menu/newgame.png").id,
+            0.0f,
+            color
+        );
+    }
+
+    { // Back button
+        glm::vec4 destRect(-51, -m_window->getScreenHeight() / 2 + 46, 102, 26);
+
+        m_spriteBatch.draw(
+            destRect,
+            uvRect,
+            Bengine::ResourceManager::getTexture("Textures/Visuals/Main Menu/backbutton.png").id,
             0.0f,
             color
         );
@@ -115,6 +158,29 @@ void NewGameScreen::checkInput()
             break;
         }
     }
+
+    if (m_game->inputManager.isKeyPressed(SDLK_RETURN) && isPlayerNameValid()) {
+        puts("Starting game...");
+    }
+
+    glm::vec2 mouseCoords = m_game->inputManager.getMouseCoords();
+
+    // Check mouse inputs on the 2 buttons
+    if (m_game->inputManager.isKeyPressed(SDL_BUTTON_LEFT)) {
+        // New game
+        if (mouseCoords.x > 302 && mouseCoords.x < 497 && isPlayerNameValid()) {
+            if (mouseCoords.y > 360 && mouseCoords.y < 398) {
+                puts("New game");
+            }
+        }
+
+        // Back
+        if (mouseCoords.x > 349 && mouseCoords.x < 451) {
+            if (mouseCoords.y > 528 && mouseCoords.y < 554) {
+                m_currentState = Bengine::ScreenState::CHANGE_PREVIOUS;
+            }
+        }
+    }
 }
 
 void NewGameScreen::initShaders()
@@ -124,4 +190,9 @@ void NewGameScreen::initShaders()
     m_textureProgram.addAttribute("vertexColor");
     m_textureProgram.addAttribute("vertexUV");
     m_textureProgram.linkShaders();
+}
+
+bool NewGameScreen::isPlayerNameValid()
+{
+    return (m_playerName.length() >= 3 && m_playerName.length() <= 16);
 }

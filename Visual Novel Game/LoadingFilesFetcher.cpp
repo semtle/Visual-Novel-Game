@@ -44,5 +44,24 @@ std::vector<std::string> LoadingFilesFetcher::getMenuLoadingScreenImagePaths()
         }
     }
 
+    fixPathSlashes(paths);
+
     return paths;
+}
+
+void LoadingFilesFetcher::fixPathSlashes(std::vector<std::string>& paths)
+{
+    const std::string s = "\\";
+    const std::string t = "/";
+
+    std::string::size_type n;
+
+    for (size_t i = 0; i < paths.size(); i++) {
+        n = 0;
+
+        while ((n = paths[i].find(s, n)) != std::string::npos) {
+            paths[i].replace(n, s.size(), t);
+            n += t.size();
+        }
+    }
 }

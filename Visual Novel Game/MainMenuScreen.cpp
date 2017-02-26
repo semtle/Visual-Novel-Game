@@ -46,7 +46,8 @@ void MainMenuScreen::onEntry()
 
 void MainMenuScreen::onExit()
 {
-
+    m_spriteBatch.dispose();
+    m_textureProgram.dispose();
 }
 
 void MainMenuScreen::update()

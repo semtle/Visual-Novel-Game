@@ -5,8 +5,11 @@
 #include <Bengine/IGameScreen.h>
 #include <Bengine/GLSLProgram.h>
 #include <Bengine/SpriteBatch.h>
+#include <Bengine/SpriteFont.h>
 #include <Bengine/ResourceManager.h>
 #include <Bengine/Vertex.h>
+
+#include <memory>
 
 class NewGameScreen : public Bengine::IGameScreen
 {
@@ -26,6 +29,7 @@ public:
 private:
     void checkInput();
     void initShaders();
+    bool isPlayerNameValid();
 
     int m_nextScreen = SCREEN_INDEX_NO_SCREEN;
     std::string m_playerName = "";
@@ -33,5 +37,6 @@ private:
     Bengine::Window* m_window;
     Bengine::Camera2D m_camera;
     Bengine::SpriteBatch m_spriteBatch;
+    std::unique_ptr<Bengine::SpriteFont> m_spriteFont = nullptr;
     Bengine::GLSLProgram m_textureProgram;
 };

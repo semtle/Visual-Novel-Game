@@ -19,11 +19,13 @@ void App::addScreens()
 {
     m_menuLoadingScreen = std::make_unique<LoadingScreen>(&m_window, LoadingFilesFetcher::getMenuLoadingScreenImagePaths());
     m_mainMenuScreen = std::make_unique<MainMenuScreen>(&m_window);
-    m_newGameScreen = std::make_unique<NewGameScreen>(&m_window);
+    m_mainGameScreen = std::make_unique<MainGameScreen>(&m_window);
+    m_newGameScreen = std::make_unique<NewGameScreen>(&m_window, m_mainGameScreen.get());
 
     m_screenList->addScreen(m_menuLoadingScreen.get());
     m_screenList->addScreen(m_mainMenuScreen.get());
     m_screenList->addScreen(m_newGameScreen.get());
+    m_screenList->addScreen(m_mainGameScreen.get());
     
     m_screenList->setScreen(m_menuLoadingScreen->getScreenIndex());
 }

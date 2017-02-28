@@ -146,6 +146,7 @@
     <ClCompile Include="LoadingScreen.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainGame.cpp" />
+    <ClCompile Include="MainGameScreen.cpp" />
     <ClCompile Include="MainMenu.cpp" />
     <ClCompile Include="MainMenuScreen.cpp" />
     <ClCompile Include="NewGameScreen.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="LoadingFilesFetcher.h" />
     <ClInclude Include="LoadingScreen.h" />
     <ClInclude Include="MainGame.h" />
+    <ClInclude Include="MainGameScreen.h" />
     <ClInclude Include="MainMenu.h" />
     <ClInclude Include="MainMenuScreen.h" />
     <ClInclude Include="NewGameScreen.h" />

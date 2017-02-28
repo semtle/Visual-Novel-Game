@@ -59,8 +59,9 @@ private:
 	std::string message;
 	std::string talker;
 	const float MESSAGE_SCALE = 0.55f;
-	const int ANSWER_BOX_SPACE = 160;
 	std::vector<glm::vec2> answerBoxPositions;
+
+    const int ANSWER_BOX_SPACE = 160;
 	static const int ANSWER_BOX_WIDTH = 550;
 	static const int ANSWER_BOX_HEIGHT = 86;
 

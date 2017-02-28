@@ -8,6 +8,7 @@
 #include "LoadingScreen.h"
 #include "MainMenuScreen.h"
 #include "NewGameScreen.h"
+#include "MainGameScreen.h"
 
 class App : public Bengine::IMainGame
 {
@@ -23,4 +24,5 @@ private:
     std::unique_ptr<LoadingScreen> m_menuLoadingScreen = nullptr;
     std::unique_ptr<MainMenuScreen> m_mainMenuScreen = nullptr;
     std::unique_ptr<NewGameScreen> m_newGameScreen = nullptr;
+    std::unique_ptr<MainGameScreen> m_mainGameScreen = nullptr;
 };

@@ -9,12 +9,14 @@
 #include <Bengine/ResourceManager.h>
 #include <Bengine/Vertex.h>
 
+#include "MainGameScreen.h"
+
 #include <memory>
 
 class NewGameScreen : public Bengine::IGameScreen
 {
 public:
-    NewGameScreen(Bengine::Window* window);
+    NewGameScreen(Bengine::Window* window, MainGameScreen* mainGameScreen);
     ~NewGameScreen();
 
     virtual int getNextScreenIndex() const override;
@@ -32,7 +34,9 @@ private:
     bool isPlayerNameValid();
 
     int m_nextScreen = SCREEN_INDEX_NO_SCREEN;
-    std::string m_playerName = "";
+    std::string m_playerName = "Placeholder";
+
+    MainGameScreen* m_mainGameScreen;
 
     Bengine::Window* m_window;
     Bengine::Camera2D m_camera;

@@ -2345,10 +2345,31 @@ void MainProgram::drawCurrentDialogue()
 
 		std::string lc = this->currentDialogue->left;
 
+        std::string chara;
+        if (lc.length() > 0) {
+            chara = lc.substr(0, lc.find(","));
+        }
+        
+        glm::vec4 destRect = this->leftCharDestRect;
+
+        // Change size
+        if (chara == "Fumiko-san") {
+            destRect.z = 161;
+        }
+        else if (chara == "Hideo-kun" || chara == "Teemu-kun") {
+            destRect.z = 201;
+        }
+        else if (chara == "Iwao-kun") {
+            destRect.z = 177;
+        }
+        else if (chara == "Michiko-san") {
+            destRect.z = 173;
+        }
+
 		// Left Character
-		if (this->currentDialogue->left != "" && !this->currentDialogue->question) {
+		if (lc != "" && !this->currentDialogue->question) {
 			this->spriteBatch.draw(
-				this->leftCharDestRect,
+                destRect,
 				this->flippedXUvRect,
 				Bengine::ResourceManager::getTexture("../Visual Novel Game/Textures/Characters/" + lc.substr(0, lc.find(",")) + "/" + lc.substr(lc.find(",") + 2, lc.length())).id,
 				0.0f,
@@ -2357,11 +2378,30 @@ void MainProgram::drawCurrentDialogue()
 		}
 
 		std::string rc = this->currentDialogue->right;
+        if (rc.length() > 0) {
+            chara = rc.substr(0, rc.find(","));
+        }
+
+        destRect = this->rightCharDestRect;
+
+        // Change size
+        if (chara == "Fumiko-san") {
+            destRect.z = 161;
+        }
+        else if (chara == "Hideo-kun" || chara == "Teemu-kun") {
+            destRect.z = 201;
+        }
+        else if (chara == "Iwao-kun") {
+            destRect.z = 177;
+        }
+        else if (chara == "Michiko-san") {
+            destRect.z = 173;
+        }
 
 		// Right character
 		if (this->currentDialogue->right != "" && !this->currentDialogue->question) {
 			this->spriteBatch.draw(
-				this->rightCharDestRect,
+                destRect,
 				this->mainUvRect,
 				Bengine::ResourceManager::getTexture("../Visual Novel Game/Textures/Characters/" + rc.substr(0, rc.find(",")) + "/" + rc.substr(rc.find(",") + 2, rc.length())).id,
 				0.0f,

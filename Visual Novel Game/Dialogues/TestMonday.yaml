@@ -6,7 +6,7 @@
     0:
         name: Narrative 1
         message: Bright, warm rays of light spills between my curtains.
-        next_scene: 3
+        next: 1
     1:
         name: Narrative 2
         message: I can feel the warmth embracing my face as I start to wake up.
@@ -159,7 +159,7 @@
         talker: Makoto-kun
         right: Makoto-kun, smiling_side_uniform.png
         message: Guys, look who's finally here.
-        next: 24
+        next: 1
     1:
         name: Makoto 2
         talker: Makoto-kun
@@ -315,11 +315,11 @@
         name: Question 1
         Option 1:
             text: Well, depends if she likes someone a bit goofy, you might have a chance.
-            influence: 2
+            influence: 1
             next: 25
         Option 2:
             text: Teemu-kun is right, you wouldn't have a chance with her.
-            influence: 0
+            influence: 1
             next: 30
         Option 3:
             text: Sorry man, but I can't really say anything.

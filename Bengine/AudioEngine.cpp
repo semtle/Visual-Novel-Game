@@ -50,7 +50,7 @@ AudioEngine::AudioEngine()
 
 AudioEngine::~AudioEngine()
 {
-	destroy();
+	/*destroy();*/
 }
 
 

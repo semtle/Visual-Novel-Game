@@ -173,6 +173,27 @@ void MainProgram::processInput()
 		case SDL_KEYDOWN:
 			this->inputManager.pressKey(event.key.keysym.sym);
 			this->onKeyPress(event.key.keysym.sym);
+
+            if (event.key.keysym.sym == SDLK_RIGHT) {
+                if (this->clickedOnDialogueBox && this->currentMessageIdx < this->currentDialogue->message.length()) {
+                    this->currentMessageIdx++;
+                }
+
+                else if (this->clickedOnFirstAnswerBox && this->currentMessageIdx < this->currentDialogue->option1Text.length()) {
+                    this->currentMessageIdx++;
+                }
+
+                else if (this->clickedOnSecondAnswerBox && this->currentMessageIdx < this->currentDialogue->option2Text.length()) {
+                    this->currentMessageIdx++;
+                }
+
+                else if (this->clickedOnThirdAnswerBox && this->currentMessageIdx < this->currentDialogue->option3Text.length()) {
+                    this->currentMessageIdx++;
+                }
+            }
+            else if (event.key.keysym.sym == SDLK_LEFT) {
+                if (this->currentMessageIdx > 0) this->currentMessageIdx--;
+            }
 			break;
 		case SDL_KEYUP:
 			this->inputManager.releaseKey(event.key.keysym.sym);
@@ -318,6 +339,7 @@ void MainProgram::checkMainScreenInputs()
 	if (mouseCoords.x < dim.x || mouseCoords.x > dim.x + dim.z || mouseCoords.y < dim.y || mouseCoords.y > dim.y + dim.a) {
 		if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
 			this->clickedOnDialogueBox = false;
+            this->currentMessageIdx = 0;
 		}
 	}
 
@@ -772,7 +794,10 @@ void MainProgram::checkMainScreenInputs()
 					this->clickedOnTalkerBox = true;
 
 					// Don't allow to click both talker box and dialogue box at the same time
-					if (this->clickedOnDialogueBox) this->clickedOnDialogueBox = false;
+                    if (this->clickedOnDialogueBox) {
+                        this->clickedOnDialogueBox = false;
+                        this->currentMessageIdx = 0;
+                    }
 				}
 			}
 		}
@@ -788,6 +813,7 @@ void MainProgram::checkMainScreenInputs()
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 					this->clickedOnDialogueBox = true;
+                    this->currentMessageIdx = this->currentDialogue->message.length();
 
 					// Don't allow to click both talker box and dialogue box at the same time
 					if (this->clickedOnTalkerBox) this->clickedOnTalkerBox = false;
@@ -806,6 +832,7 @@ void MainProgram::checkMainScreenInputs()
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 					this->clickedOnFirstAnswerBox = true;
+                    this->currentMessageIdx = this->currentDialogue->option1Text.length();
 				}
 			}
 		}
@@ -821,6 +848,7 @@ void MainProgram::checkMainScreenInputs()
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 					this->clickedOnSecondAnswerBox = true;
+                    this->currentMessageIdx = this->currentDialogue->option2Text.length();
 				}
 			}
 		}
@@ -836,6 +864,7 @@ void MainProgram::checkMainScreenInputs()
 					this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
 					this->clickedOnThirdAnswerBox = true;
+                    this->currentMessageIdx = this->currentDialogue->option3Text.length();
 				}
 			}
 		}
@@ -1353,7 +1382,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 
 		this->saved = false;
 
-		// Remove the last character from the player's name
+		// Remove the last character
 		if (keyName == "Backspace") {
 			// Scene name
 			if (this->currentState == ProgramState::ADDSCENE) {
@@ -1381,19 +1410,54 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			}
 			// Message
 			else if (this->currentDialogue != nullptr && this->clickedOnDialogueBox) {
-				this->currentDialogue->message = this->currentDialogue->message.substr(0, this->currentDialogue->message.size() - 1);
+                // Move the line back
+                if (this->currentMessageIdx > 0) {
+                    std::string msg = this->currentDialogue->message;
+
+                    if (msg.length() > 0 && this->currentMessageIdx > 0) {
+                        std::string start = msg.substr(0, this->currentMessageIdx - 1);
+                        std::string end = msg.substr(this->currentMessageIdx, msg.length());
+
+                        this->currentMessageIdx--;
+                        this->currentDialogue->message = start + end;
+                    }
+                }
 			}
 			// First answer box
 			else if (this->currentDialogue != nullptr && this->clickedOnFirstAnswerBox) {
-				this->currentDialogue->option1Text = this->currentDialogue->option1Text.substr(0, this->currentDialogue->option1Text.size() - 1);
+                std::string msg = this->currentDialogue->option1Text;
+
+                if (msg.length() > 0 && this->currentMessageIdx > 0) {
+                    std::string start = msg.substr(0, this->currentMessageIdx - 1);
+                    std::string end = msg.substr(this->currentMessageIdx, msg.length());
+
+                    this->currentDialogue->option1Text = start + end;
+                    this->currentMessageIdx--;
+                }
 			}
 			// Second answer box
 			else if (this->currentDialogue != nullptr && this->clickedOnSecondAnswerBox) {
-				this->currentDialogue->option2Text = this->currentDialogue->option2Text.substr(0, this->currentDialogue->option2Text.size() - 1);
+                std::string msg = this->currentDialogue->option2Text;
+
+                if (msg.length() > 0 && this->currentMessageIdx > 0) {
+                    std::string start = msg.substr(0, this->currentMessageIdx - 1);
+                    std::string end = msg.substr(this->currentMessageIdx, msg.length());
+
+                    this->currentDialogue->option2Text = start + end;
+                    this->currentMessageIdx--;
+                }
 			}
 			// Third answer box
 			else if (this->currentDialogue != nullptr && this->clickedOnThirdAnswerBox) {
-				this->currentDialogue->option3Text = this->currentDialogue->option3Text.substr(0, this->currentDialogue->option3Text.size() - 1);
+                std::string msg = this->currentDialogue->option3Text;
+
+                if (msg.length() > 0 && this->currentMessageIdx > 0) {
+                    std::string start = msg.substr(0, this->currentMessageIdx - 1);
+                    std::string end = msg.substr(this->currentMessageIdx, msg.length());
+
+                    this->currentDialogue->option3Text = start + end;
+                    this->currentMessageIdx--;
+                }
 			}
 			// Dialogue name
 			else {
@@ -1441,22 +1505,50 @@ void MainProgram::onKeyPress(unsigned int keyID)
 
 			// Message
 			else if (this->currentDialogue != nullptr && this->clickedOnDialogueBox) {
-				this->currentDialogue->message += " ";
+                std::string msg = this->currentDialogue->message;
+                std::string start = msg.substr(0, this->currentMessageIdx);
+                std::string end = msg.substr(this->currentMessageIdx, msg.length());
+
+                start += " ";
+
+				this->currentDialogue->message = start + end;
+                this->currentMessageIdx++;
 			}
 
 			// First answer box
 			else if (this->currentDialogue != nullptr && this->clickedOnFirstAnswerBox) {
-				this->currentDialogue->option1Text += " ";
+                std::string msg = this->currentDialogue->option1Text;
+                std::string start = msg.substr(0, this->currentMessageIdx);
+                std::string end = msg.substr(this->currentMessageIdx, msg.length());
+
+                start += " ";
+
+				this->currentDialogue->option1Text = start + end;
+                this->currentMessageIdx++;
 			}
 
 			// Second answer box
 			else if (this->currentDialogue != nullptr && this->clickedOnSecondAnswerBox) {
-				this->currentDialogue->option2Text += " ";
+                std::string msg = this->currentDialogue->option2Text;
+                std::string start = msg.substr(0, this->currentMessageIdx);
+                std::string end = msg.substr(this->currentMessageIdx, msg.length());
+
+                start += " ";
+
+				this->currentDialogue->option2Text = start + end;
+                this->currentMessageIdx++;
 			}
 
 			// Third answer box
 			else if (this->currentDialogue != nullptr && this->clickedOnThirdAnswerBox) {
-				this->currentDialogue->option3Text += " ";
+                std::string msg = this->currentDialogue->option3Text;
+                std::string start = msg.substr(0, this->currentMessageIdx);
+                std::string end = msg.substr(this->currentMessageIdx, msg.length());
+
+                start += " ";
+
+				this->currentDialogue->option3Text = start + end;
+                this->currentMessageIdx++;
 			}
 		}
 
@@ -1482,10 +1574,45 @@ void MainProgram::onKeyPress(unsigned int keyID)
 
 					CloseClipboard();
 
-					if (this->clickedOnDialogueBox) this->currentDialogue->message += text;
-					else if (this->clickedOnFirstAnswerBox) this->currentDialogue->option1Text += text;
-					else if (this->clickedOnSecondAnswerBox) this->currentDialogue->option2Text += text;
-					else if (this->clickedOnThirdAnswerBox) this->currentDialogue->option3Text += text;
+                    if (this->clickedOnDialogueBox) {
+                        std::string msg = this->currentDialogue->message;
+                        std::string start = msg.substr(0, this->currentMessageIdx);
+                        std::string end = msg.substr(this->currentMessageIdx, msg.length());
+
+                        start += text;
+                        this->currentMessageIdx += text.length() - 1;
+                        this->currentDialogue->message = start + end;
+                    }
+                    else if (this->clickedOnFirstAnswerBox) {
+                        std::string msg = this->currentDialogue->option1Text;
+                        std::string start = msg.substr(0, this->currentMessageIdx);
+                        std::string end = msg.substr(this->currentMessageIdx, msg.length());
+
+                        start += text;
+
+                        this->currentMessageIdx += text.length() - 1;
+                        this->currentDialogue->option1Text = start + end;
+                    }
+                    else if (this->clickedOnSecondAnswerBox) {
+                        std::string msg = this->currentDialogue->option2Text;
+                        std::string start = msg.substr(0, this->currentMessageIdx);
+                        std::string end = msg.substr(this->currentMessageIdx, msg.length());
+
+                        start += text;
+
+                        this->currentMessageIdx += text.length() - 1;
+                        this->currentDialogue->option2Text = start + end;
+                    }
+                    else if (this->clickedOnThirdAnswerBox) {
+                        std::string msg = this->currentDialogue->option3Text;
+                        std::string start = msg.substr(0, this->currentMessageIdx);
+                        std::string end = msg.substr(this->currentMessageIdx, msg.length());
+
+                        start += text;
+
+                        this->currentMessageIdx += text.length() - 1;
+                        this->currentDialogue->option3Text = start + end;
+                    }
 				}
 			}
 		}
@@ -1513,6 +1640,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			// Message
 			else if (this->currentDialogue != nullptr && this->clickedOnDialogueBox) {
 				this->clickedOnDialogueBox = false;
+                this->currentMessageIdx = 0;
 			}
 			// First answer box
 			else if (this->currentDialogue != nullptr && this->clickedOnFirstAnswerBox) {
@@ -1520,7 +1648,6 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				this->settingNextDialogue = false;
 				this->selectedNextSceneIdx = -1;
 				this->selectedAnswerBox = -1;
-				this->resetCurrentDialogue();
 			}
 			// Second answer box
 			else if (this->currentDialogue != nullptr && this->clickedOnSecondAnswerBox) {
@@ -1528,7 +1655,6 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				this->settingNextDialogue = false;
 				this->selectedNextSceneIdx = -1;
 				this->selectedAnswerBox = -1;
-				this->resetCurrentDialogue();
 			}
 			// Third answer box
 			else if (this->currentDialogue != nullptr && this->clickedOnThirdAnswerBox) {
@@ -1536,7 +1662,6 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				this->settingNextDialogue = false;
 				this->selectedNextSceneIdx = -1;
 				this->selectedAnswerBox = -1;
-				this->resetCurrentDialogue();
 			}
 			// Setting next dialogue
 			else if (this->settingNextDialogue) {
@@ -1578,7 +1703,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			}
 		}
 
-		// Add the character to the player's name
+		// Add the character to the text
 		if (keyName != "Return" && keyName != "Space" && keyName != "Backspace" && keyName != "Up" && keyName != "Down" && keyName != "Delete") {
 			// Scene name
 			if (this->currentState == ProgramState::ADDSCENE) {
@@ -1621,32 +1746,78 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			}
 			// Message
 			else if (this->currentDialogue != nullptr && (this->clickedOnDialogueBox || this->clickedOnFirstAnswerBox || this->clickedOnSecondAnswerBox || this->clickedOnThirdAnswerBox || this->clickedOnTalkerBox)) {
-				// Question mark
+                std::string msg = this->currentDialogue->message, start, end;
+
+                if (this->clickedOnDialogueBox) {
+                    start = msg.substr(0, this->currentMessageIdx);
+                    end = msg.substr(this->currentMessageIdx, msg.length());
+                }
+
+                std::string option1 = this->currentDialogue->option1Text, option1Start, option1End;
+
+                if (this->clickedOnFirstAnswerBox) {
+                    option1Start = option1.substr(0, this->currentMessageIdx);
+                    option1End = option1.substr(this->currentMessageIdx, option1.length());
+                }
+
+                std::string option2 = this->currentDialogue->option2Text, option2Start, option2End;
+
+                if (this->clickedOnSecondAnswerBox) {
+                    option2Start = option2.substr(0, this->currentMessageIdx);
+                    option2End = option2.substr(this->currentMessageIdx, option2.length());
+                }
+
+                std::string option3 = this->currentDialogue->option3Text, option3Start, option3End;
+
+                if (this->clickedOnThirdAnswerBox) {
+                    option3Start = option3.substr(0, this->currentMessageIdx);
+                    option3End = option3.substr(this->currentMessageIdx, option3.length());
+                }
+
+                if (!this->clickedOnTalkerBox) this->currentMessageIdx++;
+
+                // Question mark
 				if (keyName == "+" && (this->inputManager.isKeyDown(SDLK_LSHIFT) || this->inputManager.isKeyDown(SDLK_RSHIFT))) {
-					if (this->clickedOnDialogueBox) this->currentDialogue->message += "?";
-					else if (this->clickedOnFirstAnswerBox) this->currentDialogue->option1Text += "?";
-					else if (this->clickedOnSecondAnswerBox) this->currentDialogue->option2Text += "?";
-					else if (this->clickedOnThirdAnswerBox) this->currentDialogue->option3Text += "?";
+					if (this->clickedOnDialogueBox) start += "?";
+					else if (this->clickedOnFirstAnswerBox) option1Start += "?";
+					else if (this->clickedOnSecondAnswerBox) option2Start += "?";
+					else if (this->clickedOnThirdAnswerBox) option3Start += "?";
 					else if (this->clickedOnTalkerBox && this->currentDialogue->talking.length() < 11) this->currentDialogue->talking += "?";
 				}
 				// Exclamation mark
 				else if (keyName == "1" && (this->inputManager.isKeyDown(SDLK_LSHIFT) || this->inputManager.isKeyDown(SDLK_RSHIFT))) {
-					if (this->clickedOnDialogueBox) this->currentDialogue->message += "!";
-					else if (this->clickedOnFirstAnswerBox) this->currentDialogue->option1Text += "!";
-					else if (this->clickedOnSecondAnswerBox) this->currentDialogue->option2Text += "!";
-					else if (this->clickedOnThirdAnswerBox) this->currentDialogue->option3Text += "!";
+					if (this->clickedOnDialogueBox) start += "!";
+                    else if (this->clickedOnFirstAnswerBox) option1Start += "!";
+                    else if (this->clickedOnSecondAnswerBox) option2Start += "!";
+                    else if (this->clickedOnThirdAnswerBox) option3Start += "!";
 				}
 				// Upper case letter (while holding shift)
 				else {
 					char letter = ((this->inputManager.isKeyDown(SDLK_LSHIFT) || this->inputManager.isKeyDown(SDLK_RSHIFT))) ? toupper(static_cast<char>(keyID)) : static_cast<char>(keyID);
 
 					if (!(this->inputManager.isKeyDown(SDLK_LCTRL) && this->inputManager.isKeyPressed(SDLK_v))) {
-						if (this->clickedOnDialogueBox) this->currentDialogue->message += letter;
-						else if (this->clickedOnFirstAnswerBox) this->currentDialogue->option1Text += letter;
-						else if (this->clickedOnSecondAnswerBox) this->currentDialogue->option2Text += letter;
-						else if (this->clickedOnThirdAnswerBox) this->currentDialogue->option3Text += letter;
+						if (this->clickedOnDialogueBox) start += letter;
+                        else if (this->clickedOnFirstAnswerBox) option1Start += letter;
+                        else if (this->clickedOnSecondAnswerBox) option2Start += letter;
+                        else if (this->clickedOnThirdAnswerBox) option3Start += letter;
 					}
 				}
+
+                if (this->clickedOnDialogueBox) {
+                    this->currentDialogue->message = start + end;
+                }
+
+                if (this->clickedOnFirstAnswerBox) {
+                    this->currentDialogue->option1Text = option1Start + option1End;
+                }
+
+                if (this->clickedOnSecondAnswerBox) {
+                    this->currentDialogue->option2Text = option2Start + option2End;
+                }
+
+                if (this->clickedOnThirdAnswerBox) {
+                    this->currentDialogue->option3Text = option3Start + option3End;
+                }
 			}
 			// Dialogue name
 			else {
@@ -2227,6 +2398,37 @@ void MainProgram::drawCurrentDialogue()
 			);
 		}
 
+        // The line
+        if (this->clickedOnDialogueBox) {
+            float xPos, yPos = this->textBoxDestRect.y + this->textBoxDestRect.w;
+            yPos -= 39;
+
+            std::vector<std::string> text = this->getWrappedText(this->currentDialogue->message, spriteFont, 550, 0.6f);
+            
+            int lengthSoFar = 0;
+            for (size_t i = 0; i < text.size(); i++) {
+                if (text[i].length() + lengthSoFar < this->currentMessageIdx) {
+                    lengthSoFar += text[i].length();
+                    yPos -= 26;
+                }
+                else {
+                    int idx = this->currentMessageIdx - lengthSoFar;
+                    std::string sub = text[i].substr(0, idx);
+                    xPos = 23 + this->textBoxDestRect.x + this->spriteFont->measure(sub.c_str()).x * 0.6f;
+
+                    break;
+                }
+            }
+
+            this->spriteBatch.draw(
+                glm::vec4(xPos, yPos, 1, 20),
+                glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+                Bengine::ResourceManager::getTexture("Textures/line.png").id,
+                0.0f,
+                Bengine::ColorRGBA8(255, 255, 255, 255)
+            );
+        }
+
 		/* Question boxes */
 		if (this->currentDialogue->question && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx) {
 			unsigned int firstBox, secondBox, thirdBox;
@@ -2253,7 +2455,7 @@ void MainProgram::drawCurrentDialogue()
 				secondBox = Bengine::ResourceManager::getTexture("Textures/GreenOptionBox.png").id;
 			}
 
-			// Determine second box color
+			// Determine third box color
 			if (this->currentDialogue->option3Influence == 0) {
 				thirdBox = Bengine::ResourceManager::getTexture("Textures/RedOptionBox.png").id;
 			}
@@ -2282,7 +2484,7 @@ void MainProgram::drawCurrentDialogue()
 				this->color
 			);
 
-			// First answer box
+			// Third answer box
 			this->spriteBatch.draw(
 				this->thirdAnswerBoxDestRect,
 				this->mainUvRect,
@@ -2290,6 +2492,91 @@ void MainProgram::drawCurrentDialogue()
 				0.0f,
 				this->color
 			);
+
+            float xPos = this->firstAnswerBoxDestRect.x + this->firstAnswerBoxDestRect.z / 2.0f, yPos;
+            std::string m = "";
+            glm::vec4 dim;
+
+            if (this->currentDialogue->question) {
+	            if (this->clickedOnFirstAnswerBox) {
+	                m = this->currentDialogue->option1Text;
+	                dim = this->firstAnswerBoxDestRect;
+	            }
+	            else if (this->clickedOnSecondAnswerBox) {
+	                m = this->currentDialogue->option2Text;
+	                dim = this->secondAnswerBoxDestRect;
+	            }
+	            else if (this->clickedOnThirdAnswerBox) {
+	                m = this->currentDialogue->option3Text;
+	                dim = this->thirdAnswerBoxDestRect;
+	            }
+	
+	            float fontScale = 0.6f;
+	
+	            std::vector<std::string> text = this->getWrappedText(m, spriteFont, 520, fontScale);
+	            
+                // No text
+                if (text.size() == 0 && (this->clickedOnFirstAnswerBox || this->clickedOnSecondAnswerBox || this->clickedOnThirdAnswerBox)) {
+                    yPos = dim.y + dim.w / 2.0f - 6;
+
+                    this->spriteBatch.draw(
+                        glm::vec4(xPos, yPos, 1, 20),
+                        glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+                        Bengine::ResourceManager::getTexture("Textures/line.png").id,
+                        0.0f,
+                        Bengine::ColorRGBA8(255, 255, 255, 255)
+                    );
+                }
+
+                // One line of text
+	            else if (text.size() == 1) {
+                    // Move to the left
+                    xPos = xPos + (this->spriteFont->measure(text[0].c_str()).x * fontScale / -2.0f);
+                    std::string sub = text[0].substr(0, this->currentMessageIdx);
+                    xPos += this->spriteFont->measure(sub.c_str()).x * fontScale - 1;
+
+                    yPos = dim.y + dim.w / 2.0f - 6;
+	
+	                this->spriteBatch.draw(
+	                    glm::vec4(xPos, yPos, 1, 20),
+	                    glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+	                    Bengine::ResourceManager::getTexture("Textures/line.png").id,
+	                    0.0f,
+	                    Bengine::ColorRGBA8(255, 255, 255, 255)
+	                );
+	            }
+
+                // 2 Lines
+                else {
+                    yPos = dim.y + dim.w / 2.0f;
+
+                    int lengthSoFar = 0;
+                    for (size_t i = 0; i < text.size(); i++) {
+                        if (text[i].length() + lengthSoFar < this->currentMessageIdx) {
+                            lengthSoFar += text[i].length();
+                            yPos -= 26;
+                        }
+                        else {
+                            int idx = this->currentMessageIdx - lengthSoFar;
+                            std::string sub = text[i].substr(0, idx);
+                            xPos += (this->spriteFont->measure(text[i].c_str()).x * fontScale / -2.0f);
+                            xPos += this->spriteFont->measure(sub.c_str()).x * 0.6f - 1;
+
+                            break;
+                        }
+                    }
+
+                    yPos += 5;
+
+                    this->spriteBatch.draw(
+                        glm::vec4(xPos, yPos, 1, 20),
+                        glm::vec4(0.0f, 0.0f, 1.0f, 1.0f),
+                        Bengine::ResourceManager::getTexture("Textures/line.png").id,
+                        0.0f,
+                        Bengine::ColorRGBA8(255, 255, 255, 255)
+                    );
+                }
+            }
 		}
 
 		if (this->currentDialogue->question && this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx) {
@@ -3530,6 +3817,7 @@ void MainProgram::resetEverything()
 
 	this->clickedOnTalkerBox = false;
 	this->clickedOnDialogueBox = false;
+    this->currentMessageIdx = 0;
 
 	this->clickedOnFirstAnswerBox = false;
 	this->clickedOnSecondAnswerBox = false;
@@ -3623,6 +3911,7 @@ std::vector<std::string> MainProgram::getWrappedText(std::string text, Bengine::
 
 			// If the line doesn't fit the box, it means that we should end the current line
 			if (spriteFont->measure(crop.c_str()).x * fontScale > maxLength) {
+                i--;
 				char currChar = text[i];
 
 				// Go back to the last space so we don't crop in the middle of a word
@@ -3630,7 +3919,7 @@ std::vector<std::string> MainProgram::getWrappedText(std::string text, Bengine::
 					i--;
 					currChar = text[i];
 				}
-				crop = crop.substr(0, i);
+				crop = crop.substr(0, i + 1);
 				lines.push_back(crop);
 				text = text.substr(i + 1, text.length() - 1);
 				break;

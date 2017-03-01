@@ -103,6 +103,8 @@ private:
 	std::string currentFileName = "";
     std::string creationErrorMsg = "";
 
+    int currentMessageIdx = 0;
+
 	bool clickedOnTalkerBox = false;
 	bool clickedOnDialogueBox = false;
 

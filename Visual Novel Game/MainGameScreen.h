@@ -8,6 +8,7 @@
 #include <Bengine/SpriteFont.h>
 #include <Bengine/ResourceManager.h>
 #include <Bengine/Vertex.h>
+#include <Bengine/AudioEngine.h>
 
 #include <yaml-cpp/yaml.h>
 
@@ -40,9 +41,10 @@ private:
     void changeToNextDialogue();
     void updateNewDialogueValues();
     void handleOptionBoxInputs();
+    void handleClickedOption(int idx);
     std::vector<std::string> getWrappedText(std::string text, const float& maxLength, const float& fontScale);
 
-    std::string m_currentDay = "TestMonday";
+    std::string m_currentDay = "Monday";
     std::string m_currentSceneStr = "-1", m_currentDialogueStr = "-1";
     int m_currentSceneIndex = -1;
     int m_currentDialogueIndex = -1;
@@ -50,13 +52,19 @@ private:
 
     int m_clickedRedIdx = -1;
     int m_clickedGreenIdx = -1;
+    int m_clickedBoxIdx = -1;
 
     int m_leftCharWidth = -1;
     int m_rightCharWidth = -1;
+    int m_alphaValue = 255;
 
     bool m_hasDialogueBox = false;
     bool m_hasTalkerBox = false;
     bool m_isQuestion = false;
+    bool m_fadeIn = false;
+    bool m_changeToNextDialogue = true;
+    bool m_shouldFadeOut = false;
+    bool m_fadingOut = false;
     bool m_firstUpdateAfterOptionClick = false;
     bool m_waitAfterClickedOption = false;
 
@@ -69,7 +77,10 @@ private:
 
     YAML::Node m_file;
 
+    Bengine::SoundEffect m_currentSoundEffect;
+    Bengine::Music m_currentSong;
     Bengine::Window* m_window;
+    Bengine::AudioEngine m_audioEngine;
     Bengine::Camera2D m_camera;
     Bengine::SpriteBatch m_spriteBatch;
     Bengine::SpriteFont m_spriteFont;

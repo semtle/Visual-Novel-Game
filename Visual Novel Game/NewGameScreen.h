@@ -13,10 +13,12 @@
 
 #include <memory>
 
+class App;
+
 class NewGameScreen : public Bengine::IGameScreen
 {
 public:
-    NewGameScreen(Bengine::Window* window, MainGameScreen* mainGameScreen);
+    NewGameScreen(Bengine::Window* window, MainGameScreen* mainGameScreen, App* app);
     ~NewGameScreen();
 
     virtual int getNextScreenIndex() const override;
@@ -38,6 +40,7 @@ private:
 
     MainGameScreen* m_mainGameScreen;
 
+    App* m_app;
     Bengine::Window* m_window;
     Bengine::Camera2D m_camera;
     Bengine::SpriteBatch m_spriteBatch;

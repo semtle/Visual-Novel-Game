@@ -5,6 +5,7 @@
 
     0:
         name: Narrative 1
+        StartMusic: JunkyFunk.mp3
         message: Bright, warm rays of light spills between my curtains.
         next: 1
     1:
@@ -107,7 +108,7 @@
         next: 7
     7:
         name: Narrative 4
-        message: I've been friends with him since the school started, but I have to say that he can be a bit odd from time to time.
+        message: I've been friends with him since t  e school started, but I have to. say that he can be a bit odd from time to time.
         next: 8
     8:
         name: Makoto 3
@@ -176,13 +177,13 @@
         name: Player 1
         talker: Player
         right: Makoto-kun, confident_left_uniform.png
-        message: I was exhausted because I ran all the way from home, and I already said that my alarm didn't go off!
+        message: I was exhausted ggbgegcgagugse I ran all the way from home, and I already said that my alarm didn't go off!gggggggggg hello dude whats up whats up whats up whats up whats up what s up
         next: 4
     4:
         name: Player 2
         talker: Player
         right: Makoto-kun, laughing_uniform.png
-        message: There's nothing I could have done.
+        message: There's nothing Fuck Me In The Ass I Fuck Me In The Asscould have done.
         next: 5
     5:
         name: Narrative 1

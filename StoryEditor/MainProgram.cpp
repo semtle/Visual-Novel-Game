@@ -2199,8 +2199,8 @@ void MainProgram::drawCurrentDialogue()
 		}
 
         Bengine::GLTexture texture;
-        if (this->clickedOnTalkerBox) texture = Bengine::ResourceManager::getTexture("Textures/TalkerBoxHighlight.png");
-        else texture = Bengine::ResourceManager::getTexture("Textures/TalkerBoxBlue.png");
+        /*if (this->clickedOnTalkerBox) texture = Bengine::ResourceManager::getTexture("Textures/TalkerBoxHighlight.png");*/
+        /*else */texture = Bengine::ResourceManager::getTexture("Textures/TalkerBoxBlue.png");
 
 		// Talker box
 		if (this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->talker) {
@@ -2213,8 +2213,8 @@ void MainProgram::drawCurrentDialogue()
 			);
 		}
 
-        if (this->clickedOnDialogueBox) texture = Bengine::ResourceManager::getTexture("Textures/BlueboxHighlight.png");
-        else texture = Bengine::ResourceManager::getTexture("Textures/TextBoxBlueSolo.png");
+        /*if (this->clickedOnDialogueBox) texture = Bengine::ResourceManager::getTexture("Textures/BlueboxHighlight.png");*/
+        /*else */texture = Bengine::ResourceManager::getTexture("Textures/TextBoxBlueSolo.png");
 
 		// Dialogue box
 		if (this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->showTextBox) {

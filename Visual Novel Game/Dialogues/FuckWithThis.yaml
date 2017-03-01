@@ -69,7 +69,7 @@
         name: Player 5
         talker: Player
         message: Well, I better hurry and get going, but first, where's my pants at?
-        next_scene: 1
+        next_scene: 2
 1:
     name: Run Boy
 

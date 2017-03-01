@@ -1,9 +1,10 @@
 #include "MainMenuScreen.h"
 #include "Indices.h"
+#include "App.h"
 #include <Bengine/IMainGame.h>
 
-MainMenuScreen::MainMenuScreen(Bengine::Window* window) :
-    m_window(window)
+MainMenuScreen::MainMenuScreen(Bengine::Window* window, App* app) :
+    m_window(window), m_app(app)
 {
     m_screenIndex = SCREEN_INDEX_MAIN_MENU;
 }
@@ -24,7 +25,7 @@ int MainMenuScreen::getPreviousScreenIndex() const
 
 void MainMenuScreen::build()
 {
-
+    
 }
 
 void MainMenuScreen::destroy()
@@ -42,6 +43,11 @@ void MainMenuScreen::onEntry()
 
     // Initialize shaders
     initShaders();
+
+    if (!m_isBuilt) {
+        m_app->startMenuSong();
+        m_isBuilt = true;
+    }
 }
 
 void MainMenuScreen::onExit()

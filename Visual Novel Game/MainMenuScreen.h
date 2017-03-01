@@ -8,10 +8,12 @@
 #include <Bengine/ResourceManager.h>
 #include <Bengine/Vertex.h>
 
+class App;
+
 class MainMenuScreen : public Bengine::IGameScreen
 {
 public:
-    MainMenuScreen(Bengine::Window* window);
+    MainMenuScreen(Bengine::Window* window, App* app);
     ~MainMenuScreen();
 
     virtual int getNextScreenIndex() const override;
@@ -28,7 +30,9 @@ private:
     void initShaders();
 
     int m_nextScreen = SCREEN_INDEX_NO_SCREEN;
-
+    bool m_isBuilt = false;
+    
+    App* m_app;
     Bengine::Window* m_window;
     Bengine::Camera2D m_camera;
     Bengine::SpriteBatch m_spriteBatch;

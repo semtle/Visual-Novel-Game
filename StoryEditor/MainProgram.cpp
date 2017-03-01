@@ -1693,7 +1693,8 @@ void MainProgram::onKeyPress(unsigned int keyID)
 		}
 
 		// Move dialogues up or down
-		if (this->currentDialogue != nullptr && this->selectedDialogueIdx != -1 && this->selectedSceneIdx != -1) {
+		if (this->currentDialogue != nullptr && this->selectedDialogueIdx != -1 && this->selectedSceneIdx != -1 &&
+            !this->clickedOnFirstAnswerBox && !this->clickedOnSecondAnswerBox && !this->clickedOnThirdAnswerBox) {
 			if (keyName == "Up" && this->selectedDialogueIdx > 0) {
 				this->sceneManager->moveDialogueUp(this->selectedSceneIdx, this->selectedDialogueIdx);
 				this->selectedDialogueIdx--;
@@ -2197,23 +2198,30 @@ void MainProgram::drawCurrentDialogue()
 			);
 		}
 
+        Bengine::GLTexture texture;
+        if (this->clickedOnTalkerBox) texture = Bengine::ResourceManager::getTexture("Textures/TalkerBoxHighlight.png");
+        else texture = Bengine::ResourceManager::getTexture("Textures/TalkerBoxBlue.png");
+
 		// Talker box
 		if (this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->talker) {
 			this->spriteBatch.draw(
 				this->talkerBoxDestRect,
 				this->mainUvRect,
-				Bengine::ResourceManager::getTexture("Textures/TalkerBoxBlue.png").id,
+				texture.id,
 				0.0f,
 				this->color
 			);
 		}
+
+        if (this->clickedOnDialogueBox) texture = Bengine::ResourceManager::getTexture("Textures/BlueboxHighlight.png");
+        else texture = Bengine::ResourceManager::getTexture("Textures/TextBoxBlueSolo.png");
 
 		// Dialogue box
 		if (this->sceneManager->getSceneBackgrounds().size() > this->selectedSceneIdx && this->currentDialogue->showTextBox) {
 			this->spriteBatch.draw(
 				this->textBoxDestRect,
 				this->mainUvRect,
-				Bengine::ResourceManager::getTexture("Textures/TextBoxBlueSolo.png").id,
+				texture.id,
 				0.0f,
 				this->color
 			);
@@ -2289,9 +2297,9 @@ void MainProgram::drawCurrentDialogue()
 			glm::vec4 dim = this->firstAnswerBoxDestRect;
 
 			this->spriteBatch.draw(
-				glm::vec4(dim.x, dim.y + 85, 350, 30),
+				glm::vec4(dim.x, dim.y + 85, 350, 35),
 				this->mainUvRect,
-				Bengine::ResourceManager::getTexture("Textures/blackbox.png").id,
+				Bengine::ResourceManager::getTexture("Textures/OptionBlackBox.png").id,
 				0.0f,
 				this->color
 			);
@@ -2299,9 +2307,9 @@ void MainProgram::drawCurrentDialogue()
 			dim = this->secondAnswerBoxDestRect;
 
 			this->spriteBatch.draw(
-				glm::vec4(dim.x, dim.y + 85, 350, 30),
+				glm::vec4(dim.x, dim.y + 85, 350, 35),
 				this->mainUvRect,
-				Bengine::ResourceManager::getTexture("Textures/blackbox.png").id,
+				Bengine::ResourceManager::getTexture("Textures/OptionBlackBox.png").id,
 				0.0f,
 				this->color
 			);
@@ -2309,9 +2317,9 @@ void MainProgram::drawCurrentDialogue()
 			dim = this->thirdAnswerBoxDestRect;
 
 			this->spriteBatch.draw(
-				glm::vec4(dim.x, dim.y + 85, 350, 30),
+				glm::vec4(dim.x, dim.y + 85, 350, 35),
 				this->mainUvRect,
-				Bengine::ResourceManager::getTexture("Textures/blackbox.png").id,
+				Bengine::ResourceManager::getTexture("Textures/OptionBlackBox.png").id,
 				0.0f,
 				this->color
 			);

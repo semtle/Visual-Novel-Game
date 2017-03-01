@@ -1,9 +1,10 @@
 #include "NewGameScreen.h"
 #include "Indices.h"
+#include "App.h"
 #include <Bengine/IMainGame.h>
 
-NewGameScreen::NewGameScreen(Bengine::Window* window, MainGameScreen* mainGameScreen) :
-    m_window(window), m_mainGameScreen(mainGameScreen)
+NewGameScreen::NewGameScreen(Bengine::Window* window, MainGameScreen* mainGameScreen, App* app) :
+    m_window(window), m_mainGameScreen(mainGameScreen), m_app(app)
 {
     m_screenIndex = SCREEN_INDEX_NEW_GAME;
 }
@@ -162,6 +163,7 @@ void NewGameScreen::checkInput()
     if (m_game->inputManager.isKeyPressed(SDLK_RETURN) && isPlayerNameValid()) {
         m_currentState = Bengine::ScreenState::CHANGE_NEXT;
         m_mainGameScreen->setPlayerName(m_playerName);
+        m_app->endMenuSong();
     }
 
     glm::vec2 mouseCoords = m_game->inputManager.getMouseCoords();
@@ -173,6 +175,7 @@ void NewGameScreen::checkInput()
             if (mouseCoords.y > 360 && mouseCoords.y < 398) {
                 m_currentState = Bengine::ScreenState::CHANGE_NEXT;
                 m_mainGameScreen->setPlayerName(m_playerName);
+                m_app->endMenuSong();
             }
         }
 

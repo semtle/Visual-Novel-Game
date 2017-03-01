@@ -51,6 +51,9 @@ void MainGameScreen::onEntry()
     // Init font
     m_spriteFont.init("Fonts/Chapaza/Chapaza.ttf", 32);
 
+    // Init audio engine
+    m_audioEngine.init();
+
     // Initialize shaders
     initShaders();
 
@@ -66,6 +69,7 @@ void MainGameScreen::onExit()
     m_spriteBatch.dispose();
     m_textureProgram.dispose();
     m_spriteFont.dispose();
+    /*m_audioEngine.destroy();*/
 }
 
 void MainGameScreen::update()
@@ -95,7 +99,67 @@ void MainGameScreen::update()
             m_currentDialogueStr = std::to_string(m_nextDlgFromOption);
             m_nextDlgFromOption = -1;
             updateNewDialogueValues();
+            m_changeToNextDialogue = false;
+
+            // Release the left button because otherwise player has to click twice
             m_game->inputManager.releaseKey(SDL_BUTTON_LEFT);
+        }
+    }
+
+    // Fade in
+    if (m_fadeIn) {
+        if (m_alphaValue < 255) {
+            m_alphaValue++;
+
+            Uint32 ticks = SDL_GetTicks();
+
+            // Check exit input so the game doesn't freeze and player can exit
+            while (SDL_GetTicks() - ticks < 10) {
+                SDL_Event event;
+                while (SDL_PollEvent(&event)) {
+                    if (event.type == SDL_QUIT) m_currentState = Bengine::ScreenState::EXIT_APPLICATION;
+                }
+            }
+        }
+        else {
+            m_fadeIn = false;
+
+            // Release the left button because otherwise player has to click twice
+            m_game->inputManager.releaseKey(SDL_BUTTON_LEFT);
+        }
+    }
+
+    // Fade out
+    if (m_fadingOut && !m_waitAfterClickedOption) {
+        if (m_alphaValue > 0) {
+            m_alphaValue--;
+
+            Uint32 ticks = SDL_GetTicks();
+
+            // Check exit input so the game doesn't freeze and player can exit
+            while (SDL_GetTicks() - ticks < 10) {
+                SDL_Event event;
+                while (SDL_PollEvent(&event)) {
+                    if (event.type == SDL_QUIT) m_currentState = Bengine::ScreenState::EXIT_APPLICATION;
+                }
+            }
+        }
+        else {
+            m_fadingOut = false;
+            m_shouldFadeOut = false;
+            m_alphaValue = 255;
+
+            // Release the left button because otherwise player has to click twice
+            m_game->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+            // Change to next dialogue
+            if (m_changeToNextDialogue) {
+                changeToNextDialogue();
+                m_changeToNextDialogue = false;
+            }
+            else {
+                m_changeToNextDialogue = true;
+            }
         }
     }
 }
@@ -119,10 +183,12 @@ void MainGameScreen::draw()
     glUniformMatrix4fv(pUniform, 1, GL_FALSE, &projectionMatrix[0][0]);
 
     drawImages();
+
     drawTexts();
 
     m_spriteBatch.end();
     m_spriteBatch.renderBatch();
+
     m_textureProgram.unuse();
 }
 
@@ -131,6 +197,8 @@ void MainGameScreen::drawImages()
     static const Bengine::ColorRGBA8 color(255, 255, 255, 255);
 
     { // Background
+        std::string name = m_file[m_currentSceneStr]["name"].as<std::string>();
+
         glm::vec4 destRect(-m_window->getScreenWidth() / 2, -m_window->getScreenHeight() / 2, m_window->getScreenWidth(), m_window->getScreenHeight());
         glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
         std::string path = m_file[m_currentSceneStr]["Background"].as<std::string>();
@@ -141,12 +209,12 @@ void MainGameScreen::drawImages()
             uvRect,
             texture.id,
             0.0f,
-            color
+            Bengine::ColorRGBA8(255, 255, 255, m_alphaValue)
         );
     }
 
     // Left Character
-    if (m_leftCharWidth != -1) {
+    if (m_leftCharWidth != -1 && !m_fadeIn && !m_fadingOut) {
         glm::vec4 destRect(-m_window->getScreenWidth() / 2 + 50, -m_window->getScreenHeight() / 2, m_leftCharWidth, CHAR_HEIGHT);
         glm::vec4 uvRect(0.0f, 0.0f, -1.0f, 1.0f);
         std::string path = m_file[m_currentSceneStr][m_currentDialogueStr]["left"].as<std::string>();
@@ -166,7 +234,7 @@ void MainGameScreen::drawImages()
     }
 
     // Right Character
-    if (m_rightCharWidth != -1) {
+    if (m_rightCharWidth != -1 && !m_fadeIn && !m_fadingOut) {
         glm::vec4 destRect(m_window->getScreenWidth() / 2 - 300, -m_window->getScreenHeight() / 2, m_rightCharWidth, CHAR_HEIGHT);
         glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
         std::string path = m_file[m_currentSceneStr][m_currentDialogueStr]["right"].as<std::string>();
@@ -186,7 +254,7 @@ void MainGameScreen::drawImages()
     }
 
     // Talker box
-    if (m_hasTalkerBox) {
+    if (m_hasTalkerBox && !m_fadeIn && !m_fadingOut) {
         glm::vec4 destRect(-m_window->getScreenWidth() / 2 + 20, -m_window->getScreenHeight() / 2 + 157, 159, 66);
         glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 
@@ -200,7 +268,7 @@ void MainGameScreen::drawImages()
     }
 
     // Dialogue box
-    if (m_hasDialogueBox) {
+    if (m_hasDialogueBox && !m_fadeIn && !m_fadingOut) {
         glm::vec4 destRect(-m_window->getScreenWidth() / 2 + 6, -m_window->getScreenHeight() / 2, 788, 177);
         glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 
@@ -214,7 +282,7 @@ void MainGameScreen::drawImages()
     }
 
     // Question boxes
-    if (m_isQuestion) {
+    if (m_isQuestion && ((!m_fadeIn && !m_fadingOut) || (m_waitAfterClickedOption))) {
         drawAnswerBoxes(m_clickedRedIdx, m_clickedGreenIdx);
     }
 }
@@ -225,7 +293,7 @@ void MainGameScreen::drawTexts()
     static const glm::vec2 bottomLeft(-m_window->getScreenWidth() / 2, -m_window->getScreenHeight() / 2);
 
     // Talker
-    if (m_hasTalkerBox) {
+    if (m_hasTalkerBox && (!m_fadeIn && !m_fadingOut)) {
         sprintf_s(buffer, "%s", m_talker.c_str());
 
         m_spriteFont.draw(
@@ -240,7 +308,7 @@ void MainGameScreen::drawTexts()
     }
 
     // Dialogue box message
-    if (m_hasDialogueBox) {
+    if (m_hasDialogueBox && (!m_fadeIn && !m_fadingOut)) {
         for (size_t i = 0; i < m_message.size(); i++) {
             sprintf_s(buffer, "%s", m_message[i].c_str());
 
@@ -256,7 +324,7 @@ void MainGameScreen::drawTexts()
     }
 
     // Options in question
-    if (m_isQuestion) {
+    if (m_isQuestion && ((!m_fadeIn && !m_fadingOut) || m_waitAfterClickedOption)) {
         drawAnswerTexts();
     }
 }
@@ -289,8 +357,8 @@ void MainGameScreen::drawAnswerBoxes(int redIdx /*= -1*/, int greenIdx /*= -1*/)
 
         if (m_answerBoxPositions.size() < 3) {
             // Get the locations of the boxes and push them to the position vector
-            float xp = (m_window->getScreenWidth() + x * 2) / 2;
-            float yp = m_window->getScreenHeight() / 2 + y - ANSWER_BOX_HEIGHT / 2;
+            float xp = static_cast<float>((m_window->getScreenWidth() + x * 2) / 2);
+            float yp = static_cast<float>(m_window->getScreenHeight() / 2 + y - ANSWER_BOX_HEIGHT / 2);
             m_answerBoxPositions.push_back(glm::vec2(xp, yp));
         }
 
@@ -358,17 +426,19 @@ void MainGameScreen::checkInput()
 
         switch (event.type) {
         case SDL_QUIT:
-            m_currentState = Bengine::ScreenState::EXIT_APPLICATION;
+            SDL_Quit();
             break;
         }
     }
 
     if (m_game->inputManager.isKeyPressed(SDL_BUTTON_LEFT)) {
-        if (m_isQuestion) {
-            handleOptionBoxInputs();
-        }
-        else {
-            changeToNextDialogue();
+        if (!m_fadeIn && !m_fadingOut) {
+            if (m_isQuestion) {
+                handleOptionBoxInputs();
+            }
+            else {
+                changeToNextDialogue();
+            }
         }
     }
 }
@@ -389,10 +459,18 @@ void MainGameScreen::initDay()
     m_currentDialogueIndex = 0;
     m_currentSceneStr = "0";
     m_currentDialogueStr = "0";
+    updateNewDialogueValues();
 }
 
 void MainGameScreen::changeToNextDialogue()
 {
+    // Don't change to next dialogue before faded out
+    if (m_shouldFadeOut) {
+        m_fadingOut = true;
+        m_alphaValue = 255;
+        return;
+    }
+
     YAML::Node next = m_file[m_currentSceneStr][m_currentDialogueStr]["next"];
     YAML::Node nextScene = m_file[m_currentSceneStr][m_currentDialogueStr]["next_scene"];
 
@@ -410,9 +488,6 @@ void MainGameScreen::changeToNextDialogue()
         m_currentDialogueIndex = 0;
     }
 
-    std::cout << "Current scene: " << m_currentSceneStr << "\n";
-    std::cout << "Current dialogue: " << m_currentDialogueStr << "\n";
-
     updateNewDialogueValues();
 }
 
@@ -423,6 +498,11 @@ void MainGameScreen::updateNewDialogueValues()
     YAML::Node right = m_file[m_currentSceneStr][m_currentDialogueStr]["right"];
     YAML::Node talker = m_file[m_currentSceneStr][m_currentDialogueStr]["talker"];
     YAML::Node message = m_file[m_currentSceneStr][m_currentDialogueStr]["message"];
+    YAML::Node fadeIn = m_file[m_currentSceneStr][m_currentDialogueStr]["FadeIn"];
+    YAML::Node fadeOut = m_file[m_currentSceneStr][m_currentDialogueStr]["FadeOut"];
+    YAML::Node startMusic = m_file[m_currentSceneStr][m_currentDialogueStr]["StartMusic"];
+    YAML::Node endMusic = m_file[m_currentSceneStr][m_currentDialogueStr]["EndMusic"];
+    YAML::Node soundEffect = m_file[m_currentSceneStr][m_currentDialogueStr]["SoundEffect"];
 
     // Left character
     if (left != nullptr) {
@@ -511,7 +591,7 @@ void MainGameScreen::updateNewDialogueValues()
     }
 
     // Question
-    if (dlg["name"].as<std::string>().find("Question") != std::string::npos) {
+    if (dlg["name"] != nullptr && dlg["name"].as<std::string>().find("Question") != std::string::npos) {
         m_isQuestion = true;
 
         m_option1 = dlg["Option 1"];
@@ -520,6 +600,36 @@ void MainGameScreen::updateNewDialogueValues()
     }
     else {
         m_isQuestion = false;
+    }
+
+    // Fade in
+    if (fadeIn != nullptr) {
+        m_fadeIn = true;
+        m_alphaValue = 0;
+    }
+    else {
+        m_fadeIn = false;
+    }
+
+    // Fade out
+    m_shouldFadeOut = (fadeOut != nullptr);
+
+    // Start music
+    if (startMusic != nullptr) {
+        std::string filePath = "Audio/Music/" + startMusic.as<std::string>();
+        m_currentSong = m_audioEngine.loadMusic(filePath);
+        m_currentSong.play(-1);
+    }
+
+    // End music
+    if (endMusic != nullptr) {
+        m_currentSong.stop();
+    }
+
+    // Sound effect
+    if (soundEffect != nullptr) {
+        m_currentSoundEffect = m_audioEngine.loadSoundEffect("Audio/Sound Effects/" + soundEffect.as<std::string>());
+        m_currentSoundEffect.play();
     }
 }
 
@@ -542,12 +652,24 @@ void MainGameScreen::handleOptionBoxInputs()
     if (clickedIdx != -1) {
         int diff = clickedIdx - m_answerBoxPositions.size();
         clickedIdx = abs(diff) - 1;
+
+        // Don't change to next dialogue before faded out
+        if (m_shouldFadeOut) {
+            m_fadingOut = true;
+            m_alphaValue = 255;
+            m_clickedBoxIdx = clickedIdx;
+        }
     }
 
+    handleClickedOption(clickedIdx);
+}
+
+void MainGameScreen::handleClickedOption(int idx)
+{
     // Get the index of the option that was clicked
-    if (clickedIdx != -1) {
+    if (idx != -1) {
         // Put the current option into string to access it from the YAML file
-        std::string optionString = "Option " + std::to_string(clickedIdx + 1);
+        std::string optionString = "Option " + std::to_string(idx + 1);
         // Get the current option
         YAML::Node currNode = m_file[m_currentSceneStr][m_currentDialogueStr][optionString];
 
@@ -556,15 +678,17 @@ void MainGameScreen::handleOptionBoxInputs()
         m_nextDlgFromOption = currNode["next"].as<int>();
 
         if (influence == 0) {
-            m_clickedRedIdx = clickedIdx;
+            m_clickedRedIdx = idx;
         }
         else if (influence == 2) {
-            m_clickedGreenIdx = clickedIdx;
+            m_clickedGreenIdx = idx;
         }
 
         // Wait a bit after answering the question so the player sees how the answer influenced the character
         m_waitAfterClickedOption = true;
         m_firstUpdateAfterOptionClick = true;
+
+        m_clickedBoxIdx = -1;
 
         // TODO: Get the name of the character who was asking the question
     }

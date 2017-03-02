@@ -316,11 +316,11 @@
         name: Question 1
         Option 1:
             text: Well, depends if she likes someone a bit goofy, you might have a chance.
-            influence: 1
+            influence: 2
             next: 25
         Option 2:
             text: Teemu-kun is right, you wouldn't have a chance with her.
-            influence: 1
+            influence: 0
             next: 30
         Option 3:
             text: Sorry man, but I can't really say anything.

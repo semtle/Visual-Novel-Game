@@ -47,6 +47,9 @@ public:
 	Music loadMusic(const std::string& filePath);
 	SoundEffect loadSoundEffect(const std::string& filePath);
 
+    void setVolume(float volume); ///< volume is a float between 0 and 1
+    int getMusicVolume();
+
 private:
 	std::map<std::string, Mix_Chunk*> m_effectMap;
 	std::map<std::string, Mix_Music*> m_musicMap;

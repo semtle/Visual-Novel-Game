@@ -42,7 +42,7 @@ void NewGameScreen::onEntry()
     m_spriteBatch.init();
 
     // Init font
-    m_spriteFont = std::make_unique<Bengine::SpriteFont>("Fonts/Chapaza/Chapaza.ttf", 32);
+    m_spriteFont = std::make_unique<Bengine::SpriteFont>("Fonts/cabin-condensed.regular.ttf", 32);
 
     // Initialize shaders
     initShaders();

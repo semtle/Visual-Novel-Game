@@ -14,6 +14,7 @@ void App::onInit()
 {
     m_audioEngine.init();
     m_menuSong = m_audioEngine.loadMusic("Audio/Music/MenuSong.mp3");
+    m_optionsScreen.init(&m_window);
 }
 
 void App::addScreens()
@@ -44,4 +45,15 @@ void App::startMenuSong()
 void App::endMenuSong()
 {
     m_menuSong.stop();
+}
+
+void App::setMusicVolume(float volume)
+{
+    m_audioEngine.setVolume(volume);
+}
+
+float App::getMusicVolume()
+{
+    float volume = (float)m_audioEngine.getMusicVolume();
+    return volume / 128.0f;
 }

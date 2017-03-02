@@ -36,7 +36,7 @@ private:
     bool isPlayerNameValid();
 
     int m_nextScreen = SCREEN_INDEX_NO_SCREEN;
-    std::string m_playerName = "Placeholder";
+    std::string m_playerName = "";
 
     MainGameScreen* m_mainGameScreen;
 

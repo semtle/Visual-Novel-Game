@@ -1,7 +1,9 @@
 #include "MainMenuScreen.h"
 #include "Indices.h"
 #include "App.h"
+#include "OptionsScreen.h"
 #include <Bengine/IMainGame.h>
+#include <fstream>
 
 MainMenuScreen::MainMenuScreen(Bengine::Window* window, App* app) :
     m_window(window), m_app(app)
@@ -25,7 +27,8 @@ int MainMenuScreen::getPreviousScreenIndex() const
 
 void MainMenuScreen::build()
 {
-    
+    m_optionsScreen.init(m_window);
+    loadOptions();
 }
 
 void MainMenuScreen::destroy()
@@ -54,12 +57,20 @@ void MainMenuScreen::onExit()
 {
     m_spriteBatch.dispose();
     m_textureProgram.dispose();
+    saveOptions();
 }
 
 void MainMenuScreen::update()
 {
     m_camera.update();
     checkInput();
+
+    if (m_optionsScreen.shouldUpdate()) {
+        m_app->setMusicVolume(m_optionsScreen.getVolume());
+        m_optionsScreen.setShouldUpdate(false);
+    }
+
+    if (m_optionsScreen.shouldClose()) m_showOptions = false;
 }
 
 void MainMenuScreen::draw()
@@ -96,6 +107,10 @@ void MainMenuScreen::draw()
         );
     }
 
+    if (m_showOptions) {
+        m_optionsScreen.draw(&m_spriteBatch);
+    }
+
     m_spriteBatch.end();
     m_spriteBatch.renderBatch();
     m_textureProgram.unuse();
@@ -112,12 +127,24 @@ void MainMenuScreen::checkInput()
         case SDL_QUIT:
             m_currentState = Bengine::ScreenState::EXIT_APPLICATION;
             break;
+        case SDL_MOUSEBUTTONDOWN:
+            if (m_showOptions)
+                m_optionsScreen.onMouseDown((float)event.button.x, (float)event.button.y);
+            break;
+        case SDL_MOUSEBUTTONUP:
+            if (m_showOptions)
+                m_optionsScreen.onMouseUp();
+            break;
+        case SDL_MOUSEMOTION:
+            if (m_showOptions)
+                m_optionsScreen.onMouseMove((float)event.motion.x, (float)event.motion.y);
+            break;
         }
     }
 
     glm::vec2 mouseCoords = m_game->inputManager.getMouseCoords();
 
-    if (m_game->inputManager.isKeyPressed(SDL_BUTTON_LEFT)) {
+    if (m_game->inputManager.isKeyPressed(SDL_BUTTON_LEFT) && !m_showOptions) {
         // All buttons are at the same x position and have same width
         if (mouseCoords.x > 305 && mouseCoords.x < 478) {
             // New game
@@ -133,7 +160,8 @@ void MainMenuScreen::checkInput()
 
             // Options
             if (mouseCoords.y > 507 && mouseCoords.y < 546) {
-                // TODO: Implement
+                m_optionsScreen.openOptions();
+                m_showOptions = true;
             }
 
             // Exit
@@ -151,4 +179,40 @@ void MainMenuScreen::initShaders()
     m_textureProgram.addAttribute("vertexColor");
     m_textureProgram.addAttribute("vertexUV");
     m_textureProgram.linkShaders();
+}
+
+void MainMenuScreen::loadOptions()
+{
+    std::ifstream file("SaveFiles/options.txt");
+    if (file.fail()) {
+        perror("SaveFiles/options.txt");
+        return;
+    }
+
+    // Load values from the options save file
+    float volume, textSpeed, autoPlaySpeed;
+    file >> volume >> textSpeed >> autoPlaySpeed;
+
+    file.close();
+
+    m_optionsScreen.setVolume(volume);
+    m_optionsScreen.setTextSpeed(textSpeed);
+    m_optionsScreen.setAutoPlaySpeed(autoPlaySpeed);
+
+    m_app->setMusicVolume(volume);
+}
+
+void MainMenuScreen::saveOptions()
+{
+    std::ofstream file("SaveFiles/options.txt");
+    if (file.fail()) {
+        perror("SaveFiles/options.txt");
+        return;
+    }
+
+    file << m_optionsScreen.getVolume() << '\n';
+    file << m_optionsScreen.getTextSpeed() << '\n';
+    file << m_optionsScreen.getAutoPlaySpeed() << '\n';
+
+    file.close();
 }

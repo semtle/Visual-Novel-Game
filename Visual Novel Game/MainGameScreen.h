@@ -10,6 +10,8 @@
 #include <Bengine/Vertex.h>
 #include <Bengine/AudioEngine.h>
 
+#include "OptionsScreen.h"
+
 #include <yaml-cpp/yaml.h>
 
 class MainGameScreen : public Bengine::IGameScreen
@@ -43,6 +45,8 @@ private:
     void handleOptionBoxInputs();
     void handleClickedOption(int idx);
     std::vector<std::string> getWrappedText(std::string text, const float& maxLength, const float& fontScale);
+    void loadOptions();
+    void saveOptions();
 
     std::string m_currentDay = "Monday";
     std::string m_currentSceneStr = "-1", m_currentDialogueStr = "-1";
@@ -67,6 +71,7 @@ private:
     bool m_fadingOut = false;
     bool m_firstUpdateAfterOptionClick = false;
     bool m_waitAfterClickedOption = false;
+    bool m_showOptions = false;
 
     std::string m_playerName = "";
     std::string m_talker = "";
@@ -77,6 +82,7 @@ private:
 
     YAML::Node m_file;
 
+    OptionsScreen m_optionsScreen;
     Bengine::SoundEffect m_currentSoundEffect;
     Bengine::Music m_currentSong;
     Bengine::Window* m_window;

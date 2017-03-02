@@ -8,6 +8,8 @@
 #include <Bengine/ResourceManager.h>
 #include <Bengine/Vertex.h>
 
+#include "OptionsScreen.h"
+
 class App;
 
 class MainMenuScreen : public Bengine::IGameScreen
@@ -25,14 +27,19 @@ public:
     virtual void update() override;
     virtual void draw() override;
 
+    OptionsScreen getOptionsScreen() const { return m_optionsScreen; }
 private:
     void checkInput();
     void initShaders();
+    void loadOptions();
+    void saveOptions();
 
     int m_nextScreen = SCREEN_INDEX_NO_SCREEN;
     bool m_isBuilt = false;
+    bool m_showOptions = false;
     
     App* m_app;
+    OptionsScreen m_optionsScreen;
     Bengine::Window* m_window;
     Bengine::Camera2D m_camera;
     Bengine::SpriteBatch m_spriteBatch;

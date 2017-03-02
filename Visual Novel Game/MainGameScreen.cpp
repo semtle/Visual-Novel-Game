@@ -3,6 +3,7 @@
 #include <fstream>
 #include <Bengine/IMainGame.h>
 
+const int BASE_TEXT_SPEED_IDX = 10;
 const int CHAR_HEIGHT = 600;
 const float MESSAGE_SCALE = 0.55f;
 const int ANSWER_BOX_SPACE = 160;
@@ -158,6 +159,7 @@ void MainGameScreen::update()
             }
 
             m_clickedGreenIdx = -1;
+            m_clickedBoxIdx = -1;
             m_clickedRedIdx = -1;
             m_waitAfterClickedOption = false;
             m_currentDialogueIndex = m_nextDlgFromOption;
@@ -183,6 +185,19 @@ void MainGameScreen::update()
         m_rightCharAlpha += 8;
         if (m_rightCharAlpha > 255) {
             m_rightCharAlpha = 255;
+        }
+    }
+
+    // Dialogue message
+    if (m_fullMessage != "" && m_currentMessage != m_fullMessage && !m_showOptions) {
+        if (m_currentTextSpeedIdx <= m_optionsScreen.getTextSpeed() * 10) {
+            int idx = m_currentMessage.length() + 1;
+            m_currentMessage = m_fullMessage.substr(0, idx);
+
+            m_currentTextSpeedIdx = BASE_TEXT_SPEED_IDX;
+        }
+        else {
+            m_currentTextSpeedIdx--;
         }
     }
 }
@@ -361,10 +376,12 @@ void MainGameScreen::drawTexts()
         );
     }
 
+    std::vector<std::string> msg = getWrappedText(m_currentMessage, 700.0f, MESSAGE_SCALE);
+
     // Dialogue box message
     if (m_hasDialogueBox && (!m_fadeIn && !m_fadingOut)) {
-        for (size_t i = 0; i < m_message.size(); i++) {
-            sprintf_s(buffer, "%s", m_message[i].c_str());
+        for (size_t i = 0; i < msg.size(); i++) {
+            sprintf_s(buffer, "%s", msg[i].c_str());
 
             m_spriteFont.draw(
                 m_spriteBatch,
@@ -386,6 +403,7 @@ void MainGameScreen::drawTexts()
 void MainGameScreen::drawAnswerBoxes(int redIdx /*= -1*/, int greenIdx /*= -1*/)
 {
     static const Bengine::GLTexture blueBox = Bengine::ResourceManager::getTexture("Textures/Visuals/BlueOptionBox.png");
+    static const Bengine::GLTexture blueBoxHighlight = Bengine::ResourceManager::getTexture("Textures/Visuals/BlueOptionHighlight.png");
     static const Bengine::GLTexture greenBox = Bengine::ResourceManager::getTexture("Textures/Visuals/GreenOptionBox.png");
     static const Bengine::GLTexture redBox = Bengine::ResourceManager::getTexture("Textures/Visuals/RedOptionBox.png");
     glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
@@ -397,6 +415,7 @@ void MainGameScreen::drawAnswerBoxes(int redIdx /*= -1*/, int greenIdx /*= -1*/)
         float x = -ANSWER_BOX_WIDTH / 2;
         
         Bengine::GLTexture texture = blueBox;
+        if (m_waitAfterClickedOption && m_clickedBoxIdx == idx) texture = blueBoxHighlight;
         
         if (redIdx == idx) texture = redBox;
         else if (greenIdx == idx) texture = greenBox;
@@ -502,7 +521,10 @@ void MainGameScreen::checkInput()
                 handleOptionBoxInputs();
             }
             else {
-                changeToNextDialogue();
+                if (m_currentMessage == m_fullMessage)
+                    changeToNextDialogue();
+                else
+                    m_currentMessage = m_fullMessage;
             }
         }
     }
@@ -596,6 +618,9 @@ void MainGameScreen::updateNewDialogueValues()
     YAML::Node endMusic = m_file[m_currentSceneStr][m_currentDialogueStr]["EndMusic"];
     YAML::Node soundEffect = m_file[m_currentSceneStr][m_currentDialogueStr]["SoundEffect"];
 
+    m_currentMessage = "";
+    m_fullMessage = "";
+
     // Left character
     if (left != nullptr) {
         std::string leftStr = left.as<std::string>();
@@ -684,6 +709,7 @@ void MainGameScreen::updateNewDialogueValues()
         m_hasDialogueBox = true;
 
         std::string msg = message.as<std::string>();
+        m_fullMessage = msg;
 
         // Replace all "player's" with player's name
         std::string::size_type n = 0;
@@ -798,11 +824,11 @@ void MainGameScreen::handleClickedOption(int idx)
             m_clickedGreenIdx = idx;
         }
 
+        m_clickedBoxIdx = idx;
+
         // Wait a bit after answering the question so the player sees how the answer influenced the character
         m_waitAfterClickedOption = true;
         m_firstUpdateAfterOptionClick = true;
-
-        m_clickedBoxIdx = -1;
 
         // TODO: Get the name of the character who was asking the question
     }

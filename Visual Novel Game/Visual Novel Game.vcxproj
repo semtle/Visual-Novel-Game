@@ -145,6 +145,7 @@
     <ClCompile Include="MainGameScreen.cpp" />
     <ClCompile Include="MainMenuScreen.cpp" />
     <ClCompile Include="NewGameScreen.cpp" />
+    <ClCompile Include="OptionsScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h" />
@@ -154,6 +155,7 @@
     <ClInclude Include="MainGameScreen.h" />
     <ClInclude Include="MainMenuScreen.h" />
     <ClInclude Include="NewGameScreen.h" />
+    <ClInclude Include="OptionsScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

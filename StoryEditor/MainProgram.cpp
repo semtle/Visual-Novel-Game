@@ -45,7 +45,7 @@ void MainProgram::initSystems()
 	this->fontBatch.init();
 
 	// Initialize font
-	this->spriteFont = new Bengine::SpriteFont("Fonts/timeburnernormal.ttf", 32);
+	this->spriteFont = new Bengine::SpriteFont("Fonts/cabin-condensed.regular.ttf", 32);
 
 	// Initialize the scene manager
 	this->sceneManager = new SceneManager();

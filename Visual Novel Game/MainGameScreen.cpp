@@ -50,7 +50,7 @@ void MainGameScreen::onEntry()
     m_spriteBatch.init();
 
     // Init font
-    m_spriteFont.init("Fonts/Chapaza/Chapaza.ttf", 32);
+    m_spriteFont.init("Fonts/cabin-condensed.regular.ttf", 32);
 
     // Init audio engine
     m_audioEngine.init();

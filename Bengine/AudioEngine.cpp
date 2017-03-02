@@ -152,4 +152,15 @@ SoundEffect AudioEngine::loadSoundEffect(const std::string& filePath)
 }
 
 
+void AudioEngine::setVolume(float volume)
+{
+    Mix_VolumeMusic(volume * 128);
+    Mix_Volume(-1, volume * 128);
+}
+
+int AudioEngine::getMusicVolume()
+{
+    return Mix_VolumeMusic(-1);
+}
+
 }

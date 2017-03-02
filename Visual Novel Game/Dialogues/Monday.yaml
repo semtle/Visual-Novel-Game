@@ -5,6 +5,8 @@
 
     0:
         name: Narrative 1
+        FadeIn: true
+        StartMusic: JunkyFunk.mp3
         message: Bright, warm rays of light spills between my curtains.
         next: 1
     1:

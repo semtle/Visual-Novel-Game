@@ -2424,7 +2424,7 @@ void MainProgram::drawCurrentDialogue()
 			);
 		}
 
-        /*if (this->clickedOnDialogueBox) texture = Bengine::ResourceManager::getTexture("Textures/BlueboxHighlight.png");*/
+        /*if (this->clickedOnDialogueBox) texture = Bengine::ResourceManager::getTexture("Textures/TextBoxHighlight.png");*/
         /*else */texture = Bengine::ResourceManager::getTexture("Textures/TextBoxBlueSolo.png");
 
 		// Dialogue box

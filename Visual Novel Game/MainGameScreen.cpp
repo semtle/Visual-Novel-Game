@@ -91,35 +91,6 @@ void MainGameScreen::update()
         m_optionsScreen.setShouldClose(false);
     }
 
-    if (m_firstUpdateAfterOptionClick) {
-        m_firstUpdateAfterOptionClick = false;
-    }
-    else {
-        if (m_waitAfterClickedOption) {
-            Uint32 ticks = SDL_GetTicks();
-
-            // Check exit input so the game doesn't freeze and player can exit
-            while (SDL_GetTicks() - ticks <= 1250) {
-                SDL_Event event;
-                while (SDL_PollEvent(&event)) {
-                    if (event.type == SDL_QUIT) m_currentState = Bengine::ScreenState::EXIT_APPLICATION;
-                }
-            }
-
-            m_clickedGreenIdx = -1;
-            m_clickedRedIdx = -1;
-            m_waitAfterClickedOption = false;
-            m_currentDialogueIndex = m_nextDlgFromOption;
-            m_currentDialogueStr = std::to_string(m_nextDlgFromOption);
-            m_nextDlgFromOption = -1;
-            updateNewDialogueValues();
-            m_changeToNextDialogue = false;
-
-            // Release the left button because otherwise player has to click twice
-            m_game->inputManager.releaseKey(SDL_BUTTON_LEFT);
-        }
-    }
-
     // Fade in
     if (m_fadeIn) {
         if (m_alphaValue < 255) {
@@ -167,13 +138,51 @@ void MainGameScreen::update()
             m_game->inputManager.releaseKey(SDL_BUTTON_LEFT);
 
             // Change to next dialogue
-            if (m_changeToNextDialogue) {
-                changeToNextDialogue();
-                m_changeToNextDialogue = false;
+            changeToNextDialogue();
+        }
+    }
+
+    if (m_firstUpdateAfterOptionClick) {
+        m_firstUpdateAfterOptionClick = false;
+    }
+    else {
+        if (m_waitAfterClickedOption) {
+            Uint32 ticks = SDL_GetTicks();
+
+            // Check exit input so the game doesn't freeze and player can exit
+            while (SDL_GetTicks() - ticks <= 1250) {
+                SDL_Event event;
+                while (SDL_PollEvent(&event)) {
+                    if (event.type == SDL_QUIT) m_currentState = Bengine::ScreenState::EXIT_APPLICATION;
+                }
             }
-            else {
-                m_changeToNextDialogue = true;
-            }
+
+            m_clickedGreenIdx = -1;
+            m_clickedRedIdx = -1;
+            m_waitAfterClickedOption = false;
+            m_currentDialogueIndex = m_nextDlgFromOption;
+            m_currentDialogueStr = std::to_string(m_nextDlgFromOption);
+            m_nextDlgFromOption = -1;
+            updateNewDialogueValues();
+
+            // Release the left button because otherwise player has to click twice
+            m_game->inputManager.releaseKey(SDL_BUTTON_LEFT);
+        }
+    }
+
+    // Left char alpha
+    if (m_leftCharAlpha < 255) {
+        m_leftCharAlpha += 8;
+        if (m_leftCharAlpha > 255) {
+            m_leftCharAlpha = 255;
+        }
+    }
+
+    // Right char alpha
+    if (m_rightCharAlpha < 255) {
+        m_rightCharAlpha += 8;
+        if (m_rightCharAlpha > 255) {
+            m_rightCharAlpha = 255;
         }
     }
 }
@@ -230,7 +239,21 @@ void MainGameScreen::drawImages()
         );
     }
 
-    // Left Character
+    // Last Left Character
+    if (m_leftCharWidth != -1 && m_fadeLeftChar && !m_fadeIn && !m_fadingOut) {
+        glm::vec4 destRect(-m_window->getScreenWidth() / 2 + 50, -m_window->getScreenHeight() / 2, m_leftCharWidth, CHAR_HEIGHT);
+        glm::vec4 uvRect(0.0f, 0.0f, -1.0f, 1.0f);
+
+        m_spriteBatch.draw(
+            destRect,
+            uvRect,
+            m_lastLeftTexture.id,
+            0.0f,
+            color
+        );
+    }
+
+    // Current Left Character
     if (m_leftCharWidth != -1 && !m_fadeIn && !m_fadingOut) {
         glm::vec4 destRect(-m_window->getScreenWidth() / 2 + 50, -m_window->getScreenHeight() / 2, m_leftCharWidth, CHAR_HEIGHT);
         glm::vec4 uvRect(0.0f, 0.0f, -1.0f, 1.0f);
@@ -246,11 +269,25 @@ void MainGameScreen::drawImages()
             uvRect,
             texture.id,
             0.0f,
+            Bengine::ColorRGBA8(255, 255, 255, m_leftCharAlpha)
+        );
+    }
+
+    // Last Right Character
+    if (m_rightCharWidth != -1 && m_fadeRightChar && !m_fadeIn && !m_fadingOut) {
+        glm::vec4 destRect(m_window->getScreenWidth() / 2 - 300, -m_window->getScreenHeight() / 2, m_rightCharWidth, CHAR_HEIGHT);
+        glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
+
+        m_spriteBatch.draw(
+            destRect,
+            uvRect,
+            m_lastRightTexture.id,
+            0.0f,
             color
         );
     }
 
-    // Right Character
+    // Current Right Character
     if (m_rightCharWidth != -1 && !m_fadeIn && !m_fadingOut) {
         glm::vec4 destRect(m_window->getScreenWidth() / 2 - 300, -m_window->getScreenHeight() / 2, m_rightCharWidth, CHAR_HEIGHT);
         glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
@@ -266,7 +303,7 @@ void MainGameScreen::drawImages()
             uvRect,
             texture.id,
             0.0f,
-            color
+            Bengine::ColorRGBA8(255, 255, 255, m_rightCharAlpha)
         );
     }
 
@@ -510,14 +547,32 @@ void MainGameScreen::changeToNextDialogue()
 
     YAML::Node next = m_file[m_currentSceneStr][m_currentDialogueStr]["next"];
     YAML::Node nextScene = m_file[m_currentSceneStr][m_currentDialogueStr]["next_scene"];
+    YAML::Node left = m_file[m_currentSceneStr][m_currentDialogueStr]["left"];
+    YAML::Node right = m_file[m_currentSceneStr][m_currentDialogueStr]["right"];
 
     // Change to next dialogue in the same scene
     if (next != nullptr) {
+        if (left != nullptr) {
+            std::string l = left.as<std::string>();
+            m_lastLeftChar = l.substr(0, l.find(","));
+
+            m_lastLeftTexture = Bengine::ResourceManager::getTexture("Textures/Characters/" + m_lastLeftChar + "/" + l.substr(l.find(", ") + 2, l.length()));
+        }
+        if (right != nullptr) {
+            std::string r = right.as<std::string>();
+            m_lastRightChar = r.substr(0, r.find(","));
+
+            m_lastRightTexture = Bengine::ResourceManager::getTexture("Textures/Characters/" + m_lastRightChar + "/" + r.substr(r.find(", ") + 2, r.length()));
+        }
+
         m_currentDialogueStr = next.as<std::string>();
         m_currentDialogueIndex = stoi(m_currentDialogueStr);
     }
     // Change to next scene
     else if (nextScene != nullptr) {
+        m_fadeLeftChar = false;
+        m_fadeRightChar = false;
+
         m_currentSceneStr = nextScene.as<std::string>();
         m_currentSceneIndex = stoi(m_currentSceneStr);
 
@@ -546,6 +601,15 @@ void MainGameScreen::updateNewDialogueValues()
         std::string leftStr = left.as<std::string>();
         std::string name = leftStr.substr(0, leftStr.find(","));
 
+        if (name == m_lastLeftChar && m_currentDialogueIndex != 0) {
+            m_fadeLeftChar = true;
+            m_leftCharAlpha = 0;
+        }
+        else {
+            m_fadeLeftChar = false;
+            m_leftCharAlpha = 255;
+        }
+
         if (name == "Fumiko-san") {
             m_leftCharWidth = 220;
         }
@@ -570,6 +634,15 @@ void MainGameScreen::updateNewDialogueValues()
     if (right != nullptr) {
         std::string rightStr = right.as<std::string>();
         std::string name = rightStr.substr(0, rightStr.find(","));
+
+        if (name == m_lastRightChar && m_currentDialogueIndex != 0) {
+            m_fadeRightChar = true;
+            m_rightCharAlpha = 0;
+        }
+        else {
+            m_fadeRightChar = false;
+            m_rightCharAlpha = 255;
+        }
 
         if (name == "Fumiko-san") {
             m_rightCharWidth = 220;
@@ -596,6 +669,10 @@ void MainGameScreen::updateNewDialogueValues()
         m_hasTalkerBox = true;
 
         m_talker = talker.as<std::string>();
+
+        if (m_talker == "Player" || m_talker == "player") {
+            m_talker = m_playerName;
+        }
     }
     else {
         m_hasTalkerBox = false;

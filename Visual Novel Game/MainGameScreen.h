@@ -61,7 +61,16 @@ private:
     int m_leftCharWidth = -1;
     int m_rightCharWidth = -1;
     int m_alphaValue = 255;
+    int m_leftCharAlpha = 255;
+    int m_rightCharAlpha = 255;
 
+    std::string m_lastLeftChar = "";
+    std::string m_lastRightChar = "";
+
+    Bengine::GLTexture m_lastLeftTexture, m_lastRightTexture;
+
+    
+    bool m_fadeLeftChar = false, m_fadeRightChar = false;
     bool m_hasDialogueBox = false;
     bool m_hasTalkerBox = false;
     bool m_isQuestion = false;

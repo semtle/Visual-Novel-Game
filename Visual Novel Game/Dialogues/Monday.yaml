@@ -59,6 +59,7 @@
         next: 12
     12:
         name: Player 5
+        FadeOut: true
         talker: Player
         message: Well, I better hurry and get going, but first, where's my pants at?
         next_scene: 1
@@ -69,6 +70,8 @@
 
     0:
         name: Run Boy
+        FadeIn: true
+        FadeOut: true
         next_scene: 2
 2:
     name: Infrnt Of The School
@@ -77,6 +80,7 @@
 
     0:
         name: Narrative 1
+        FadeIn: true
         message: I can see the school's gates in the distance getting closer and closer.
         next: 1
     1:

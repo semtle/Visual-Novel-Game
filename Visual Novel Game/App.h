@@ -10,6 +10,7 @@
 #include "MainMenuScreen.h"
 #include "NewGameScreen.h"
 #include "MainGameScreen.h"
+#include "OptionsScreen.h"
 
 class App : public Bengine::IMainGame
 {
@@ -23,9 +24,14 @@ public:
 
     void startMenuSong();
     void endMenuSong();
+
+    void setMusicVolume(float volume);
+    float getMusicVolume();
 private:
     Bengine::AudioEngine m_audioEngine;
     Bengine::Music m_menuSong;
+
+    OptionsScreen m_optionsScreen;
 
     std::unique_ptr<LoadingScreen> m_menuLoadingScreen = nullptr;
     std::unique_ptr<MainMenuScreen> m_mainMenuScreen = nullptr;

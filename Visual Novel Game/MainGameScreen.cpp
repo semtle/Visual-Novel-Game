@@ -1,5 +1,6 @@
 #include "MainGameScreen.h"
 #include "Indices.h"
+#include <fstream>
 #include <Bengine/IMainGame.h>
 
 const int CHAR_HEIGHT = 600;
@@ -32,7 +33,7 @@ int MainGameScreen::getPreviousScreenIndex() const
 
 void MainGameScreen::build()
 {
-    // Empty
+    m_optionsScreen.init(m_window);
 }
 
 void MainGameScreen::destroy()
@@ -57,6 +58,9 @@ void MainGameScreen::onEntry()
     // Initialize shaders
     initShaders();
 
+    // Load options
+    loadOptions();
+
     // Initialize current day
     initDay();
 
@@ -69,13 +73,23 @@ void MainGameScreen::onExit()
     m_spriteBatch.dispose();
     m_textureProgram.dispose();
     m_spriteFont.dispose();
-    /*m_audioEngine.destroy();*/
+    saveOptions();
 }
 
 void MainGameScreen::update()
 {
     m_camera.update();
     checkInput();
+
+    if (m_optionsScreen.shouldUpdate()) {
+        m_audioEngine.setVolume(m_optionsScreen.getVolume());
+        m_optionsScreen.setShouldUpdate(false);
+    }
+
+    if (m_optionsScreen.shouldClose()) {
+        m_showOptions = false;
+        m_optionsScreen.setShouldClose(false);
+    }
 
     if (m_firstUpdateAfterOptionClick) {
         m_firstUpdateAfterOptionClick = false;
@@ -185,6 +199,9 @@ void MainGameScreen::draw()
     drawImages();
 
     drawTexts();
+
+    if (m_showOptions)
+        m_optionsScreen.draw(&m_spriteBatch);
 
     m_spriteBatch.end();
     m_spriteBatch.renderBatch();
@@ -428,17 +445,37 @@ void MainGameScreen::checkInput()
         case SDL_QUIT:
             SDL_Quit();
             break;
+        case SDL_MOUSEBUTTONDOWN:
+            if (m_showOptions)
+                m_optionsScreen.onMouseDown((float)event.button.x, (float)event.button.y);
+            break;
+        case SDL_MOUSEBUTTONUP:
+            if (m_showOptions)
+                m_optionsScreen.onMouseUp();
+            break;
+        case SDL_MOUSEMOTION:
+            if (m_showOptions)
+                m_optionsScreen.onMouseMove((float)event.motion.x, (float)event.motion.y);
         }
     }
 
     if (m_game->inputManager.isKeyPressed(SDL_BUTTON_LEFT)) {
-        if (!m_fadeIn && !m_fadingOut) {
+        if (!m_fadeIn && !m_fadingOut && !m_showOptions) {
             if (m_isQuestion) {
                 handleOptionBoxInputs();
             }
             else {
                 changeToNextDialogue();
             }
+        }
+    }
+
+    if (m_game->inputManager.isKeyPressed(SDLK_o)) {
+        if (m_showOptions) {
+            m_showOptions = false;
+        }
+        else  {
+            if (!m_fadingOut && !m_fadeIn) m_showOptions = true;
         }
     }
 }
@@ -724,4 +761,40 @@ std::vector<std::string> MainGameScreen::getWrappedText(std::string text, const 
     if (text != "") lines.push_back(text);
 
     return lines;
+}
+
+void MainGameScreen::loadOptions()
+{
+    std::ifstream file("SaveFiles/options.txt");
+    if (file.fail()) {
+        perror("SaveFiles/options.txt");
+        return;
+    }
+
+    // Load values from the options save file
+    float volume, textSpeed, autoPlaySpeed;
+    file >> volume >> textSpeed >> autoPlaySpeed;
+
+    file.close();
+
+    m_optionsScreen.setVolume(volume);
+    m_optionsScreen.setTextSpeed(textSpeed);
+    m_optionsScreen.setAutoPlaySpeed(autoPlaySpeed);
+
+    m_audioEngine.setVolume(volume);
+}
+
+void MainGameScreen::saveOptions()
+{
+    std::ofstream file("SaveFiles/options.txt");
+    if (file.fail()) {
+        perror("SaveFiles/options.txt");
+        return;
+    }
+
+    file << m_optionsScreen.getVolume() << '\n';
+    file << m_optionsScreen.getTextSpeed() << '\n';
+    file << m_optionsScreen.getAutoPlaySpeed() << '\n';
+
+    file.close();
 }

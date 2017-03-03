@@ -29,7 +29,7 @@ void MainProgram::initSystems()
 	std::cout << "Creating window...\n";
 
 	// Create the window
-	this->window.create("Teemun fantasiat editor", this->screenWidth, this->screenHeight, 0, false);
+	this->window.create("Game Editor", this->screenWidth, this->screenHeight, 0, false);
 
 	// Initialize shaders
 	initShaders();

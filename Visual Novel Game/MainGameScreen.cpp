@@ -809,7 +809,6 @@ void MainGameScreen::updateNewDialogueValues()
         m_hasDialogueBox = true;
 
         std::string msg = message.as<std::string>();
-        m_fullMessage = msg;
 
         // Replace all "player's" with player's name
         std::string::size_type n = 0;
@@ -823,7 +822,10 @@ void MainGameScreen::updateNewDialogueValues()
             n += 6;
         }
 
-        m_message = getWrappedText(msg, 700.0f, MESSAGE_SCALE);
+		m_message = getWrappedText(msg, 700.0f, MESSAGE_SCALE);
+		for (std::string s : m_message) {
+			m_fullMessage += s;
+		}
     }
     else {
         m_hasDialogueBox = false;

@@ -139,6 +139,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
+    <ClCompile Include="LoadGameScreen.cpp" />
     <ClCompile Include="LoadingFilesFetcher.cpp" />
     <ClCompile Include="LoadingScreen.cpp" />
     <ClCompile Include="main.cpp" />
@@ -150,6 +151,7 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="Indices.h" />
+    <ClInclude Include="LoadGameScreen.h" />
     <ClInclude Include="LoadingFilesFetcher.h" />
     <ClInclude Include="LoadingScreen.h" />
     <ClInclude Include="MainGameScreen.h" />

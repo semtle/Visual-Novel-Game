@@ -173,6 +173,7 @@
 
     0:
         name: Makoto 1
+        FadeIn: true
         talker: Makoto-kun
         right: Makoto-kun, smiling_side_uniform.png
         message: Guys, look who's finally here.
@@ -215,7 +216,7 @@
     7:
         name: Narrative 2
         right: Makoto-kun, confident_uniform.png
-        message: Usually he's a chill guy...
+        message: Usually he's a chill guy, but i guess that's his way of showing friendship.
         next: 8
     8:
         name: Teemu 1
@@ -351,16 +352,16 @@
     27:
         name: Question 1
         Option 1:
-            text: Option not set.
-            influence: 1
+            text: I think he could do it, if given the chance
+            influence: 2
             next: 28
         Option 2:
             text: Teemu-kun is right, you wouldn't have a chance with her.
-            influence: 1
+            influence: 0
             next: 33
         Option 3:
             text: Sorry man, but I can't really say anything.
-            influence: 2
+            influence: 1
             next: 38
     28:
         name: Makoto 1.1
@@ -419,14 +420,14 @@
         talker: Makoto-kun
         left: Teemu-kun, normal_uniform.png
         right: Makoto-kun, confident_left_uniform.png
-        message: That's not fair! I'll show you my game when I get the chance to prove them.
+        message: That's not fair! I'll show you my A-game when I get the chance!
         next: 35
     35:
         name: Makoto 2.2
         talker: Makoto-kun
         left: Teemu-kun, surprised_uniform.png
         right: Makoto-kun, laughing_uniform.png
-        message: Atleast I'm not going after 3D girls unlike you.
+        message: Atleast I'm not going after 2D girls unlike you Teemu-kun.
         next: 36
     36:
         name: Teemu 2.2
@@ -595,8 +596,263 @@
     Background: cafeday.PNG
 
     0:
-        name: Narrator 1
-        message: Our School's cafeteria is a bit small and it's usually
+        name: Player 1
+        FadeIn: true
+        talker: Player
+        message: Wow! There's no one here.
+        next: 1
+    1:
+        name: Player 2
+        talker: Player
+        message: Did the class really end so early?
+        next: 2
+    2:
+        name: Narrative 1
+        message: Usually this place is packed...
+        next: 3
+    3:
+        name: Makoto 1
+        talker: Makoto-kun
+        right: Makoto-kun, normal_uniform.png
+        message: I guess we can get lucky too!
+        next: 4
+    4:
+        name: Teemu 1
+        talker: Teemu-kun
+        left: Teemu-kun, happy_uniform.png
+        right: Makoto-kun, normal_uniform.png
+        message: It does seem like we got lucky.
+        next: 5
+    5:
+        name: Player 3
+        talker: Player
+        left: Teemu-kun, normal_uniform.png
+        right: Makoto-kun, blush_center_uniform.png
+        message: Well, where should we sit then?
+        next: 6
+    6:
+        name: Teemu 2
+        talker: Teemu-kun
+        left: Teemu-kun, normal_uniform.png
+        right: Makoto-kun, blush_uniform.png
+        message: Let's just sit here.
+        next: 7
+    7:
+        name: Narrative 2
+        left: Teemu-kun, worried_uniform.png
+        message: Huh? where did Makoto-kun go.
+        next: 8
+    8:
+        name: Narrative 3
+        left: Teemu-kun, worried_uniform.png
+        message: He was just behind me.
+        next: 9
+    9:
+        name: Teemu 3
+        talker: Teemu-kun
+        left: Teemu-kun, smiling_uniform.png
+        message: And there he goes...
+        next: 10
+    10:
+        name: Narrative 4
+        left: Teemu-kun, smiling_uniform.png
+        message: Why is he running away from us?
+        next: 11
+    11:
+        name: Teemu 4
+        talker: Teemu-kun
+        left: Teemu-kun, happy_uniform.png
+        message: Let's hope he won't find trouble.
+        next: 12
+    12:
+        name: Player 4
+        talker: Player
+        left: Teemu-kun, smiling_uniform.png
+        message: Give him some slack Teemu-kun.
+        next: 13
+    13:
+        name: Player 5
+        talker: Player
+        left: Teemu-kun, normal_uniform.png
+        message: Even if you don't believe it, he has his moments too.
+        next: 14
+    14:
+        name: Teemu 5
+        talker: Teemu-kun
+        left: Teemu-kun, happy_uniform.png
+        message: That's what I'm worried about.
+        next: 15
+    15:
+        name: Makoto 2
+        talker: Makoto-kun
+        left: Teemu-kun, surprised_uniform.png
+        message: Hey guys! Come fast!
+        next: 16
+    16:
+        name: Narrative 5
+        left: Teemu-kun, angry_uniform.png
+        message: This can't be good...
+        next: 17
+    17:
+        name: Teemu 6
+        talker: Teemu-kun
+        left: Teemu-kun, laughing_uniform.png
+        message: Then, shall we?
+        next: 18
+    18:
+        name: Player 6
+        FadeOut: true
+        talker: Player
+        left: Teemu-kun, laughing_uniform.png
+        message: Here  goes nothing...
+        next: 19
+    19:
+        name: Narrative 6
+        FadeIn: true
+        left: Makoto-kun, confident_left_uniform.png
+        message: Looks like Makoto-kun is with a girl...
+        next: 20
+    20:
+        name: Makoto 3
+        talker: Makoto-kun
+        left: Makoto-kun, laughing_uniform.png
+        message: Hey, hey, Look whom I found sitting here all alone.
+        next: 21
+    21:
+        name: Narrative 7
+        left: Makoto-kun, confident_left_uniform.png
+        right: Maiko-san, blush_uniform.png
+        message: She looks a bit shy...
+        next: 22
+    22:
+        name: Maiko 1
+        talker: Maiko-san
+        left: Makoto-kun, normal_uniform.png
+        right: Maiko-san, blush_uniform.png
+        message: You must be Makoto-kun's friends.
+        next: 23
+    23:
+        name: Player 7
+        talker: Player
+        left: Makoto-kun, confident_uniform.png
+        right: Maiko-san, normal_uniform.png
+        message: Who's she?
+        next: 24
+    24:
+        name: Maiko 2
+        talker: Maiko-san
+        left: Makoto-kun, normal_uniform.png
+        right: Maiko-san, worried_uniform.png
+        message: Aaah! Sorry for not introducing myself.
+        next: 25
+    25:
+        name: Maiko 3
+        talker: Maiko-san
+        left: Makoto-kun, confident_left_uniform.png
+        right: Maiko-san, worried_uniform.png
+        message: I'm Maiko-san, nice to meet you guys!
+        next: 26
+    26:
+        name: Teemu 7
+        talker: Teemu-kun
+        left: Teemu-kun, blush_uniform.png
+        right: Maiko-san, normal_uniform.png
+        message: Excuse me for my friend's rudeness.
+        next: 27
+    27:
+        name: Player 8
+        talker: Player
+        left: Teemu-kun, laughing_uniform.png
+        right: Maiko-san, normal_uniform.png
+        message: No, I should be the one apologizing here...
+        next: 28
+    28:
+        name: Teemu 8
+        talker: Teemu-kun
+        left: Teemu-kun, happy_uniform.png
+        right: Maiko-san, smiling_uniform.png
+        message: I'm Teemu-kun and this here is Player , nice to meet you too.
+        next: 29
+    29:
+        name: Player 9
+        talker: Player
+        left: Teemu-kun, normal_uniform.png
+        right: Maiko-san, surprised_uniform.png
+        message: By the way, Maiko-san, where do you know Makoto-kun from?
+        next: 30
+    30:
+        name: Maiko 4
+        talker: Maiko-san
+        left: Makoto-kun, normal_uniform.png
+        right: Maiko-san, blush_uniform.png
+        message: We are childhood friends...
+        next: 31
+    31:
+        name: Maiko 5
+        talker: Maiko-san
+        left: Makoto-kun, laughing_uniform.png
+        right: Maiko-san, blush_uniform.png
+        message: We have know each others since kindergarten.
+        next: 32
+    32:
+        name: Makoto 4
+        talker: Makoto-kun
+        left: Makoto-kun, confident_left_uniform.png
+        right: Maiko-san, angry_uniform.png
+        message: That's right!
+        next: 33
+    33:
+        name: Makoto 5
+        talker: Makoto-kun
+        left: Makoto-kun, normal_uniform.png
+        right: Maiko-san, worried_uniform.png
+        message: She's one of my oldest friends!
+        next: 34
+    34:
+        name: Teemu 8
+        talker: Teemu-kun
+        left: Makoto-kun, disappointed_uniform.png
+        right: Teemu-kun, blush_sad_center_uniform.png
+        message: Must be nice...
+        next: 35
+    35:
+        name: Narrative 8
+        left: Makoto-kun, confident_left_uniform.png
+        right: Teemu-kun, blush_uniform.png
+        message: I feel like something's bothering Teemu-kun...
+        next: 36
+    36:
+        name: Player 11
+        talker: Player
+        left: Makoto-kun, bored_uniform.png
+        right: Teemu-kun, blush_sad_center_uniform.png
+        message: Teemu-kun did you say something?
+        next: 37
+    37:
+        name: Teemu 9
+        talker: Teemu-kun
+        left: Makoto-kun, confident_left_uniform.png
+        right: Teemu-kun, blush_uniform.png
+        message: Ah, no, it's nothing.
+        next: 38
+    38:
+        name: Makoto 6
+        talker: Makoto-kun
+        left: Makoto-kun, normal_uniform.png
+        right: Teemu-kun, happy_uniform.png
+        message: Let's start eating, shall we!
+        next: 39
+    39:
+        name: Narrative 9
+        left: Makoto-kun, normal_uniform.png
+        right: Teemu-kun, smiling_uniform.png
+        message: Finally, I can start wolfing down my favorite food.
+        next: 40
+    40:
+        name: All
+        FadeOut: true
+        talker: Everyone
+        message: Thank you for the food!
         next_scene: 7
 7:
     name: Leaving School
@@ -605,6 +861,7 @@
 
     0:
         name: Gates
+        FadeIn: true
         talker: Xddd
         message: NICE MEMES
         next_scene: 8

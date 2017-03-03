@@ -1332,12 +1332,12 @@
     3:
         name: Player 2
         talker: Player
-        right: Makoto-kun, confident_left_uniform.png
+        right: Makoto-kun, bored_uniform.png
         message: Sure!
         next: 4
     4:
         name: Narrative 2
-        right: Makoto-kun, confident_left_uniform.png
+        right: Makoto-kun, normal_uniform.png
         message: Sitting down after walking for so long feels amazing.
         next: 5
     5:
@@ -1349,7 +1349,7 @@
     6:
         name: Makoto 3
         talker: Makoto-kun
-        right: Makoto-kun, confident_left_uniform.png
+        right: Makoto-kun, blush_center_uniform.png
         message: What did you think of Maiko-san?
         next: 7
     7:
@@ -1369,7 +1369,7 @@
     8:
         name: Makoto 1.1
         talker: Makoto-kun
-        right: Makoto-kun, confident_left_uniform.png
+        right: Makoto-kun, bored_uniform.png
         message: I see..
         next: 9
         custom_next: true
@@ -1377,7 +1377,7 @@
     9:
         name: Makoto 1.2
         talker: Makoto-kun
-        right: Makoto-kun, confident_left_uniform.png
+        right: Makoto-kun, angry_uniform.png
         message: She's always been a bit shy.
         next: 10
         custom_next: true
@@ -1393,14 +1393,14 @@
     11:
         name: Makoto 1.3
         talker: Makoto-kun
-        right: Makoto-kun, confident_left_uniform.png
+        right: Makoto-kun, angry_uniform.png
         message: Hmm...
         next: 12
         custom_next: true
 
     12:
         name: Narrative 1.1
-        right: Makoto-kun, confident_left_uniform.png
+        right: Makoto-kun, confident_uniform.png
         message: The atmosphere seems awkward...
         next: 13
         custom_next: true
@@ -1409,7 +1409,7 @@
         name: Narrative 1.2
         right: Makoto-kun, confident_left_uniform.png
         message: Meaby I said something, I shouldn't have...
-        next: 25
+        next: 26
         custom_next: true
 
     14:
@@ -1423,7 +1423,7 @@
     15:
         name: Makoto 2.1
         talker: Makoto-kun
-        right: Makoto-kun, confident_left_uniform.png
+        right: Makoto-kun, laughing_uniform.png
         message: I was just wondering...
         next: 16
         custom_next: true
@@ -1431,7 +1431,7 @@
     16:
         name: Player 2.2
         talker: Player
-        right: Makoto-kun, confident_left_uniform.png
+        right: Makoto-kun, bored_uniform.png
         message: Is something wrong?
         next: 17
         custom_next: true
@@ -1439,7 +1439,7 @@
     17:
         name: Makoto 2.3
         talker: Makoto-kun
-        right: Makoto-kun, confident_left_uniform.png
+        right: Makoto-kun, blush_bored_center_uniform.png
         message: I'm just wondering...
         next: 18
         custom_next: true
@@ -1455,7 +1455,7 @@
     19:
         name: Player 2.3
         talker: Player
-        right: Makoto-kun, confident_left_uniform.png
+        right: Makoto-kun, normal_uniform.png
         message: Don't worry mate, I got you!
         next: 20
         custom_next: true
@@ -1463,15 +1463,15 @@
     20:
         name: Makoto 2.5
         talker: Makoto-kun
-        right: Makoto-kun, confident_left_uniform.png
+        right: Makoto-kun, blush_center_uniform.png
         message: Thanks dude, it means a lot.
-        next: 25
+        next: 26
         custom_next: true
 
     21:
         name: Makoto 3.1
         talker: Makoto-kun
-        right: Makoto-kun, confident_left_uniform.png
+        right: Makoto-kun, laughing_uniform.png
         message: Isn't she!
         next: 22
         custom_next: true
@@ -1487,7 +1487,7 @@
     23:
         name: Makoto 3.2
         talker: Makoto-kun
-        right: Makoto-kun, confident_left_uniform.png
+        right: Makoto-kun, normal_uniform.png
         message: I'm just glad that you think that way.
         next: 24
         custom_next: true
@@ -1501,12 +1501,66 @@
         custom_next: true
 
     25:
+        name: Makoto 3.3
+        talker: Makoto-kun
+        right: Makoto-kun, laughing_uniform.png
+        message: Please do!
+        next: 26
+        custom_next: true
+
+    26:
         name: Teemu 1
         talker: Teemu-kun
         left: Teemu-kun, normal_uniform.png
         right: Makoto-kun, confident_left_uniform.png
         message: Hey, what are you guys talking about?
-        next_scene: 11
+        next: 27
+    27:
+        name: Player 3
+        talker: Player
+        left: Teemu-kun, laughing_uniform.png
+        right: Makoto-kun, sad_uniform.png
+        message: Ah, you scared me!
+        next: 28
+    28:
+        name: Teemu 2
+        talker: Teemu-kun
+        left: Teemu-kun, happy_uniform.png
+        right: Makoto-kun, angry_uniform.png
+        message: Sorry, sorry!
+        next: 29
+    29:
+        name: Teemu 3
+        talker: Teemu-kun
+        left: Teemu-kun, laughing_uniform.png
+        right: Makoto-kun, normal_uniform.png
+        message: So, should we do something?
+        next: 30
+    30:
+        name: Makoto 4
+        talker: Makoto-kun
+        left: Teemu-kun, blush_uniform.png
+        right: Makoto-kun, confident_uniform.png
+        message: Let's just go to that rice field up there and relax.
+        next: 31
+    31:
+        name: Player 4
+        talker: Player
+        left: Teemu-kun, blush_uniform.png
+        right: Makoto-kun, confident_uniform.png
+        message: Sounds good to me!
+        next: 32
+    32:
+        name: Narrative 3
+        message: ...and so we spend rest of our day just chilling at the rice field.
+        next: 33
+    33:
+        name: Narattive 4
+        FadeOut: true
+        message: As the day started to turn closer and closer to dawn we dicided to call it for the day and go home...
+        next_scene: 8
+        custom_next: true
+
 11:
     name: Home
 

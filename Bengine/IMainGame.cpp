@@ -85,7 +85,7 @@ bool IMainGame::init()
 bool IMainGame::initSystems()
 {
     Bengine::init();
-    m_window.create("Teemun fantasiat", 800, 600, 0, 0);
+    m_window.create("Faded Memories", 800, 600, 0, 0);
     return true;
 }
 

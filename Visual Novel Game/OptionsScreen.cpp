@@ -1,6 +1,6 @@
 #include "OptionsScreen.h"
 
-const int SLIDER_WIDTH = 165;
+const int SLIDER_WIDTH = 255;
 const int VOLUME_BALL = 0;
 const int TEXT_BALL = 1;
 const int AUTOPLAY_BALL = 2;
@@ -23,29 +23,25 @@ void OptionsScreen::init(Bengine::Window* window)
     m_backButtonSize = glm::vec2(199, 60);
     m_sliderSize = glm::vec2(468, 75);
 
-    m_backButtonDestRect = glm::vec4(-m_backButtonSize.x / 2, -m_window->getScreenHeight() / 2 + 75, m_backButtonSize);
+    m_backButtonDestRect = glm::vec4(-m_backButtonSize.x / 2, -m_window->getScreenHeight() / 2 + 35, m_backButtonSize);
     m_volumeSliderDestRect = glm::vec4(-m_sliderSize.x / 2, -m_window->getScreenHeight() / 2 + 375, m_sliderSize);
     m_textSpeedSliderDestRect = glm::vec4(-m_sliderSize.x / 2, -m_window->getScreenHeight() / 2 + 275, m_sliderSize);
     m_autoPlaySliderDestRect = glm::vec4(-m_sliderSize.x / 2, -m_window->getScreenHeight() / 2 + 175, m_sliderSize);
+    m_checkBoxDestRect = glm::vec4(-m_window->getScreenWidth() / 2 + 265, -m_window->getScreenHeight() / 2 + 146, 50, 46);
 
-    m_ballMinX = m_volumeSliderDestRect.x + 272 - SLIDER_BALL_RADIUS / 2;
-    m_ballMaxX = m_ballMinX + SLIDER_WIDTH;
+    m_ballMinX = -m_window->getScreenWidth() / 2 + 443 - SLIDER_BALL_RADIUS / 2;
+    m_ballMaxX = -m_window->getScreenWidth() / 2 + 690 - SLIDER_BALL_RADIUS / 2;
 
     m_sliderBallPositions.resize(3);
 
-    m_sliderBallPositions[VOLUME_BALL].x = (int)m_volumeSliderDestRect.x + 272 - SLIDER_BALL_RADIUS / 2;
-    m_sliderBallPositions[VOLUME_BALL].y = m_volumeSliderDestRect.y + m_volumeSliderDestRect.w / 2.0f - SLIDER_BALL_RADIUS / 2.0f;
+    m_sliderBallPositions[VOLUME_BALL].x = m_ballMinX;
+    m_sliderBallPositions[VOLUME_BALL].y = -m_window->getScreenHeight() / 2 + 434 - SLIDER_BALL_RADIUS / 2;
 
-    m_sliderBallPositions[TEXT_BALL].x = (int)m_textSpeedSliderDestRect.x + 272 - SLIDER_BALL_RADIUS / 2;
-    m_sliderBallPositions[TEXT_BALL].y = m_textSpeedSliderDestRect.y + m_textSpeedSliderDestRect.w / 2.0f - SLIDER_BALL_RADIUS / 2.0f;
+    m_sliderBallPositions[TEXT_BALL].x = m_ballMinX;
+    m_sliderBallPositions[TEXT_BALL].y = -m_window->getScreenHeight() / 2 + 302 - SLIDER_BALL_RADIUS / 2;
 
-    m_sliderBallPositions[AUTOPLAY_BALL].x = (int)m_autoPlaySliderDestRect.x + 272 - SLIDER_BALL_RADIUS / 2;
-    m_sliderBallPositions[AUTOPLAY_BALL].y = m_autoPlaySliderDestRect.y + m_autoPlaySliderDestRect.w / 2.0f - SLIDER_BALL_RADIUS / 2.0f;
-}
-
-void OptionsScreen::update()
-{
-
+    m_sliderBallPositions[AUTOPLAY_BALL].x = m_ballMinX;
+    m_sliderBallPositions[AUTOPLAY_BALL].y = -m_window->getScreenHeight() / 2 + 169 - SLIDER_BALL_RADIUS / 2;
 }
 
 void OptionsScreen::draw(Bengine::SpriteBatch* spriteBatch)
@@ -61,37 +57,7 @@ void OptionsScreen::draw(Bengine::SpriteBatch* spriteBatch)
         spriteBatch->draw(
             destRect,
             uvRect,
-            Bengine::ResourceManager::getTexture("Textures/Backgrounds/Main Menu/options_dark.png").id,
-            0.0f,
-            color
-        );
-    }
-
-    { // Volume
-        spriteBatch->draw(
-            m_volumeSliderDestRect,
-            uvRect,
-            Bengine::ResourceManager::getTexture("Textures/Visuals/Main Menu/VolumeOption.png").id,
-            0.0f,
-            color
-        );
-    }
-
-    { // Text Speed
-        spriteBatch->draw(
-            m_textSpeedSliderDestRect,
-            uvRect,
-            Bengine::ResourceManager::getTexture("Textures/Visuals/Main Menu/TextSpeedOption.png").id,
-            0.0f,
-            color
-        );
-    }
-
-    { // Autoplay speed
-        spriteBatch->draw(
-            m_autoPlaySliderDestRect,
-            uvRect,
-            Bengine::ResourceManager::getTexture("Textures/Visuals/Main Menu/AutoPlayOption.png").id,
+            Bengine::ResourceManager::getTexture("Textures/Backgrounds/Main Menu/OptionsScreen.png").id,
             0.0f,
             color
         );
@@ -110,7 +76,7 @@ void OptionsScreen::draw(Bengine::SpriteBatch* spriteBatch)
     const static Bengine::GLTexture dot = Bengine::ResourceManager::getTexture("Textures/Visuals/Main Menu/SliderBall.png");
 
     { // Volume slider dot
-        glm::vec4 destRect(m_sliderBallPositions[VOLUME_BALL].x, m_volumeSliderDestRect.y + m_volumeSliderDestRect.w / 2.0f - SLIDER_BALL_RADIUS / 2.0f, SLIDER_BALL_RADIUS, SLIDER_BALL_RADIUS);
+        glm::vec4 destRect(m_sliderBallPositions[VOLUME_BALL].x, m_sliderBallPositions[VOLUME_BALL].y, SLIDER_BALL_RADIUS, SLIDER_BALL_RADIUS);
         
         spriteBatch->draw(
             destRect,
@@ -122,7 +88,7 @@ void OptionsScreen::draw(Bengine::SpriteBatch* spriteBatch)
     }
 
     { // Text speed slider dot
-        glm::vec4 destRect(m_sliderBallPositions[TEXT_BALL].x, m_textSpeedSliderDestRect.y + m_textSpeedSliderDestRect.w / 2.0f - SLIDER_BALL_RADIUS / 2.0f, SLIDER_BALL_RADIUS, SLIDER_BALL_RADIUS);
+        glm::vec4 destRect(m_sliderBallPositions[TEXT_BALL].x, m_sliderBallPositions[TEXT_BALL].y, SLIDER_BALL_RADIUS, SLIDER_BALL_RADIUS);
 
         spriteBatch->draw(
             destRect,
@@ -133,8 +99,43 @@ void OptionsScreen::draw(Bengine::SpriteBatch* spriteBatch)
         );
     }
 
-    { // Autoplay speed slider dot
-        glm::vec4 destRect(m_sliderBallPositions[AUTOPLAY_BALL].x, m_autoPlaySliderDestRect.y + m_autoPlaySliderDestRect.w / 2.0f - SLIDER_BALL_RADIUS / 2.0f, SLIDER_BALL_RADIUS, SLIDER_BALL_RADIUS);
+    { // Checkbox
+        spriteBatch->draw(
+            m_checkBoxDestRect,
+            uvRect,
+            Bengine::ResourceManager::getTexture("Textures/Visuals/Main Menu/OptionCheckmarkBox.png").id,
+            0.0f,
+            color
+        );
+    }
+
+    // Checkmark
+    if (m_autoPlay) {
+        spriteBatch->draw(
+            glm::vec4(m_checkBoxDestRect.x + 6, m_checkBoxDestRect.y + 4, 40, 40),
+            uvRect,
+            Bengine::ResourceManager::getTexture("Textures/Visuals/Main Menu/OptionCheckmark.png").id,
+            0.0f,
+            color
+        );
+    }
+
+    // Autoplay slider
+    if (m_autoPlay) {
+        glm::vec4 destRect(m_ballMinX, m_sliderBallPositions[AUTOPLAY_BALL].y + SLIDER_BALL_RADIUS / 2 - 2, 255, 4);
+
+        spriteBatch->draw(
+            destRect,
+            uvRect,
+            Bengine::ResourceManager::getTexture("Textures/Visuals/Main Menu/Slider.png").id,
+            0.0f,
+            color
+        );
+    }
+
+    // Autoplay speed slider dot
+    if (m_autoPlay) {
+        glm::vec4 destRect(m_sliderBallPositions[AUTOPLAY_BALL].x, m_sliderBallPositions[AUTOPLAY_BALL].y, SLIDER_BALL_RADIUS, SLIDER_BALL_RADIUS);
 
         spriteBatch->draw(
             destRect,
@@ -152,9 +153,11 @@ void OptionsScreen::onMouseDown(float x, float y)
 
     for (size_t i = 0; i < m_sliderBallPositions.size(); i++) {
         if (isMouseOnSliderBall(i, x, y)) {
-            m_grabbedBall = i;
-            m_grabOffset = mouseCoords - m_sliderBallPositions[i];
-            break;
+            if (!(i == AUTOPLAY_BALL && !m_autoPlay)) {
+                m_grabbedBall = i;
+                m_grabOffset = mouseCoords - m_sliderBallPositions[i];
+                break;
+            }
         }
     }
 
@@ -162,6 +165,13 @@ void OptionsScreen::onMouseDown(float x, float y)
     if (mouseCoords.x > dims.x && mouseCoords.x < dims.x + dims.z) {
         if (mouseCoords.y > dims.y && mouseCoords.y < dims.y + dims.a) {
             m_shouldClose = true;
+        }
+    }
+
+    dims = getInputDimensions(m_checkBoxDestRect);
+    if (mouseCoords.x > dims.x && mouseCoords.x < dims.x + dims.z) {
+        if (mouseCoords.y > dims.y && mouseCoords.y < dims.y + dims.a) {
+            m_autoPlay = !m_autoPlay;
         }
     }
 }
@@ -174,6 +184,8 @@ void OptionsScreen::onMouseUp()
 void OptionsScreen::onMouseMove(float x, float y)
 {
     glm::vec2 mouseCoords(x, y);
+    std::cout << "Mouse X: " << mouseCoords.x << "\n";
+    std::cout << "Mouse Y: " << mouseCoords.y << "\n";
 
     if (m_grabbedBall != NO_BALL) {
         m_shouldUpdate = true;
@@ -195,6 +207,7 @@ void OptionsScreen::onMouseMove(float x, float y)
         }
         else {
             m_autoPlaySpeed = (static_cast<float>(((float)m_sliderBallPositions[AUTOPLAY_BALL].x - (float)m_ballMinX) / (float)SLIDER_WIDTH));
+            std::cout << "Autoplay speed: " << m_autoPlaySpeed << "\n";
         }
     }
 }
@@ -202,19 +215,19 @@ void OptionsScreen::onMouseMove(float x, float y)
 void OptionsScreen::setVolume(float v)
 {
     m_volume = v;
-    m_sliderBallPositions[VOLUME_BALL].x = (int)m_volumeSliderDestRect.x + 272 - SLIDER_BALL_RADIUS / 2 + v * SLIDER_WIDTH;
+    m_sliderBallPositions[VOLUME_BALL].x = m_ballMinX + v * SLIDER_WIDTH;
 }
 
 void OptionsScreen::setTextSpeed(float s)
 {
     m_textSpeed = s;
-    m_sliderBallPositions[TEXT_BALL].x = (int)m_textSpeedSliderDestRect.x + 272 - SLIDER_BALL_RADIUS / 2 + m_textSpeed * SLIDER_WIDTH;
+    m_sliderBallPositions[TEXT_BALL].x = m_ballMinX + m_textSpeed * SLIDER_WIDTH;
 }
 
 void OptionsScreen::setAutoPlaySpeed(float s)
 {
     m_autoPlaySpeed = s;
-    m_sliderBallPositions[AUTOPLAY_BALL].x = (int)m_autoPlaySliderDestRect.x + 272 - SLIDER_BALL_RADIUS / 2 + m_autoPlaySpeed * SLIDER_WIDTH;
+    m_sliderBallPositions[AUTOPLAY_BALL].x = m_ballMinX + m_autoPlaySpeed * SLIDER_WIDTH;
 }
 
 bool OptionsScreen::isMouseOnSliderBall(int idx, float mouseX, float mouseY)

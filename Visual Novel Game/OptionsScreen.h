@@ -18,7 +18,6 @@ public:
     ~OptionsScreen();
 
     void init(Bengine::Window* window);
-    void update();
     void draw(Bengine::SpriteBatch* spriteBatch);
     void onMouseDown(float x, float y);
     void onMouseUp();
@@ -26,12 +25,14 @@ public:
 
     void openOptions() { m_shouldClose = false; }
 
+    void setHasAutoPlay(bool h) { m_autoPlay = h; }
     void setShouldClose(bool s) { m_shouldClose = s; }
     void setShouldUpdate(bool s) { m_shouldUpdate = s; }
     void setVolume(float v);
     void setTextSpeed(float s);
     void setAutoPlaySpeed(float s);
 
+    bool  hasAutoPlay()      const { return m_autoPlay; }
     bool  shouldClose()      const { return m_shouldClose; }
     bool  shouldUpdate()     const { return m_shouldUpdate; }
     float getVolume()        const { return m_volume; }
@@ -49,7 +50,8 @@ private:
     int m_volumeBallPos = 0;
     bool m_shouldClose = false;
     bool m_shouldUpdate = false;
-    
+    bool m_autoPlay = false;
+
     int m_ballMinX, m_ballMaxX;
 
     glm::vec2 m_grabOffset;
@@ -59,7 +61,7 @@ private:
 
     glm::vec2 m_backButtonSize;
     glm::vec2 m_sliderSize;
-    glm::vec4 m_backButtonDestRect, m_volumeSliderDestRect, m_autoPlaySliderDestRect, m_textSpeedSliderDestRect;
+    glm::vec4 m_backButtonDestRect, m_volumeSliderDestRect, m_autoPlaySliderDestRect, m_textSpeedSliderDestRect, m_checkBoxDestRect;
 
     Bengine::Window* m_window;
 };

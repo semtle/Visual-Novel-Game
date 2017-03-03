@@ -7,8 +7,10 @@
 #include <Bengine/SpriteBatch.h>
 #include <Bengine/ResourceManager.h>
 #include <Bengine/Vertex.h>
+#include <Bengine/SpriteFont.h>
 
 #include "OptionsScreen.h"
+#include "LoadGameScreen.h"
 
 class App;
 
@@ -37,9 +39,12 @@ private:
     int m_nextScreen = SCREEN_INDEX_NO_SCREEN;
     bool m_isBuilt = false;
     bool m_showOptions = false;
+    bool m_showLoadMenu = false;
     
     App* m_app;
+    LoadGameScreen m_loadGameScreen;
     OptionsScreen m_optionsScreen;
+    Bengine::SpriteFont m_spriteFont;
     Bengine::Window* m_window;
     Bengine::Camera2D m_camera;
     Bengine::SpriteBatch m_spriteBatch;

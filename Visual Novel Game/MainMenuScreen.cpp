@@ -28,6 +28,7 @@ int MainMenuScreen::getPreviousScreenIndex() const
 void MainMenuScreen::build()
 {
     m_optionsScreen.init(m_window);
+    m_loadGameScreen.init(m_window);
     loadOptions();
 }
 
@@ -44,6 +45,8 @@ void MainMenuScreen::onEntry()
     // Init spritebatch
     m_spriteBatch.init();
 
+    m_spriteFont.init("Fonts/cabin-condensed.regular.ttf", 32);
+
     // Initialize shaders
     initShaders();
 
@@ -57,6 +60,7 @@ void MainMenuScreen::onExit()
 {
     m_spriteBatch.dispose();
     m_textureProgram.dispose();
+    m_spriteFont.dispose();
     saveOptions();
 }
 
@@ -70,6 +74,18 @@ void MainMenuScreen::update()
         m_optionsScreen.setShouldUpdate(false);
     }
 
+    if (m_loadGameScreen.loaded()) {
+        m_app->setGameData(m_loadGameScreen.getSave());
+        m_showLoadMenu = false;
+
+        m_nextScreen = SCREEN_INDEX_PLAY;
+        m_currentState = Bengine::ScreenState::CHANGE_NEXT;
+    }
+    if (m_loadGameScreen.shouldClose()) {
+        m_loadGameScreen.setShouldClose(false);
+        m_showLoadMenu = false;
+    }
+
     if (m_optionsScreen.shouldClose()) m_showOptions = false;
 }
 
@@ -79,7 +95,7 @@ void MainMenuScreen::draw()
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
     m_textureProgram.use();
-    m_spriteBatch.begin();
+    m_spriteBatch.begin(Bengine::GlyphSortType::NONE);
 
     // Upload texture uniform
     GLint textureUniform = m_textureProgram.getUniformLocation("mySampler");
@@ -94,7 +110,7 @@ void MainMenuScreen::draw()
     static const Bengine::ColorRGBA8 color(255, 255, 255, 255);
 
     // Start screen
-    {
+    if (!m_showLoadMenu) {
         glm::vec4 destRect(-m_window->getScreenWidth() / 2, -m_window->getScreenHeight() / 2, m_window->getScreenWidth(), m_window->getScreenHeight());
         glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
 
@@ -109,6 +125,9 @@ void MainMenuScreen::draw()
 
     if (m_showOptions) {
         m_optionsScreen.draw(&m_spriteBatch);
+    }
+    else if (m_showLoadMenu) {
+        m_loadGameScreen.draw(&m_spriteBatch, &m_spriteFont);
     }
 
     m_spriteBatch.end();
@@ -130,21 +149,27 @@ void MainMenuScreen::checkInput()
         case SDL_MOUSEBUTTONDOWN:
             if (m_showOptions)
                 m_optionsScreen.onMouseDown((float)event.button.x, (float)event.button.y);
+            if (m_showLoadMenu)
+                m_loadGameScreen.onMouseDown((float)event.button.x, (float)event.button.y);
             break;
         case SDL_MOUSEBUTTONUP:
             if (m_showOptions)
                 m_optionsScreen.onMouseUp();
+            if (m_showLoadMenu)
+                m_loadGameScreen.onMouseUp();
             break;
         case SDL_MOUSEMOTION:
             if (m_showOptions)
                 m_optionsScreen.onMouseMove((float)event.motion.x, (float)event.motion.y);
+            if (m_showLoadMenu)
+                m_loadGameScreen.onMouseMove((float)event.motion.x, (float)event.motion.y);
             break;
         }
     }
 
     glm::vec2 mouseCoords = m_game->inputManager.getMouseCoords();
 
-    if (m_game->inputManager.isKeyPressed(SDL_BUTTON_LEFT) && !m_showOptions) {
+    if (m_game->inputManager.isKeyPressed(SDL_BUTTON_LEFT) && !m_showOptions && !m_showLoadMenu) {
         // All buttons are at the same x position and have same width
         if (mouseCoords.x > 305 && mouseCoords.x < 478) {
             // New game
@@ -155,7 +180,7 @@ void MainMenuScreen::checkInput()
 
             // Load game
             if (mouseCoords.y > 460 && mouseCoords.y < 500) {
-                // TODO: Implement
+                m_showLoadMenu = true;
             }
 
             // Options
@@ -191,12 +216,14 @@ void MainMenuScreen::loadOptions()
 
     // Load values from the options save file
     float volume, textSpeed, autoPlaySpeed;
-    file >> volume >> textSpeed >> autoPlaySpeed;
+    int hasAutoPlay;
+    file >> volume >> textSpeed >> hasAutoPlay >> autoPlaySpeed;
 
     file.close();
 
     m_optionsScreen.setVolume(volume);
     m_optionsScreen.setTextSpeed(textSpeed);
+    m_optionsScreen.setHasAutoPlay((bool)hasAutoPlay);
     m_optionsScreen.setAutoPlaySpeed(autoPlaySpeed);
 
     m_app->setMusicVolume(volume);
@@ -212,6 +239,7 @@ void MainMenuScreen::saveOptions()
 
     file << m_optionsScreen.getVolume() << '\n';
     file << m_optionsScreen.getTextSpeed() << '\n';
+    file << m_optionsScreen.hasAutoPlay() << '\n';
     file << m_optionsScreen.getAutoPlaySpeed() << '\n';
 
     file.close();

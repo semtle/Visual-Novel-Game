@@ -133,7 +133,7 @@
         next: 9
     9:
         name: Makoto 4
-        talker: Mokoto-kun
+        talker: Makoto-kun
         right: Makoto-kun, confident_left_uniform.png
         message: You already missed the first class!
         next: 10
@@ -840,7 +840,7 @@
         talker: Makoto-kun
         left: Makoto-kun, normal_uniform.png
         right: Teemu-kun, happy_uniform.png
-        message: Let's start eating, shall we!
+        message: Then let's start eating, shall we!
         next: 39
     39:
         name: Narrative 9
@@ -860,46 +860,339 @@
     Background: schoolyard_evening.png
 
     0:
-        name: Gates
+        name: Narrative 1
         FadeIn: true
-        talker: Xddd
-        message: NICE MEMES
+        message: Phew, I can finally go home.
+        next: 1
+    1:
+        name: Narrative 2
+        message: Now I just have to wait for Makoto-kun to come...
+        next: 2
+    2:
+        name: Narrative 3
+        message: Meaby I should go and check on him.
+        next: 3
+    3:
+        name: Narrative 4
+        message: Oh wait, he's waiting me at the gates.
+        next: 4
+    4:
+        name: Narrative 5
+        message: I ran to him with light steps.
+        next: 5
+    5:
+        name: Player 1
+        talker: Player
+        message: Hey, when did you get here?
+        next: 6
+    6:
+        name: Makoto 1
+        talker: Makoto-kun
+        right: Makoto-kun, normal_uniform.png
+        message: I just got here and thought that I should wait you.
+        next: 7
+    7:
+        name: Player 2
+        talker: Player
+        right: Makoto-kun, smiling_side_uniform.png
+        message: Thanks man!
+        next: 8
+    8:
+        name: Player 3
+        talker: Player
+        right: Makoto-kun, confident_uniform.png
+        message: By the way, do you know where Teemu-kun is?
+        next: 9
+    9:
+        name: Makoto 2
+        talker: Makoto-kun
+        right: Makoto-kun, confident_uniform.png
+        message: He said that he had a meeting to attend to.
+        next: 10
+    10:
+        name: Player 4
+        talker: Player
+        right: Makoto-kun, bored_uniform.png
+        message: Did he say when the meeting would end?
+        next: 11
+    11:
+        name: Makoto 3
+        talker: Makoto-kun
+        right: Makoto-kun, normal_uniform.png
+        message: He only said that we shouldn't wait for him.
+        next: 12
+    12:
+        name: Makoto 4
+        talker: Makoto-kun
+        right: Makoto-kun, normal_uniform.png
+        message: Well then, where should we go next?
+        next: 13
+    13:
+        name: Question
+        Option 1:
+            text: Go home
+            influence: 1
+            next: 14
+        Option 2:
+            text: Go to Park
+            influence: 1
+            next: 19
+        Option 3:
+            text: Go to Arcade
+            influence: 1
+            next: Not Selected
+    14:
+        name: Player 1.1
+        talker: Player
+        right: Makoto-kun, confident_left_uniform.png
+        message: I'm feeling a bit tired...
+        next: 15
+        custom_next: true
+
+    15:
+        name: Player 1.2
+        talker: Player
+        right: Makoto-kun, disappointed_uniform.png
+        message: So I think I'm going to go home today.
+        next: 16
+    16:
+        name: Makoto 1.1
+        talker: Makoto-kun
+        right: Makoto-kun, disappointed_uniform.png
+        message: I see...
+        next: 17
+        custom_next: true
+
+    17:
+        name: Makoto 1.2
+        talker: Makoto-kun
+        right: Makoto-kun, normal_uniform.png
+        message: Well, see you tomorrow then!
+        next: 18
+        custom_next: true
+
+    18:
+        name: Player 1.3
+        FadeOut: true
+        talker: Player
+        right: Makoto-kun, normal_uniform.png
+        message: Tomorrow it is! Cya!
         next_scene: 8
+        custom_next: true
+
+    19:
+        name: Player 2.1
+        talker: Player
+        right: Makoto-kun, bored_uniform.png
+        message: Should we go to the park?
+        next: 20
+        custom_next: true
+
+    20:
+        name: Makoto 2.1
+        talker: Makoto-kun
+        right: Makoto-kun, confident_left_uniform.png
+        message: Hmm, what should we do there?
+        next: 21
+        custom_next: true
+
+    21:
+        name: Player 2.2
+        talker: Player
+        right: Makoto-kun, normal_uniform.png
+        message: I don't know, just chill and play videagames?
+        next: 22
+        custom_next: true
+
+    22:
+        name: Makoto 2.2
+        talker: Makoto-kun
+        right: Makoto-kun, confident_uniform.png
+        message: Sure, I'll just let Teemu-kun know if he wants to join us at some point.
+        next: 23
+        custom_next: true
+
+    23:
+        name: Player 2.3
+        talker: Player
+        right: Makoto-kun, confident_left_uniform.png
+        message: Sounds like a plan!
+        next: 24
+        custom_next: true
+
+    24:
+        name: Makoto 2.3
+        FadeOut: true
+        talker: Makoto-kun
+        right: Makoto-kun, normal_uniform.png
+        message: Then, shall we?
+        next_scene: 10
+        custom_next: true
+
+    25:
+        name: Player 3.1
+        talker: Player
+        right: Makoto-kun, normal_uniform.png
+        message: How about we go to the Arcade?
+        next: 26
+        custom_next: true
+
+    26:
+        name: Makoto 3.1
+        talker: Makoto-kun
+        right: Makoto-kun, confident_uniform.png
+        message: Now you're talkin'!
+        next: 27
+        custom_next: true
+
+    27:
+        name: Makoto 3.2
+        talker: Makoto-kun
+        right: Makoto-kun, laughing_uniform.png
+        message: You know the new game that was released last month is freaking dope!
+        next: 28
+        custom_next: true
+
+    28:
+        name: Makoto 3.3
+        talker: Makoto-kun
+        right: Makoto-kun, confident_left_uniform.png
+        message: We definitely should play some of it.
+        next: 29
+        custom_next: true
+
+    29:
+        name: Player 3.2
+        talker: Player
+        right: Makoto-kun, normal_uniform.png
+        message: Sounds good!
+        next: 30
+        custom_next: true
+
+    30:
+        name: Makoto 3.4
+        talker: Makoto-kun
+        right: Makoto-kun, laughing_uniform.png
+        message: Then, what are we waiting for?
+        next: 31
+        custom_next: true
+
+    31:
+        name: Player 3.3
+        FadeOut: true
+        talker: Player
+        right: Makoto-kun, confident_uniform.png
+        message: Let's GO!
+        next_scene: 9
+        custom_next: true
+
 8:
     name: Going Home 1
 
     Background: train_inside.png
 
     0:
-        name: Narrative
-        message: Finally some peace
+        name: Narrative 1
+        FadeIn: true
+        message: Finally some peace...
+        next: 1
+    1:
+        name: Narrative 2
+        message: Today sure was an eventful day if I say so myself.
+        next: 2
+    2:
+        name: Narrative 3
+        message: Still 25 minutes until I get home and can fully relax.
+        next: 3
+    3:
+        name: Narrative 4
+        message: As I watched through the train's window, I could see station after station passing me by.
+        next: 4
+    4:
+        name: Narrative 5
+        message: I can feel how my eyes are getting shut and opening again and again...
+        next: 5
+    5:
+        name: Narrative 6
+        message: Trying to fight back that sudden feeling of sweet dreams is taking everything I have.
+        next: 6
+    6:
+        name: Narrative 7
+        message: Hearing the announcer's voice echoing through the train, makes me feel some how relax.
+        next: 7
+    7:
+        name: Narrative 8
+        message: Yet another station passed by...
+        next: 8
+    8:
+        name: Narrative 9
+        message: I can finally hear something familiar from the announcement...
+        next: 9
+    9:
+        name: Player 1
+        talker: Player
+        message: I have to remember getting off the train on the next stop.
+        next: 10
+    10:
+        name: Narrative 11
+        message: I put my headphones back and continued listen sick beats.
+        next: 11
+    11:
+        name: Narrative 12
+        message: As I stood up, I could feel my body getting a bit heavyer...
+        next: 12
+    12:
+        name: Narrative 13
+        message: As the train's doors opened I thought to myself...
+        next: 13
+    13:
+        name: Narrative 14
+        message: Next stop... 
+        next: 14
+    14:
+        name: Narrative 15
+        FadeOut: true
+        message: Home.
         next_scene: 9
 9:
     name: Arcade
 
-    Background: park_valley.png
-
-    0:
-        name: Close To The Arcade
-        talker: Dankmemes
-        message: eyyy lmao
-        next_scene: 10
-10:
-    name: Park 1
-
     Background: park_benches.png
 
     0:
+        name: Narrative 1
+        FadeIn: true
+        message: eyyy lmao
+        next_scene: 10
+10:
+    name: Park 
+
+    Background: park.png
+
+    0:
         name: Narrative
-        talker: Eyylmao
-        message: adsffdasfds
+        FadeIn: true
+        message: This park sure does seems like a good place to relax.
         next_scene: 11
 11:
-    name: Phone 1
+    name: Home
 
     Background: bedroom.png
 
     0:
-        name: Narrative
-        talker: Asdfadfsfds
-        message: adsffads
+        name: Narrative 1
+        FadeIn: true
+        message: Home, sweet home.
+        next: 1
+    1:
+        name: Narrative 2
+        message: After slamming my home door shut, I dropped my schoolbag on the floor and went to my room.
+        next: 2
+    2:
+        name: Narrative 3
+        message: After entering my room, I threw my heavy body at the bed and sighed...
+        next: 3
+    3:
+        name: Player
+        talker: Player
+        message: That sure was one long day...

@@ -2,7 +2,10 @@
 #include "Indices.h"
 #include <fstream>
 #include <Bengine/IMainGame.h>
+#include <Bengine/BengineErrors.h>
 
+const int MIN_AUTOPLAY_SPEED = 2;
+const int MAX_AUTOPLAY_SPEED = 11;
 const int BASE_TEXT_SPEED_IDX = 10;
 const int CHAR_HEIGHT = 600;
 const float MESSAGE_SCALE = 0.55f;
@@ -62,8 +65,10 @@ void MainGameScreen::onEntry()
     // Load options
     loadOptions();
 
-    // Initialize current day
-    initDay();
+    if (m_currentSceneIndex == -1) {
+        // Initialize current day
+        initDay();
+    }
 
     // Set the character values
     updateNewDialogueValues();
@@ -116,7 +121,7 @@ void MainGameScreen::update()
     }
 
     // Fade out
-    if (m_fadingOut && !m_waitAfterClickedOption) {
+    if (m_fadingOut && !m_waitAfterClickedOption && !m_paused) {
         if (m_alphaValue > 0) {
             m_alphaValue--;
 
@@ -143,11 +148,11 @@ void MainGameScreen::update()
         }
     }
 
-    if (m_firstUpdateAfterOptionClick) {
+    if (m_firstUpdateAfterOptionClick && !m_paused) {
         m_firstUpdateAfterOptionClick = false;
     }
     else {
-        if (m_waitAfterClickedOption) {
+        if (m_waitAfterClickedOption && !m_paused) {
             Uint32 ticks = SDL_GetTicks();
 
             // Check exit input so the game doesn't freeze and player can exit
@@ -189,7 +194,7 @@ void MainGameScreen::update()
     }
 
     // Dialogue message
-    if (m_fullMessage != "" && m_currentMessage != m_fullMessage && !m_showOptions) {
+    if (m_fullMessage != "" && m_currentMessage != m_fullMessage && !m_showOptions && !m_fadeIn && !m_fadingOut && !m_paused) {
         if (m_currentTextSpeedIdx <= m_optionsScreen.getTextSpeed() * 10) {
             int idx = m_currentMessage.length() + 1;
             m_currentMessage = m_fullMessage.substr(0, idx);
@@ -199,6 +204,25 @@ void MainGameScreen::update()
         else {
             m_currentTextSpeedIdx--;
         }
+    }
+
+    m_autoPlay = (m_optionsScreen.hasAutoPlay());
+
+    // Autoplay
+    if (m_autoPlay && !m_isQuestion && !m_fadeIn && !m_fadingOut) {
+        if (m_currentMessage == m_fullMessage && !m_setAutoPlayTicks) {
+            int speed = m_optionsScreen.getAutoPlaySpeed() * 10 + 1;
+            speed = abs(speed - MAX_AUTOPLAY_SPEED) + 2;
+            m_autoPlayWaitTime = (Uint32)speed * 1000;
+            m_autoPlayStartTicks = SDL_GetTicks();
+
+            m_setAutoPlayTicks = true;
+        }
+    }
+
+    if (m_setAutoPlayTicks && SDL_GetTicks() > m_autoPlayStartTicks + m_autoPlayWaitTime && !m_paused) {
+        m_setAutoPlayTicks = false;
+        changeToNextDialogue();
     }
 }
 
@@ -231,6 +255,19 @@ void MainGameScreen::draw()
     m_spriteBatch.renderBatch();
 
     m_textureProgram.unuse();
+}
+
+void MainGameScreen::setGameData(SaveData data)
+{
+    m_file = YAML::LoadFile("Dialogues/" + m_currentDay + ".yaml");
+
+    m_currentDialogueIndex = 0;
+    m_currentDialogueStr = "0";
+
+    m_currentSceneIndex = data.sceneIndex;
+    m_currentSceneStr = std::to_string(data.sceneIndex);
+
+    m_playerName = data.playerName;
 }
 
 void MainGameScreen::drawImages()
@@ -354,12 +391,39 @@ void MainGameScreen::drawImages()
     if (m_isQuestion && ((!m_fadeIn && !m_fadingOut) || (m_waitAfterClickedOption))) {
         drawAnswerBoxes(m_clickedRedIdx, m_clickedGreenIdx);
     }
+
+    // Pause overlay
+    if (m_paused) {
+        glm::vec4 destRect(-m_window->getScreenWidth() / 2, -m_window->getScreenHeight() / 2, m_window->getScreenWidth(), m_window->getScreenHeight());
+        glm::vec4 uvRect(0.0f, 0.0f, 1.0f, 1.0f);
+
+        m_spriteBatch.draw(
+            destRect,
+            uvRect,
+            Bengine::ResourceManager::getTexture("Textures/Visuals/Main Menu/PauseScreen.png").id,
+            0.0f,
+            color
+        );
+    }
 }
 
 void MainGameScreen::drawTexts()
 {
     char buffer[256];
     static const glm::vec2 bottomLeft(-m_window->getScreenWidth() / 2, -m_window->getScreenHeight() / 2);
+
+    // Auto play
+    if (m_autoPlay && (!m_fadeIn && !m_fadingOut && !m_showOptions)) {
+        m_spriteFont.draw(
+            m_spriteBatch,
+            "Autoplay",
+            glm::vec2(-m_window->getScreenWidth() / 2.0f + 12.0f, m_window->getScreenHeight() / 2.0f - 38.0f),
+            glm::vec2(0.75f),
+            0.0f,
+            Bengine::ColorRGBA8(0, 0, 0, 255),
+            Bengine::Justification::LEFT
+        );
+    }
 
     // Talker
     if (m_hasTalkerBox && (!m_fadeIn && !m_fadingOut)) {
@@ -515,21 +579,57 @@ void MainGameScreen::checkInput()
         }
     }
 
+    glm::vec2 mouseCoords = m_game->inputManager.getMouseCoords();
+    std::cout << "X: " << mouseCoords.x << ", Y: " << abs(mouseCoords.y - m_window->getScreenHeight()) << "\n";
+
+    bool saved = false;
+
+    // Small button
+    if (m_game->inputManager.isKeyPressed(SDL_BUTTON_LEFT) && mouseCoords.y > 565 && mouseCoords.y < 580) {
+        // Save
+        if (mouseCoords.x > 609 && mouseCoords.x < 644) {
+            saveGame();
+            saved = true;
+        }
+
+        // Load
+        else if (mouseCoords.x > 656 && mouseCoords.x < 691) {
+
+        }
+
+        // Quit
+        else if (mouseCoords.x > 702 && mouseCoords.x < 738) {
+            saveOptions();
+            saveGame();
+            m_currentState = Bengine::ScreenState::EXIT_APPLICATION;
+        }
+    }
+
+    // Pause
+    if (m_game->inputManager.isKeyPressed(SDLK_ESCAPE) || m_game->inputManager.isKeyPressed(SDLK_p)) {
+        m_paused = !m_paused;
+    }
+
+    // Handle left click
     if (m_game->inputManager.isKeyPressed(SDL_BUTTON_LEFT)) {
-        if (!m_fadeIn && !m_fadingOut && !m_showOptions) {
+        if (!m_fadeIn && !m_fadingOut && !m_showOptions && !m_paused && !saved) {
             if (m_isQuestion) {
                 handleOptionBoxInputs();
             }
             else {
-                if (m_currentMessage == m_fullMessage)
+                if (m_currentMessage == m_fullMessage) {
+                    m_setAutoPlayTicks = false;
                     changeToNextDialogue();
-                else
+                }
+                else {
                     m_currentMessage = m_fullMessage;
+                }
             }
         }
     }
 
-    if (m_game->inputManager.isKeyPressed(SDLK_o)) {
+    // Toggle options
+    if (m_game->inputManager.isKeyPressed(SDLK_o) && !m_paused) {
         if (m_showOptions) {
             m_showOptions = false;
         }
@@ -876,12 +976,14 @@ void MainGameScreen::loadOptions()
 
     // Load values from the options save file
     float volume, textSpeed, autoPlaySpeed;
-    file >> volume >> textSpeed >> autoPlaySpeed;
+    int hasAutoPlay;
+    file >> volume >> textSpeed >> hasAutoPlay >> autoPlaySpeed;
 
     file.close();
 
     m_optionsScreen.setVolume(volume);
     m_optionsScreen.setTextSpeed(textSpeed);
+    m_optionsScreen.setHasAutoPlay((bool)hasAutoPlay);
     m_optionsScreen.setAutoPlaySpeed(autoPlaySpeed);
 
     m_audioEngine.setVolume(volume);
@@ -897,7 +999,57 @@ void MainGameScreen::saveOptions()
 
     file << m_optionsScreen.getVolume() << '\n';
     file << m_optionsScreen.getTextSpeed() << '\n';
+    file << m_optionsScreen.hasAutoPlay() << '\n';
     file << m_optionsScreen.getAutoPlaySpeed() << '\n';
 
     file.close();
+}
+
+void MainGameScreen::saveGame()
+{
+    std::ofstream file("SaveFiles/" + m_playerName + ".savefile");
+
+    if (!file.is_open()) {
+        std::cout << "Fatal error: Couldn't save " << m_playerName << "'s game!\n";
+        SDL_Quit();
+    }
+
+    file << m_currentSceneIndex << '\n';
+    file << m_playerName << '\n';
+    std::string bg = m_file[m_currentSceneStr]["Background"].as<std::string>();
+    std::string bgPath = "Textures/Backgrounds/" + bg;
+
+    if (bg.find("beach") != std::string::npos) {
+        bg = "At Beach";
+    }
+    else if (bg.find("bedroom") != std::string::npos) {
+        bg = "In Bedroom";
+    }
+    else if (bg.find("cafe") != std::string::npos) {
+        bg = "At Cafe";
+    }
+    else if (bg.find("class") != std::string::npos) {
+        bg = "In Class";
+    }
+    else if (bg.find("forest") != std::string::npos) {
+        bg = "In Forest";
+    }
+    else if (bg.find("park") != std::string::npos) {
+        bg = "At Park";
+    }
+    else if (bg.find("runningtoschool") != std::string::npos) {
+        bg = "Schooltrip";
+    }
+    else if (bg.find("school") != std::string::npos) {
+        bg = "At School";
+    }
+    else if (bg.find("trainstation") != std::string::npos) {
+        bg = "At Station";
+    }
+    else if (bg.find("train") != std::string::npos) {
+        bg = "In Train";
+    }
+
+    file << bg << '\n';
+    file << bgPath << '\n';
 }

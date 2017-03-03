@@ -11,6 +11,7 @@
 #include <Bengine/AudioEngine.h>
 
 #include "OptionsScreen.h"
+#include "LoadGameScreen.h"
 
 #include <yaml-cpp/yaml.h>
 
@@ -30,6 +31,7 @@ public:
     virtual void update() override;
     virtual void draw() override;
 
+    void setGameData(SaveData data);
     void setPlayerName(const std::string playerName) { m_playerName = playerName; }
 
 private:
@@ -47,6 +49,8 @@ private:
     std::vector<std::string> getWrappedText(std::string text, const float& maxLength, const float& fontScale);
     void loadOptions();
     void saveOptions();
+    
+    void saveGame();
 
     std::string m_currentDay = "Monday";
     std::string m_currentSceneStr = "-1", m_currentDialogueStr = "-1";
@@ -72,17 +76,23 @@ private:
 
     Bengine::GLTexture m_lastLeftTexture, m_lastRightTexture;
 
+    bool m_paused = false;
     bool m_fadeLeftChar = false, m_fadeRightChar = false;
     bool m_hasDialogueBox = false;
     bool m_hasTalkerBox = false;
     bool m_isQuestion = false;
     bool m_fadeIn = false;
+    bool m_autoPlay = true;
+    bool m_setAutoPlayTicks = false;
     bool m_changeToNextDialogue = true;
     bool m_shouldFadeOut = false;
     bool m_fadingOut = false;
     bool m_firstUpdateAfterOptionClick = false;
     bool m_waitAfterClickedOption = false;
     bool m_showOptions = false;
+
+    Uint32 m_autoPlayWaitTime = 0;
+    Uint32 m_autoPlayStartTicks = 0;
 
     std::string m_playerName = "";
     std::string m_talker = "";
@@ -94,6 +104,7 @@ private:
     YAML::Node m_file;
 
     OptionsScreen m_optionsScreen;
+    LoadGameScreen m_loadGameScreen;
     Bengine::SoundEffect m_currentSoundEffect;
     Bengine::Music m_currentSong;
     Bengine::Window* m_window;

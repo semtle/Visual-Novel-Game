@@ -11,6 +11,7 @@
 #include "NewGameScreen.h"
 #include "MainGameScreen.h"
 #include "OptionsScreen.h"
+#include "LoadGameScreen.h"
 
 class App : public Bengine::IMainGame
 {
@@ -25,6 +26,7 @@ public:
     void startMenuSong();
     void endMenuSong();
 
+    void setGameData(SaveData data) { m_mainGameScreen->setGameData(data); }
     void setMusicVolume(float volume);
     float getMusicVolume();
 private:

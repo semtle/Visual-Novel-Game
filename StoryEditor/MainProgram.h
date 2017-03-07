@@ -104,9 +104,11 @@ private:
     std::string creationErrorMsg = "";
 
     int currentMessageIdx = 0;
+    int currentCharAskingQuestionIdx = 0;
 
 	bool clickedOnTalkerBox = false;
 	bool clickedOnDialogueBox = false;
+    bool settingCharAskingQuestion = false;
 
 	bool clickedOnFirstAnswerBox = false;
 	bool clickedOnSecondAnswerBox = false;
@@ -273,6 +275,9 @@ private:
 
     // Open sound effect file
     glm::vec4 openSoundEffectFileBtn = glm::vec4(-this->screenWidth / 2 + 620, -this->screenHeight / 2 + 75, buttonSize);
+
+    // Set char asking question button
+    glm::vec4 setCharAskingQuestionBtnDestRect = glm::vec4(-this->screenWidth / 2 + 220, -this->screenHeight / 2 + 100, buttonSize);
 
 	// Close icon
 	glm::vec4 closeIconDestRect = glm::vec4(this->screenWidth / 2 - 48, -this->screenHeight / 2 + 550, 32, 32);

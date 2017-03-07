@@ -336,6 +336,17 @@ void MainProgram::checkMainScreenInputs()
 		}
 	}
 
+    dim = this->getInputDimensions(this->setCharAskingQuestionBtnDestRect);
+
+    // If clicked outside of set char asking question
+    if (this->changingSettings) {
+        if (mouseCoords.x < dim.x || mouseCoords.x > dim.x + dim.z || mouseCoords.y < dim.y || mouseCoords.y > dim.y + dim.a) {
+            if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+                this->settingCharAskingQuestion = false;
+            }
+        }
+    }
+
 	dim = this->getInputDimensions(this->saveBtnDestRect);
 
 	// Clicked something else than save button
@@ -988,7 +999,7 @@ void MainProgram::checkMainScreenInputs()
 	}
 
 	// Custom next dialogue checkbox
-	if (this->changingSettings) {
+	if (this->changingSettings && this->lastDialogue->name.find("Question") == std::string::npos) {
 		dim = this->getInputDimensions(this->customNextCheckBox);
 		if (this->lastDialogue->name.find("Question") == std::string::npos) {
 			dim.y -= 80;
@@ -1008,7 +1019,7 @@ void MainProgram::checkMainScreenInputs()
 	}
 
 	// Custom next dialogue button
-	if (this->changingSettings && this->lastDialogue->nextDialogue != "") {
+	if (this->changingSettings && this->lastDialogue->nextDialogue != "" && this->lastDialogue->name.find("Question") == std::string::npos) {
 		dim = this->getInputDimensions(this->setNextCustomDlgDestRect);
 		if (this->lastDialogue->name.find("Question") == std::string::npos) {
 			dim.y -= 80;
@@ -1039,8 +1050,9 @@ void MainProgram::checkMainScreenInputs()
     // Start Music checkbox
     if (this->changingSettings) {
         dim = this->getInputDimensions(this->startMusicCheckBox);
-        if (this->lastDialogue->name.find("Question") == std::string::npos) {
-            dim.y -= 80;
+        dim.y -= 80;
+        if (this->lastDialogue->name.find("Question") != std::string::npos) {
+            dim.y -= 65;
         }
 
         if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
@@ -1063,8 +1075,9 @@ void MainProgram::checkMainScreenInputs()
     // End Music checkbox
     if (this->changingSettings) {
         dim = this->getInputDimensions(this->endMusicCheckBox);
-        if (this->lastDialogue->name.find("Question") == std::string::npos) {
-            dim.y -= 80;
+        dim.y -= 80;
+        if (this->lastDialogue->name.find("Question") != std::string::npos) {
+            dim.y -= 65;
         }
 
         if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
@@ -1082,8 +1095,9 @@ void MainProgram::checkMainScreenInputs()
     // Sound effect checkbox
     if (this->changingSettings) {
         dim = this->getInputDimensions(this->soundEffectCheckBox);
-        if (this->lastDialogue->name.find("Question") == std::string::npos) {
-            dim.y -= 80;
+        dim.y -= 80;
+        if (this->lastDialogue->name.find("Question") != std::string::npos) {
+            dim.y -= 65;
         }
 
         if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
@@ -1101,8 +1115,9 @@ void MainProgram::checkMainScreenInputs()
     // Open music file
     if (this->changingSettings) {
         dim = this->getInputDimensions(this->openMusicFileBtn);
-        if (this->lastDialogue->name.find("Question") == std::string::npos) {
-            dim.y -= 80;
+        dim.y -= 80;
+        if (this->lastDialogue->name.find("Question") != std::string::npos) {
+            dim.y -= 65;
         }
 
         if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
@@ -1132,8 +1147,9 @@ void MainProgram::checkMainScreenInputs()
     // Open sound effect file
     if (this->changingSettings) {
         dim = this->getInputDimensions(this->openSoundEffectFileBtn);
-        if (this->lastDialogue->name.find("Question") == std::string::npos) {
-            dim.y -= 80;
+        dim.y -= 80;
+        if (this->lastDialogue->name.find("Question") != std::string::npos) {
+            dim.y -= 65;
         }
 
         if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
@@ -1155,6 +1171,22 @@ void MainProgram::checkMainScreenInputs()
 
                         this->lastDialogue->soundEffect = filePath.substr(pos + 14);
                     }
+                }
+            }
+        }
+    }
+
+    // Open sound effect file
+    if (this->changingSettings && this->lastDialogue->name.find("Question") != std::string::npos) {
+        dim = this->getInputDimensions(this->setCharAskingQuestionBtnDestRect);
+        
+        if (mouseCoords.x > dim.x && mouseCoords.x < dim.x + dim.z) {
+            if (mouseCoords.y > dim.y && mouseCoords.y < dim.y + dim.a) {
+                if (this->inputManager.isKeyDown(SDL_BUTTON_LEFT)) {
+                    this->inputManager.releaseKey(SDL_BUTTON_LEFT);
+
+                    this->settingCharAskingQuestion = true;
+                    this->currentCharAskingQuestionIdx = this->lastDialogue->charAskingQuestion.length();
                 }
             }
         }
@@ -1376,6 +1408,7 @@ void MainProgram::onKeyPress(unsigned int keyID)
 	if (this->currentState == ProgramState::ADD_DIALOGUE || this->currentState == ProgramState::ADDSCENE
 		|| this->clickedOnTalkerBox || this->clickedOnDialogueBox || this->clickedOnFirstAnswerBox || this->clickedOnSecondAnswerBox || this->clickedOnThirdAnswerBox
 		|| this->settingNextDialogue || this->changingDialogueName || this->changingSceneNameIdx != -1 ||this->selectedDialogueIdx != -1 || this->selectedSceneIdx != -1 || clickedOnDialogueBox
+        || this->settingCharAskingQuestion
 		) {
 		// Handle modifying the current scene name being given
 		std::string keyName = SDL_GetKeyName(keyID);
@@ -1408,6 +1441,11 @@ void MainProgram::onKeyPress(unsigned int keyID)
 				this->duplicateDialogueName = false;
                 this->creationErrorMsg = "";
 			}
+            // Setting char asking question
+            if (this->settingCharAskingQuestion && this->changingSettings) {
+                if (this->lastDialogue->charAskingQuestion.length() > 0)
+                    this->lastDialogue->charAskingQuestion = this->lastDialogue->charAskingQuestion.substr(0, this->lastDialogue->charAskingQuestion.size() - 1);
+            }
 			// Changing dialogue name
 			else if (this->changingDialogueName) {
 				this->currentDialogue->name = this->currentDialogue->name.substr(0, this->currentDialogue->name.size() - 1);
@@ -1649,6 +1687,9 @@ void MainProgram::onKeyPress(unsigned int keyID)
 			else if (this->currentDialogue != nullptr && this->clickedOnTalkerBox) {
 				this->clickedOnTalkerBox = false;
 			}
+            if (this->settingCharAskingQuestion && this->changingSettings) {
+                this->settingCharAskingQuestion = false;
+            }
 			// Message
 			else if (this->currentDialogue != nullptr && this->clickedOnDialogueBox) {
 				this->clickedOnDialogueBox = false;
@@ -1735,6 +1776,10 @@ void MainProgram::onKeyPress(unsigned int keyID)
                     this->creationErrorMsg = "";
 				}
 			}
+            // Setting char asking question
+            if (this->settingCharAskingQuestion && this->changingSettings) {
+                this->lastDialogue->charAskingQuestion += static_cast<char>(keyID);
+            }
 			// Changing dialogue name
 			else if (this->changingDialogueName) {
 				if (this->currentDialogue->name.length() < 20) {
@@ -1920,6 +1965,13 @@ void MainProgram::onKeyPress(unsigned int keyID)
 		if (this->currentDialogue != nullptr && this->clickedOnTalkerBox && this->currentDialogue->talking.length() > 0) {
 			this->currentDialogue->talking[0] = toupper(this->currentDialogue->talking[0]);
 		}
+
+        // Setting char asking question
+        if (this->settingCharAskingQuestion && this->changingSettings) {
+            if (this->lastDialogue->charAskingQuestion.length() > 0) {
+                this->lastDialogue->charAskingQuestion[0] = toupper(this->lastDialogue->charAskingQuestion[0]);
+            }
+        }
 
 		if (!this->clickedOnTalkerBox && !this->clickedOnDialogueBox) {
 			// Capitalize first letters of the name
@@ -2755,41 +2807,47 @@ void MainProgram::drawCurrentDialogue()
 
 		}
 
+        glm::vec4 movedDestRect = this->customNextCheckBox;
+
 		// Custom next dialogue box
-		if (this->lastDialogue->nextDialogue != "") {
-			texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
-		}
-		else
-			texture = Bengine::ResourceManager::getTexture("Textures/checkbox_unchecked.png").id;
+        if (this->lastDialogue->name.find("Question") == std::string::npos) {
+            if (this->lastDialogue->nextDialogue != "") {
+                texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
+            }
+            else
+                texture = Bengine::ResourceManager::getTexture("Textures/checkbox_unchecked.png").id;
 
-		glm::vec4 movedDestRect = this->customNextCheckBox;
-		movedDestRect.y += 80;
-
-		this->spriteBatch.draw(
-			(this->lastDialogue->name.find("Question") == std::string::npos) ? movedDestRect : this->customNextCheckBox,
-			this->mainUvRect,
-			texture,
-			0.0f,
-			this->color
-		);
-
-		movedDestRect = this->setNextCustomDlgDestRect;
-		movedDestRect.y += 80;
-
-		// Set next dialogue button
-		if (this->lastDialogue->nextDialogue != "") {
-			this->spriteBatch.draw(
-				(this->lastDialogue->name.find("Question") == std::string::npos) ? movedDestRect : this->setNextCustomDlgDestRect,
-				this->mainUvRect,
-				Bengine::ResourceManager::getTexture("Textures/setnext.png").id,
-				0.0f,
-				this->color
-			);
-		}
-
-        movedDestRect = this->startMusicCheckBox;
-        if (this->lastDialogue->name.find("Question") == std::string::npos)
             movedDestRect.y += 80;
+
+            this->spriteBatch.draw(
+                (this->lastDialogue->name.find("Question") == std::string::npos) ? movedDestRect : this->customNextCheckBox,
+                this->mainUvRect,
+                texture,
+                0.0f,
+                this->color
+            );
+
+            movedDestRect = this->setNextCustomDlgDestRect;
+            movedDestRect.y += 80;
+
+            // Set next dialogue button
+            if (this->lastDialogue->nextDialogue != "") {
+                this->spriteBatch.draw(
+                    (this->lastDialogue->name.find("Question") == std::string::npos) ? movedDestRect : this->setNextCustomDlgDestRect,
+                    this->mainUvRect,
+                    Bengine::ResourceManager::getTexture("Textures/setnext.png").id,
+                    0.0f,
+                    this->color
+                );
+            }
+        }
+
+        // Music checkbox
+        movedDestRect = this->startMusicCheckBox;
+        movedDestRect.y += 80;
+
+        if (this->lastDialogue->name.find("Question") != std::string::npos)
+            movedDestRect.y += 67;
 
         if (this->lastDialogue->startMusic != "")
             texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
@@ -2807,8 +2865,10 @@ void MainProgram::drawCurrentDialogue()
         // Open music file button
         if (this->lastDialogue->startMusic != "") {
             glm::vec4 destRect = this->openMusicFileBtn;
-            if (this->lastDialogue->name.find("Question") == std::string::npos)
-                destRect.y += 80;
+            destRect.y += 80;
+
+            if (this->lastDialogue->name.find("Question") != std::string::npos)
+                destRect.y += 67;
 
             this->spriteBatch.draw(
                 destRect,
@@ -2822,8 +2882,10 @@ void MainProgram::drawCurrentDialogue()
         // Open sound effect file button
         if (this->lastDialogue->soundEffect != "") {
             glm::vec4 destRect = this->openSoundEffectFileBtn;
-            if (this->lastDialogue->name.find("Question") == std::string::npos)
-                destRect.y += 80;
+            destRect.y += 80;
+
+            if (this->lastDialogue->name.find("Question") != std::string::npos)
+                destRect.y += 67;
 
             this->spriteBatch.draw(
                 destRect,
@@ -2835,8 +2897,10 @@ void MainProgram::drawCurrentDialogue()
         }
 
         movedDestRect = this->endMusicCheckBox;
-        if (this->lastDialogue->name.find("Question") == std::string::npos)
-            movedDestRect.y += 80;
+        movedDestRect.y += 80;
+
+        if (this->lastDialogue->name.find("Question") != std::string::npos)
+            movedDestRect.y += 67;
 
         if (this->lastDialogue->endMusic)
             texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
@@ -2852,8 +2916,10 @@ void MainProgram::drawCurrentDialogue()
         );
 
         movedDestRect = this->soundEffectCheckBox;
-        if (this->lastDialogue->name.find("Question") == std::string::npos)
-            movedDestRect.y += 80;
+        movedDestRect.y += 80;
+
+        if (this->lastDialogue->name.find("Question") != std::string::npos)
+            movedDestRect.y += 67;
 
         if (this->lastDialogue->soundEffect != "")
             texture = Bengine::ResourceManager::getTexture("Textures/checkbox_checked.png").id;
@@ -2876,6 +2942,17 @@ void MainProgram::drawCurrentDialogue()
 			0.0f,
 			this->color
 		);
+
+        // Set char asking question
+        if (this->lastDialogue->name.find("Question") != std::string::npos) {
+            this->spriteBatch.draw(
+                this->setCharAskingQuestionBtnDestRect,
+                this->mainUvRect,
+                Bengine::ResourceManager::getTexture("Textures/set-button.png").id,
+                0.0f,
+                this->color
+            );
+        }
 	}
 }
 
@@ -3517,19 +3594,21 @@ void MainProgram::drawMainScreenTexts()
 		}
 
 		// Custom next dialogue checkbox
-		sprintf_s(buffer, "%s", "Set custom next dialogue");
+        int y = 310;
+        if (this->lastDialogue->name.find("Question") == std::string::npos) {
+            sprintf_s(buffer, "%s", "Set custom next dialogue");
 
-		int y = 310;
-		if (this->lastDialogue->name.find("Question") == std::string::npos) y += 80;
+            y += 80;
 
-		this->spriteFont->draw(
-			this->fontBatch,
-			buffer,
-			glm::vec2(226, y),
-			glm::vec2(0.8f),
-			0.0f,
-			Bengine::ColorRGBA8(0, 0, 0, 255)
-		);
+            this->spriteFont->draw(
+                this->fontBatch,
+                buffer,
+                glm::vec2(226, y),
+                glm::vec2(0.8f),
+                0.0f,
+                Bengine::ColorRGBA8(0, 0, 0, 255)
+            );
+        }
 
 		// The custom next dialogue's name
 		if (this->lastDialogue->nextDialogue != "") {
@@ -3559,8 +3638,8 @@ void MainProgram::drawMainScreenTexts()
 			);
 		}
 
-        y = 157;
-        if (this->lastDialogue->name.find("Question") == std::string::npos) y += 80;
+        y = 247;
+        if (this->lastDialogue->name.find("Question") != std::string::npos) y += 60;
 
         this->spriteFont->draw(
             this->fontBatch,
@@ -3593,8 +3672,10 @@ void MainProgram::drawMainScreenTexts()
         sprintf_s(buffer, "%s", this->lastDialogue->startMusic.c_str());
 
         glm::vec2 pos(this->openMusicFileBtn.x + this->screenWidth / 2, this->openMusicFileBtn.y + this->screenHeight / 2 - 35);
-        if (this->lastDialogue->name.find("Question") == std::string::npos)
-            pos.y += 80;
+        pos.y += 80;
+
+        if (this->lastDialogue->name.find("Question") != std::string::npos)
+            pos.y += 67;
 
         this->spriteFont->draw(
             this->fontBatch,
@@ -3609,8 +3690,10 @@ void MainProgram::drawMainScreenTexts()
         sprintf_s(buffer, "%s", this->lastDialogue->soundEffect.c_str());
 
         pos = glm::vec2(this->openSoundEffectFileBtn.x + this->screenWidth / 2, this->openSoundEffectFileBtn.y + this->screenHeight / 2 - 35);
-        if (this->lastDialogue->name.find("Question") == std::string::npos)
-            pos.y += 80;
+        pos.y += 80;
+
+        if (this->lastDialogue->name.find("Question") != std::string::npos)
+            pos.y += 67;
 
         this->spriteFont->draw(
             this->fontBatch,
@@ -3620,6 +3703,34 @@ void MainProgram::drawMainScreenTexts()
             0.0f,
             Bengine::ColorRGBA8(0, 0, 0, 255)
         );
+
+        // Character asking question
+        if (this->lastDialogue->name.find("Question") != std::string::npos) {
+
+            pos = glm::vec2(this->setCharAskingQuestionBtnDestRect.x + this->screenWidth / 2, this->setCharAskingQuestionBtnDestRect.y + this->screenHeight / 2 + 45);
+
+            this->spriteFont->draw(
+                this->fontBatch,
+                "Set the character asking this question",
+                pos,
+                glm::vec2(0.7f),
+                0.0f,
+                Bengine::ColorRGBA8(0, 0, 0, 255)
+            );
+
+            sprintf_s(buffer, "%s", this->lastDialogue->charAskingQuestion.c_str());
+
+            pos = glm::vec2(this->setCharAskingQuestionBtnDestRect.x + this->screenWidth / 2 + this->buttonSize.x + 20, this->setCharAskingQuestionBtnDestRect.y + this->screenHeight / 2 + 6);
+
+            this->spriteFont->draw(
+                this->fontBatch,
+                buffer,
+                pos,
+                glm::vec2(0.7f),
+                0.0f,
+                Bengine::ColorRGBA8(0, 0, 0, 255)
+            );
+        }
 	}
 
 	this->fontBatch.end();
@@ -4082,5 +4193,6 @@ std::wstring MainProgram::getOpenFileName(std::string fileType)
 		std::cout << "Error: could not set current directory back to default!\n";
 	}
 
+    this->inputManager.releaseKey(SDL_BUTTON_LEFT);
 	return buffer;
 }

@@ -5,70 +5,85 @@
 
     0:
         name: Narrative 1
+        BoxColor: 1
         FadeIn: true
         StartMusic: JunkyFunk.mp3
         message: Bright, warm rays of light spills between my curtains.
         next: 1
     1:
         name: Narrative 2
+        BoxColor: 1
         message: I can feel the warmth embracing my face as I start to wake up.
         next: 2
     2:
         name: Narrative 3
+        BoxColor: 1
         message: Sudden urge to strecth my body overtakes me.
         next: 3
     3:
         name: Narrative 4
+        BoxColor: 1
         message: As I straghten my arms, I can feel my body, slowly, tipping over the bed's edge.
         next: 4
     4:
         name: Player 1
+        BoxColor: 1
         talker: Player
         message: Huh !?!?
         next: 5
     5:
         name: Player 2
+        BoxColor: 1
         talker: Player
         message: Aahh, my head...
         next: 6
     6:
         name: Narrative 5
+        BoxColor: 1
         message: I genlty rub my head in confusion as I wonder how I ended up on the floor.
         next: 7
     7:
         name: Narrative 6
+        BoxColor: 1
         message: Suddenly I notice that my phone is vibrating next to me.
         next: 8
     8:
         name: Player 3
+        BoxColor: 1
         talker: Player
         message: Wait a second, it's already 9am?
         next: 9
     9:
         name: Player 3.1
+        BoxColor: 1
         talker: Player
         message: I'm late for school!
         next: 10
     10:
         name: Narrative 7
+        BoxColor: 1
         message: If you didn't know, my teacher is the scariest one in our school, so being late wasn't a good option.
         next: 11
     11:
         name: Player 4
+        BoxColor: 1
         talker: Player
         message: Why didn't that darn alarm wake me up!
         next: 12
     12:
         name: Narrative 8
+        BoxColor: 1
         message: With haste I jumped up from the floor and started to get ready for school.
         next: 13
     13:
         name: Player 5
+        BoxColor: 1
         talker: Player
         message: I better hurry up and get going...
         next: 14
     14:
         name: Player 6
+        BoxColor: 1
         FadeOut: true
         talker: Player
         message: But first, where's my pants at?
@@ -80,6 +95,7 @@
 
     0:
         name: Run Boy
+        BoxColor: 1
         FadeIn: true
         FadeOut: true
         next_scene: 2
@@ -90,78 +106,93 @@
 
     0:
         name: Narrative 1
+        BoxColor: 1
         FadeIn: true
         StartMusic: School.mp3
         message: I can see the school's gates in the distance getting closer and closer.
         next: 1
     1:
         name: Player 1
+        BoxColor: 1
         talker: Player
         message: Phew, I'm finally here.
         next: 2
     2:
         name: Narrative 2
+        BoxColor: 1
         message: While trying to catch my breath, I could hear someone yelling my name from afar.
         next: 3
     3:
         name: Makoto 1
+        BoxColor: 1
         talker: Someone
         message: Hey! Player -kun!
         next: 4
     4:
         name: Player 2
+        BoxColor: 1
         talker: Player
         message: Huh, where?
         next: 5
     5:
         name: Makoto 2
+        BoxColor: 1
         talker: Someone
         message: Good morning, player -kun!
         next: 6
     6:
         name: Narrative 3
+        BoxColor: 1
         message: Oh, it's my good friend Makoto-kun.
         next: 7
     7:
         name: Narrative 4
+        BoxColor: 1
         message: I've been friends with him since the school started, but I have to say that he can be a bit odd from time to time.
         next: 8
     8:
         name: Makoto 3
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, smiling_uniform.png
         message: You are SO late.
         next: 9
     9:
         name: Makoto 4
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, confident_left_uniform.png
         message: You already missed the first class!
         next: 10
     10:
         name: Player 3
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, disappointed_uniform.png
         message: Yeah... Well... My alarm didn't go off, you know!
         next: 11
     11:
         name: Makoto 5
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, smiling_side_uniform.png
         message: Yeah right, like I haven't heard that before.
         next: 12
     12:
         name: Makoto 6
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, laughing_uniform.png
         message: Oh well, atleast you are in time for the next class.
         next: 13
     13:
         name: Narrative 5
+        BoxColor: 1
         message: Just as he finished talking the school bell rang.
         next: 14
     14:
         name: Makoto 7
+        BoxColor: 1
         FadeOut: true
         talker: Makoto-kun
         right: Makoto-kun, normal_uniform.png
@@ -174,6 +205,7 @@
 
     0:
         name: Makoto 1
+        BoxColor: 1
         FadeIn: true
         talker: Makoto-kun
         right: Makoto-kun, smiling_side_uniform.png
@@ -181,46 +213,54 @@
         next: 1
     1:
         name: Makoto 2
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, laughing_uniform.png
         message: I found him derping around at the school's gate.
         next: 2
     2:
         name: Makoto 3
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, smiling_uniform.png
         message: He even startled when I called him, and guess what's his ecxuse for being late was.
         next: 3
     3:
         name: Player 1
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, confident_left_uniform.png
         message: I was exhausted because I ran all the way from home...
         next: 4
     4:
         name: Player 1.2
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, smiling_uniform.png
         message: And I already said that my alarm didn't rang!!
         next: 5
     5:
         name: Player 2
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, laughing_uniform.png
         message: There's nothing I could have done.
         next: 6
     6:
         name: Narrative 1
+        BoxColor: 1
         right: Makoto-kun, laughing_uniform.png
         message: Just look at his smirk, he's enjoying every second of this.
         next: 7
     7:
         name: Narrative 2
+        BoxColor: 1
         right: Makoto-kun, confident_uniform.png
         message: Usually he's a chill guy, but i guess that's his way of showing friendship.
         next: 8
     8:
         name: Teemu 1
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, angry_left_uniform.png
         right: Makoto-kun, smiling_side_uniform.png
@@ -228,18 +268,21 @@
         next: 9
     9:
         name: Narrative 3
+        BoxColor: 1
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, confident_left_uniform.png
         message: Teemu-kun is my homie, he always helps out no matter what's the problem.
         next: 10
     10:
         name: Narrative 4
+        BoxColor: 1
         left: Teemu-kun, normal_uniform.png
         right: Makoto-kun, normal_uniform.png
         message: Not only does he help everyone, he's super smart and I've known him since the elementy school.
         next: 11
     11:
         name: Teemu 2
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, normal_uniform.png
         right: Makoto-kun, bored_uniform.png
@@ -247,6 +290,7 @@
         next: 12
     12:
         name: Player 3
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, smiling_uniform.png
         right: Makoto-kun, disappointed_uniform.png
@@ -254,6 +298,7 @@
         next: 13
     13:
         name: Player 4
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, bored_uniform.png
@@ -261,6 +306,7 @@
         next: 14
     14:
         name: Makoto 4
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, laughing_uniform.png
         right: Makoto-kun, normal_uniform.png
@@ -268,6 +314,7 @@
         next: 15
     15:
         name: Teemu 3
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, surprised_uniform.png
@@ -275,6 +322,7 @@
         next: 16
     16:
         name: Player 5
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, laughing_uniform.png
         right: Makoto-kun, confident_left_uniform.png
@@ -282,6 +330,7 @@
         next: 17
     17:
         name: Player 5.2
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, smiling_uniform.png
@@ -289,6 +338,7 @@
         next: 18
     18:
         name: Teemu 4
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, surprised_uniform.png
         right: Makoto-kun, surprised_uniform.png
@@ -296,6 +346,7 @@
         next: 19
     19:
         name: Teemu 4.2
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, confident_uniform.png
@@ -303,6 +354,7 @@
         next: 20
     20:
         name: Makoto 5
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, smiling_uniform.png
@@ -310,6 +362,7 @@
         next: 21
     21:
         name: Teemu 5
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, worried_uniform.png
         right: Makoto-kun, worried_uniform.png
@@ -317,6 +370,7 @@
         next: 22
     22:
         name: Makoto 6
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, normal_uniform.png
         right: Makoto-kun, confident_left_uniform.png
@@ -324,6 +378,7 @@
         next: 23
     23:
         name: Player 6
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, blush_bored_center_uniform.png
@@ -331,6 +386,7 @@
         next: 24
     24:
         name: Makoto 7
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, sad_uniform.png
         right: Makoto-kun, confident_left_uniform.png
@@ -338,6 +394,7 @@
         next: 25
     25:
         name: Teemu 6
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, shouting_uniform.png
@@ -345,6 +402,7 @@
         next: 26
     26:
         name: Makoto 8
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, sad_uniform.png
         right: Makoto-kun, surprised_uniform.png
@@ -352,6 +410,7 @@
         next: 27
     27:
         name: Question 1
+        BoxColor: 1
         Option 1:
             text: I think he could do it, if given the chance
             influence: 2
@@ -366,6 +425,7 @@
             next: 38
     28:
         name: Makoto 1.1
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, sad_uniform.png
         right: Makoto-kun, normal_uniform.png
@@ -375,6 +435,7 @@
 
     29:
         name: Teemu 1.1
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, surprised_uniform.png
         right: Makoto-kun, confident_left_uniform.png
@@ -384,6 +445,7 @@
 
     30:
         name: Makoto 1.2
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, worried_uniform.png
         right: Makoto-kun, confident_left_uniform.png
@@ -393,6 +455,7 @@
 
     31:
         name: Teemu 1.2
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, worried_uniform.png
         right: Makoto-kun, smiling_side_uniform.png
@@ -402,6 +465,7 @@
 
     32:
         name: Player 1.1
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, sad_uniform.png
         right: Makoto-kun, disappointed_uniform.png
@@ -411,6 +475,7 @@
 
     33:
         name: Teemu 2.1
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, laughing_uniform.png
         right: Makoto-kun, bored_uniform.png
@@ -418,6 +483,7 @@
         next: 34
     34:
         name: Makoto 2.1
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, normal_uniform.png
         right: Makoto-kun, confident_left_uniform.png
@@ -425,6 +491,7 @@
         next: 35
     35:
         name: Makoto 2.2
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, surprised_uniform.png
         right: Makoto-kun, laughing_uniform.png
@@ -432,6 +499,7 @@
         next: 36
     36:
         name: Teemu 2.2
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, angry_left_uniform.png
         right: Makoto-kun, bored_uniform.png
@@ -439,6 +507,7 @@
         next: 37
     37:
         name: Makoto 2.3
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, disappointed_uniform.png
@@ -448,6 +517,7 @@
 
     38:
         name: Makoto 3.1
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, sad_uniform.png
         right: Makoto-kun, surprised_uniform.png
@@ -457,6 +527,7 @@
 
     39:
         name: Teemu 3.1
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, smiling_side_uniform.png
@@ -466,6 +537,7 @@
 
     40:
         name: Player 3.1
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, laughing_uniform.png
         right: Makoto-kun, bored_uniform.png
@@ -475,6 +547,7 @@
 
     41:
         name: Makoto 3.2
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, normal_uniform.png
         right: Makoto-kun, normal_uniform.png
@@ -484,6 +557,7 @@
 
     42:
         name: Teemu 3.2
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, smiling_uniform.png
@@ -493,6 +567,7 @@
 
     43:
         name: Teacher
+        BoxColor: 1
         talker: Teacher
         left: Teemu-kun, angry_uniform.png
         right: Makoto-kun, smiling_uniform.png
@@ -502,6 +577,7 @@
 
     44:
         name: Teacher 2
+        BoxColor: 1
         talker: Teacher
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, disappointed_uniform.png
@@ -511,6 +587,7 @@
 
     45:
         name: Boys 1
+        BoxColor: 1
         FadeOut: true
         talker: Both
         left: Teemu-kun, sad_uniform.png
@@ -526,11 +603,13 @@
 
     0:
         name: Teacher 1
+        BoxColor: 1
         talker: Teacher
         message: Silence in the classroom.
         next: 1
     1:
         name: Teacher 2
+        BoxColor: 1
         FadeOut: true
         talker: Teacher
         message: Let's start by reading...
@@ -542,6 +621,7 @@
 
     0:
         name: Makoto 1
+        BoxColor: 1
         FadeIn: true
         talker: Makoto-kun
         left: Teemu-kun, normal_uniform.png
@@ -550,6 +630,7 @@
         next: 1
     1:
         name: Teemu-kun 1
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, laughing_uniform.png
         right: Makoto-kun, confident_uniform.png
@@ -557,6 +638,7 @@
         next: 2
     2:
         name: Teemu-kun 2
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, confident_uniform.png
@@ -564,6 +646,7 @@
         next: 3
     3:
         name: Player 1
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, confident_left_uniform.png
@@ -571,6 +654,7 @@
         next: 4
     4:
         name: Teemu-kun 3
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, smiling_uniform.png
         right: Makoto-kun, normal_uniform.png
@@ -578,6 +662,7 @@
         next: 5
     5:
         name: Makoto-kun 2
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, normal_uniform.png
         right: Makoto-kun, confident_left_uniform.png
@@ -585,6 +670,7 @@
         next: 6
     6:
         name: Player 2
+        BoxColor: 1
         FadeOut: true
         talker: Player
         left: Teemu-kun, happy_uniform.png
@@ -598,27 +684,32 @@
 
     0:
         name: Player 1
+        BoxColor: 1
         FadeIn: true
         talker: Player
         message: Wow! There's no one here.
         next: 1
     1:
         name: Player 2
+        BoxColor: 1
         talker: Player
         message: Did the class really end so early?
         next: 2
     2:
         name: Narrative 1
+        BoxColor: 1
         message: Usually this place is packed...
         next: 3
     3:
         name: Makoto 1
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, normal_uniform.png
         message: I guess we can get lucky too!
         next: 4
     4:
         name: Teemu 1
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, normal_uniform.png
@@ -626,6 +717,7 @@
         next: 5
     5:
         name: Player 3
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, normal_uniform.png
         right: Makoto-kun, blush_center_uniform.png
@@ -633,6 +725,7 @@
         next: 6
     6:
         name: Teemu 2
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, normal_uniform.png
         right: Makoto-kun, blush_uniform.png
@@ -640,68 +733,80 @@
         next: 7
     7:
         name: Narrative 2
+        BoxColor: 1
         left: Teemu-kun, worried_uniform.png
         message: Huh? where did Makoto-kun go.
         next: 8
     8:
         name: Narrative 3
+        BoxColor: 1
         left: Teemu-kun, worried_uniform.png
         message: He was just behind me.
         next: 9
     9:
         name: Teemu 3
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, smiling_uniform.png
         message: And there he goes...
         next: 10
     10:
         name: Narrative 4
+        BoxColor: 1
         left: Teemu-kun, smiling_uniform.png
         message: Why is he running away from us?
         next: 11
     11:
         name: Teemu 4
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, happy_uniform.png
         message: Let's hope he won't find trouble.
         next: 12
     12:
         name: Player 4
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, smiling_uniform.png
         message: Give him some slack Teemu-kun.
         next: 13
     13:
         name: Player 5
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, normal_uniform.png
         message: Even if you don't believe it, he has his moments too.
         next: 14
     14:
         name: Teemu 5
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, happy_uniform.png
         message: That's what I'm worried about.
         next: 15
     15:
         name: Makoto 2
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, surprised_uniform.png
         message: Hey guys! Come fast!
         next: 16
     16:
         name: Narrative 5
+        BoxColor: 1
         left: Teemu-kun, angry_uniform.png
         message: This can't be good...
         next: 17
     17:
         name: Teemu 6
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, laughing_uniform.png
         message: Then, shall we?
         next: 18
     18:
         name: Player 6
+        BoxColor: 1
         FadeOut: true
         talker: Player
         left: Teemu-kun, laughing_uniform.png
@@ -709,24 +814,28 @@
         next: 19
     19:
         name: Narrative 6
+        BoxColor: 1
         FadeIn: true
         left: Makoto-kun, confident_left_uniform.png
         message: Looks like Makoto-kun is with a girl...
         next: 20
     20:
         name: Makoto 3
+        BoxColor: 1
         talker: Makoto-kun
         left: Makoto-kun, laughing_uniform.png
         message: Hey, hey, Look whom I found sitting here all alone.
         next: 21
     21:
         name: Narrative 7
+        BoxColor: 1
         left: Makoto-kun, confident_left_uniform.png
         right: Maiko-san, blush_uniform.png
         message: She looks a bit shy...
         next: 22
     22:
         name: Maiko 1
+        BoxColor: 1
         talker: Maiko-san
         left: Makoto-kun, normal_uniform.png
         right: Maiko-san, blush_uniform.png
@@ -734,6 +843,7 @@
         next: 23
     23:
         name: Player 7
+        BoxColor: 1
         talker: Player
         left: Makoto-kun, confident_uniform.png
         right: Maiko-san, normal_uniform.png
@@ -741,6 +851,7 @@
         next: 24
     24:
         name: Maiko 2
+        BoxColor: 1
         talker: Maiko-san
         left: Makoto-kun, normal_uniform.png
         right: Maiko-san, worried_uniform.png
@@ -748,6 +859,7 @@
         next: 25
     25:
         name: Maiko 3
+        BoxColor: 1
         talker: Maiko-san
         left: Makoto-kun, confident_left_uniform.png
         right: Maiko-san, worried_uniform.png
@@ -755,6 +867,7 @@
         next: 26
     26:
         name: Teemu 7
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, blush_uniform.png
         right: Maiko-san, normal_uniform.png
@@ -762,6 +875,7 @@
         next: 27
     27:
         name: Player 8
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, laughing_uniform.png
         right: Maiko-san, normal_uniform.png
@@ -769,6 +883,7 @@
         next: 28
     28:
         name: Teemu 8
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, happy_uniform.png
         right: Maiko-san, smiling_uniform.png
@@ -776,6 +891,7 @@
         next: 29
     29:
         name: Player 9
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, normal_uniform.png
         right: Maiko-san, surprised_uniform.png
@@ -783,6 +899,7 @@
         next: 30
     30:
         name: Maiko 4
+        BoxColor: 1
         talker: Maiko-san
         left: Makoto-kun, normal_uniform.png
         right: Maiko-san, blush_uniform.png
@@ -790,6 +907,7 @@
         next: 31
     31:
         name: Maiko 5
+        BoxColor: 1
         talker: Maiko-san
         left: Makoto-kun, laughing_uniform.png
         right: Maiko-san, blush_uniform.png
@@ -797,6 +915,7 @@
         next: 32
     32:
         name: Makoto 4
+        BoxColor: 1
         talker: Makoto-kun
         left: Makoto-kun, confident_left_uniform.png
         right: Maiko-san, angry_uniform.png
@@ -804,6 +923,7 @@
         next: 33
     33:
         name: Makoto 5
+        BoxColor: 1
         talker: Makoto-kun
         left: Makoto-kun, normal_uniform.png
         right: Maiko-san, worried_uniform.png
@@ -811,6 +931,7 @@
         next: 34
     34:
         name: Teemu 8
+        BoxColor: 1
         talker: Teemu-kun
         left: Makoto-kun, disappointed_uniform.png
         right: Teemu-kun, blush_sad_center_uniform.png
@@ -818,12 +939,14 @@
         next: 35
     35:
         name: Narrative 8
+        BoxColor: 1
         left: Makoto-kun, confident_left_uniform.png
         right: Teemu-kun, blush_uniform.png
         message: I feel like something's bothering Teemu-kun...
         next: 36
     36:
         name: Player 11
+        BoxColor: 1
         talker: Player
         left: Makoto-kun, bored_uniform.png
         right: Teemu-kun, blush_sad_center_uniform.png
@@ -831,6 +954,7 @@
         next: 37
     37:
         name: Teemu 9
+        BoxColor: 1
         talker: Teemu-kun
         left: Makoto-kun, confident_left_uniform.png
         right: Teemu-kun, blush_uniform.png
@@ -838,6 +962,7 @@
         next: 38
     38:
         name: Makoto 6
+        BoxColor: 1
         talker: Makoto-kun
         left: Makoto-kun, normal_uniform.png
         right: Teemu-kun, happy_uniform.png
@@ -845,12 +970,14 @@
         next: 39
     39:
         name: Narrative 9
+        BoxColor: 1
         left: Makoto-kun, normal_uniform.png
         right: Teemu-kun, smiling_uniform.png
         message: Finally, I can start wolfing down my favorite food.
         next: 40
     40:
         name: All
+        BoxColor: 1
         FadeOut: true
         talker: Everyone
         message: Thank you for the food!
@@ -862,74 +989,88 @@
 
     0:
         name: Narrative 1
+        BoxColor: 1
         FadeIn: true
         message: Phew, I can finally go home.
         next: 1
     1:
         name: Narrative 2
+        BoxColor: 1
         message: Now I just have to wait for Makoto-kun to come...
         next: 2
     2:
         name: Narrative 3
+        BoxColor: 1
         message: Meaby I should go and check on him.
         next: 3
     3:
         name: Narrative 4
+        BoxColor: 1
         message: Oh wait, he's waiting me at the gates.
         next: 4
     4:
         name: Narrative 5
+        BoxColor: 1
         message: I ran to him with light steps.
         next: 5
     5:
         name: Player 1
+        BoxColor: 1
         talker: Player
         message: Hey, when did you get here?
         next: 6
     6:
         name: Makoto 1
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, normal_uniform.png
         message: I just got here and thought that I should wait you.
         next: 7
     7:
         name: Player 2
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, smiling_side_uniform.png
         message: Thanks man!
         next: 8
     8:
         name: Player 3
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, confident_uniform.png
         message: By the way, do you know where Teemu-kun is?
         next: 9
     9:
         name: Makoto 2
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, confident_uniform.png
         message: He said that he had a meeting to attend to.
         next: 10
     10:
         name: Player 4
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, bored_uniform.png
         message: Did he say when the meeting would end?
         next: 11
     11:
         name: Makoto 3
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, normal_uniform.png
         message: He only said that we shouldn't wait for him.
         next: 12
     12:
         name: Makoto 4
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, normal_uniform.png
         message: Well then, where should we go next?
         next: 13
     13:
         name: Question
+        BoxColor: 1
         Option 1:
             text: Go home
             influence: 1
@@ -944,6 +1085,7 @@
             next: Not Selected
     14:
         name: Player 1.1
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, confident_left_uniform.png
         message: I'm feeling a bit tired...
@@ -952,12 +1094,14 @@
 
     15:
         name: Player 1.2
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, disappointed_uniform.png
         message: So I think I'm going to go home today.
         next: 16
     16:
         name: Makoto 1.1
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, disappointed_uniform.png
         message: I see...
@@ -966,6 +1110,7 @@
 
     17:
         name: Makoto 1.2
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, normal_uniform.png
         message: Well, see you tomorrow then!
@@ -974,6 +1119,7 @@
 
     18:
         name: Player 1.3
+        BoxColor: 1
         FadeOut: true
         talker: Player
         right: Makoto-kun, normal_uniform.png
@@ -983,6 +1129,7 @@
 
     19:
         name: Player 2.1
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, bored_uniform.png
         message: Should we go to the park?
@@ -991,6 +1138,7 @@
 
     20:
         name: Makoto 2.1
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, confident_left_uniform.png
         message: Hmm, what should we do there?
@@ -999,6 +1147,7 @@
 
     21:
         name: Player 2.2
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, normal_uniform.png
         message: I don't know, just chill and play videagames?
@@ -1007,6 +1156,7 @@
 
     22:
         name: Makoto 2.2
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, confident_uniform.png
         message: Sure, I'll just let Teemu-kun know if he wants to join us at some point.
@@ -1015,6 +1165,7 @@
 
     23:
         name: Player 2.3
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, confident_left_uniform.png
         message: Sounds like a plan!
@@ -1023,6 +1174,7 @@
 
     24:
         name: Makoto 2.3
+        BoxColor: 1
         FadeOut: true
         talker: Makoto-kun
         right: Makoto-kun, normal_uniform.png
@@ -1032,6 +1184,7 @@
 
     25:
         name: Player 3.1
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, normal_uniform.png
         message: How about we go to the Arcade?
@@ -1040,6 +1193,7 @@
 
     26:
         name: Makoto 3.1
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, confident_uniform.png
         message: Now you're talkin'!
@@ -1048,6 +1202,7 @@
 
     27:
         name: Makoto 3.2
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, laughing_uniform.png
         message: You know the new game that was released last month is freaking dope!
@@ -1056,6 +1211,7 @@
 
     28:
         name: Makoto 3.3
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, confident_left_uniform.png
         message: We definitely should play some of it.
@@ -1064,6 +1220,7 @@
 
     29:
         name: Player 3.2
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, normal_uniform.png
         message: Sounds good!
@@ -1072,6 +1229,7 @@
 
     30:
         name: Makoto 3.4
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, laughing_uniform.png
         message: Then, what are we waiting for?
@@ -1080,12 +1238,14 @@
 
     31:
         name: Makoto 3.5
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, confident_uniform.png
         message: Could we first go by my house? It's pretty close to the Arcade.
         next: 32
     32:
         name: Player 3.3
+        BoxColor: 1
         FadeOut: true
         talker: Player
         right: Makoto-kun, confident_uniform.png
@@ -1100,65 +1260,80 @@
 
     0:
         name: Narrative 1
+        BoxColor: 1
         FadeIn: true
         StartMusic: Train.mp3
         message: Finally some peace...
         next: 1
     1:
         name: Narrative 2
+        BoxColor: 1
         message: Today sure was an eventful day if I say so myself.
         next: 2
     2:
         name: Narrative 3
+        BoxColor: 1
         message: Still 25 minutes until I get home and can fully relax.
         next: 3
     3:
         name: Narrative 4
+        BoxColor: 1
         message: As I watched through the train's window, I could see station after station passing me by.
         next: 4
     4:
         name: Narrative 5
+        BoxColor: 1
         message: I can feel how my eyes are getting shut and opening again and again...
         next: 5
     5:
         name: Narrative 6
+        BoxColor: 1
         message: Trying to fight back that sudden feeling of sweet dreams is taking everything I have.
         next: 6
     6:
         name: Narrative 7
+        BoxColor: 1
         message: Hearing the announcer's voice echoing through the train, makes me feel some how relax.
         next: 7
     7:
         name: Narrative 8
+        BoxColor: 1
         message: Yet another station passed by...
         next: 8
     8:
         name: Narrative 9
+        BoxColor: 1
         message: I can finally hear something familiar from the announcement...
         next: 9
     9:
         name: Player 1
+        BoxColor: 1
         talker: Player
         message: I have to remember getting off the train on the next stop.
         next: 10
     10:
         name: Narrative 11
+        BoxColor: 1
         message: I put my headphones back and continued listen sick beats.
         next: 11
     11:
         name: Narrative 12
+        BoxColor: 1
         message: As I stood up, I could feel my body getting a bit heavyer...
         next: 12
     12:
         name: Narrative 13
+        BoxColor: 1
         message: As the train's doors opened I thought to myself...
         next: 13
     13:
         name: Narrative 14
+        BoxColor: 1
         message: The next stop is...
         next: 14
     14:
         name: Narrative 15
+        BoxColor: 1
         FadeOut: true
         message: Home.
         next_scene: 11
@@ -1171,134 +1346,158 @@
 
     0:
         name: Narrative 1
+        BoxColor: 1
         StartMusic: Arcade.mp3
         message: After we stopped by Makoto-kun's home, we arrived at the Arcade!
         next: 1
     1:
         name: Player 1
+        BoxColor: 1
         talker: Player
         message: So, where's this new game you were talking about?
         next: 2
     2:
         name: Makoto 1
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, laughing_freetime.png
         message: It should be right next to the X-arsoz.
         next: 3
     3:
         name: Player 2
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, bored_freetime.png
         message: Darn it..
         next: 4
     4:
         name: Player 3
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, confident_left_hoodie.png
         message: It looks like someone's playing it right now...
         next: 5
     5:
         name: Makoto 2
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, laughing_freetime.png
         message: We can always play something else.
         next: 6
     6:
         name: Makoto 3
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, normal_freetime.png
         message: Let's try this one, that looks like a space war game.
         next: 7
     7:
         name: Player 4
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, normal_freetime.png
         message: It does look pretty cool!
         next: 8
     8:
         name: Makoto 4
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, laughing_freetime.png
         message: I'm going to beat you with ease.
         next: 9
     9:
         name: Player 5
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, angry_freetime.png
         message: Don't look down on me!
         next: 10
     10:
         name: Player 6
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, confident_freetime.png
         message: I'm not going to go easy on you.
         next: 11
     11:
         name: Makoto 5
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, laughing_freetime.png
         message: Bring it on!
         next: 12
     12:
         name: Narrative 2
+        BoxColor: 1
         message: We played for hours...
         next: 13
     13:
         name: Narrative 3
+        BoxColor: 1
         message: I couldn't believe that I lost most of the matches...
         next: 14
     14:
         name: Narrative 4
+        BoxColor: 1
         message: After awhile I felt something in my pocket.
         next: 15
     15:
         name: Player 7
+        BoxColor: 1
         talker: Player
         message: Huh?
         next: 16
     16:
         name: Makoto 6
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, sad_freetime.png
         message: What is it?
         next: 17
     17:
         name: Player 8
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, bored_freetime.png
         message: It's my phone, one second.
         next: 18
     18:
         name: Narrative 5
+        BoxColor: 1
         right: Makoto-kun, normal_freetime.png
         message: I noticed that the caller was my parents.
         next: 19
     19:
         name: Player 9
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, sad_freetime.png
         message: That was my mother, she told me to come home...
         next: 20
     20:
         name: Makoto 7
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, confident_left_hoodie.png
         message: I see, well better get going then.
         next: 21
     21:
         name: Player 11
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, laughing_freetime.png
         message: Yeah, I'm sorry...
         next: 22
     22:
         name: Player 12
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, surprised_freetime.png
         message: I'll see you tomorrow at school, okey?
         next: 23
     23:
         name: Makoto 8
+        BoxColor: 1
         FadeOut: true
         talker: Makoto-kun
         right: Makoto-kun, normal_freetime.png
@@ -1313,47 +1512,55 @@
 
     0:
         name: Narrative 1
+        BoxColor: 1
         FadeIn: true
         StartMusic: Park.mp3
         message: This park sure does seems like a good place to relax.
         next: 1
     1:
         name: Player 1
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, normal_uniform.png
         message: After a long walk we should go sit some where.
         next: 2
     2:
         name: Makoto 1
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, confident_left_uniform.png
         message: How about those stairs up ahead?
         next: 3
     3:
         name: Player 2
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, bored_uniform.png
         message: Sure!
         next: 4
     4:
         name: Narrative 2
+        BoxColor: 1
         right: Makoto-kun, normal_uniform.png
         message: Sitting down after walking for so long feels amazing.
         next: 5
     5:
         name: Makoto 2
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, confident_left_uniform.png
         message: So...
         next: 6
     6:
         name: Makoto 3
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, blush_center_uniform.png
         message: What did you think of Maiko-san?
         next: 7
     7:
         name: Question
+        BoxColor: 1
         Option 1:
             text: I thought she was a bit inverted...
             influence: 0
@@ -1368,6 +1575,7 @@
             next: 21
     8:
         name: Makoto 1.1
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, bored_uniform.png
         message: I see..
@@ -1376,6 +1584,7 @@
 
     9:
         name: Makoto 1.2
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, angry_uniform.png
         message: She's always been a bit shy.
@@ -1384,6 +1593,7 @@
 
     10:
         name: Player 1.1
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, confident_left_uniform.png
         message: Don't misunderstand me, it's not a bad thing to be a bit shy.
@@ -1392,6 +1602,7 @@
 
     11:
         name: Makoto 1.3
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, angry_uniform.png
         message: Hmm...
@@ -1400,6 +1611,7 @@
 
     12:
         name: Narrative 1.1
+        BoxColor: 1
         right: Makoto-kun, confident_uniform.png
         message: The atmosphere seems awkward...
         next: 13
@@ -1407,6 +1619,7 @@
 
     13:
         name: Narrative 1.2
+        BoxColor: 1
         right: Makoto-kun, confident_left_uniform.png
         message: Meaby I said something, I shouldn't have...
         next: 26
@@ -1414,6 +1627,7 @@
 
     14:
         name: Player 2.1
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, confident_left_uniform.png
         message: Why did you ask?
@@ -1422,6 +1636,7 @@
 
     15:
         name: Makoto 2.1
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, laughing_uniform.png
         message: I was just wondering...
@@ -1430,6 +1645,7 @@
 
     16:
         name: Player 2.2
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, bored_uniform.png
         message: Is something wrong?
@@ -1438,6 +1654,7 @@
 
     17:
         name: Makoto 2.3
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, blush_bored_center_uniform.png
         message: I'm just wondering...
@@ -1446,6 +1663,7 @@
 
     18:
         name: Makoto 2.4
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, confident_left_uniform.png
         message: I've known her for a long time now, so I just hope she'd get along with everyone.
@@ -1454,6 +1672,7 @@
 
     19:
         name: Player 2.3
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, normal_uniform.png
         message: Don't worry mate, I got you!
@@ -1462,6 +1681,7 @@
 
     20:
         name: Makoto 2.5
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, blush_center_uniform.png
         message: Thanks dude, it means a lot.
@@ -1470,6 +1690,7 @@
 
     21:
         name: Makoto 3.1
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, laughing_uniform.png
         message: Isn't she!
@@ -1478,6 +1699,7 @@
 
     22:
         name: Player 3.1
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, confident_left_uniform.png
         message: Why are you getting so hyped?
@@ -1486,6 +1708,7 @@
 
     23:
         name: Makoto 3.2
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, normal_uniform.png
         message: I'm just glad that you think that way.
@@ -1494,6 +1717,7 @@
 
     24:
         name: Player 3.2
+        BoxColor: 1
         talker: Player
         right: Makoto-kun, confident_left_uniform.png
         message: Don't worry, I'll take care of her.
@@ -1502,6 +1726,7 @@
 
     25:
         name: Makoto 3.3
+        BoxColor: 1
         talker: Makoto-kun
         right: Makoto-kun, laughing_uniform.png
         message: Please do!
@@ -1510,6 +1735,7 @@
 
     26:
         name: Teemu 1
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, normal_uniform.png
         right: Makoto-kun, confident_left_uniform.png
@@ -1517,6 +1743,7 @@
         next: 27
     27:
         name: Player 3
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, laughing_uniform.png
         right: Makoto-kun, sad_uniform.png
@@ -1524,6 +1751,7 @@
         next: 28
     28:
         name: Teemu 2
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, happy_uniform.png
         right: Makoto-kun, angry_uniform.png
@@ -1531,6 +1759,7 @@
         next: 29
     29:
         name: Teemu 3
+        BoxColor: 1
         talker: Teemu-kun
         left: Teemu-kun, laughing_uniform.png
         right: Makoto-kun, normal_uniform.png
@@ -1538,6 +1767,7 @@
         next: 30
     30:
         name: Makoto 4
+        BoxColor: 1
         talker: Makoto-kun
         left: Teemu-kun, blush_uniform.png
         right: Makoto-kun, confident_uniform.png
@@ -1545,6 +1775,7 @@
         next: 31
     31:
         name: Player 4
+        BoxColor: 1
         talker: Player
         left: Teemu-kun, blush_uniform.png
         right: Makoto-kun, confident_uniform.png
@@ -1552,10 +1783,12 @@
         next: 32
     32:
         name: Narrative 3
+        BoxColor: 1
         message: ...and so we spend rest of our day just chilling at the rice field.
         next: 33
     33:
         name: Narattive 4
+        BoxColor: 1
         FadeOut: true
         message: As the day started to turn closer and closer to dawn we dicided to call it for the day and go home...
         next_scene: 8
@@ -1568,54 +1801,66 @@
 
     0:
         name: Narrative 1
+        BoxColor: 1
         FadeIn: true
         StartMusic: JunkyFunk.mp3
         message: Home, sweet home.
         next: 1
     1:
         name: Narrative 2
+        BoxColor: 1
         message: After slamming my home door shut, I dropped my schoolbag on the floor and went to my room.
         next: 2
     2:
         name: Player 1
+        BoxColor: 1
         talker: Player
         message: I'm home!
         next: 3
     3:
         name: Narrative 3
+        BoxColor: 1
         message: After entering my room, I threw my heavy body at the bed and sighed...
         next: 4
     4:
         name: Player 2
+        BoxColor: 1
         talker: Player
         message: That sure was one long day...
         next: 5
     5:
         name: Narrative 4
+        BoxColor: 1
         message: Just laying on my bed felt good.
         next: 6
     6:
         name: Narrative 5
+        BoxColor: 1
         message: I closed my eyes for a minute...
         next: 7
     7:
         name: Narrative 6
+        BoxColor: 1
         message: I could feel my body felling asleep.
         next: 8
     8:
         name: Player 3
+        BoxColor: 1
         talker: Player
         message: I better wake up early tomorrow...
         next: 9
     9:
         name: Narrative 7
+        BoxColor: 1
         message: I put my phone to a table next to my bed so I wouldn't accidentaly shut it down.
         next: 10
     10:
         name: Narrative 8
+        BoxColor: 1
         message: I turned off the lights and went to back to bed.
         next: 11
     11:
         name: Narrative 9
+        BoxColor: 1
         FadeOut: true
         message: I closed my eyes and waited for the dream to come...

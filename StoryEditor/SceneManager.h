@@ -37,6 +37,8 @@ struct Dialogue {
         startMusic(""),
         soundEffect(""),
         endMusic(false),
+        boxColor(1),
+
 		charAskingQuestion(""),
 
 		option1Text(""),
@@ -68,6 +70,8 @@ struct Dialogue {
         std::string StartMusic,
         std::string SoundEffect,
         bool EndMusic,
+        int BoxColor,
+
 		std::string CharAskingQuestion,
 
 		std::string Option1Text,
@@ -97,6 +101,8 @@ struct Dialogue {
         startMusic(StartMusic),
         soundEffect(SoundEffect),
         endMusic(EndMusic),
+        boxColor(BoxColor),
+
 		charAskingQuestion(CharAskingQuestion),
 
 		option1Text(Option1Text),
@@ -128,6 +134,9 @@ struct Dialogue {
     std::string startMusic;
     bool endMusic;
     std::string soundEffect;
+
+    // 0 = Red, 1 = Blue, 2 = Green
+    int boxColor;
 
 	std::string charAskingQuestion;
 

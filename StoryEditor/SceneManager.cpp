@@ -418,6 +418,7 @@ void SceneManager::loadFromFile(const std::string& filePath)
             bool fadeIn = (currentDialogue["FadeIn"] != nullptr) ? true : false;
             bool fadeOut = (currentDialogue["FadeOut"] != nullptr) ? true : false;
             bool endMusic = (currentDialogue["EndMusic"] != nullptr) ? true : false;
+            int boxColor = 1;
 			std::string askingQuestion = (currentDialogue["asking"] != nullptr) ? currentDialogue["asking"].as<std::string>() : "";
 
 			// Set all question related variables here, because they're set only if the dialogue is a question
@@ -429,6 +430,9 @@ void SceneManager::loadFromFile(const std::string& filePath)
 				next = currentDialogue["next"].as<std::string>();
 			else if (currentDialogue["next_scene"] != nullptr && currentDialogue["custom_next"] != nullptr)
 				next = currentDialogue["next_scene"].as<std::string>() + "otherscene";
+
+            if (currentDialogue["BoxColor"] != nullptr)
+                boxColor = currentDialogue["BoxColor"].as<int>();
 
 			// Question related
 			if (currentDialogueName.find("Question") != std::string::npos) {
@@ -484,6 +488,7 @@ void SceneManager::loadFromFile(const std::string& filePath)
                 startMusic,
                 soundEffect,
                 endMusic,
+                boxColor,
                 
 				askingQuestion,
 
@@ -533,6 +538,7 @@ void SceneManager::saveToFile(const std::string& filePath)
 			for (unsigned j = 0; j < dialogues.size(); j++) {
 				file << "    " << dialogues[j]->index << ":\n";
 				file << "        " << "name: " << dialogues[j]->name << "\n";
+                file << "        " << "BoxColor: " << dialogues[j]->boxColor << "\n";
 
                 if (dialogues[j]->fadeIn)
                     file << "        " << "FadeIn: true" << "\n";

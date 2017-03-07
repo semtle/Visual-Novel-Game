@@ -315,6 +315,18 @@ void MainProgram::checkMainScreenInputs()
 		}
 	}
 
+    // Change box color
+    if (this->currentDialogue != nullptr) {
+        if (this->inputManager.isKeyPressed(SDLK_LEFT) || this->inputManager.isKeyPressed(SDLK_q)) {
+            if (this->currentDialogue->boxColor > 0)
+                this->currentDialogue->boxColor--;
+        }
+        else if (this->inputManager.isKeyPressed(SDLK_RIGHT) || this->inputManager.isKeyPressed(SDLK_e)) {
+            if (this->currentDialogue->boxColor < 2)
+                this->currentDialogue->boxColor++;
+        }
+    }
+
 	dim = this->getInputDimensions(this->talkerBoxDestRect);
 
 	// If clicked outside of talker box, don't allow setting the name
@@ -2080,7 +2092,7 @@ void MainProgram::drawMainScreen()
 	static const unsigned int main_background = Bengine::ResourceManager::getTexture("Textures/main-bg.png").id;
 	static const unsigned int arrow = Bengine::ResourceManager::getTexture("Textures/arrow.png").id;
 	static const unsigned int add_new_button = Bengine::ResourceManager::getTexture("Textures/addnew.png").id;
-	static const unsigned int sceneBox = Bengine::ResourceManager::getTexture("Textures/scene-box.png").id;
+	static const Bengine::GLTexture sceneBox = Bengine::ResourceManager::getTexture("Textures/scene-box.png");
 	static const unsigned int arrowSide = Bengine::ResourceManager::getTexture("Textures/arrow-side.png").id;
 
 	std::map<int, std::pair<std::string, std::vector<Dialogue *>>> allScenes = this->sceneManager->getScenes();
@@ -2205,7 +2217,7 @@ void MainProgram::drawMainScreen()
 				this->spriteBatch.draw(
 					this->sceneBoxDestRect,
 					this->mainUvRect,
-					(this->selectedNextSceneIdx == this->shownSceneIndexes[i]) ? greenBox : sceneBox,
+					(this->selectedNextSceneIdx == this->shownSceneIndexes[i]) ? greenBox : sceneBox.id,
 					0.0f,
 					this->color
 				);
@@ -2221,24 +2233,37 @@ void MainProgram::drawMainScreen()
 			std::vector<Dialogue *> dialogues = this->getShownDialogues(this->sceneManager->getDialogues(this->selectedSceneIdx));
 			glm::vec4 destRect = this->sceneBoxDestRect;
 
-			static const unsigned int greenBox = Bengine::ResourceManager::getTexture("Textures/scene-box-green.png").id;
-			static const unsigned int blueBox = Bengine::ResourceManager::getTexture("Textures/scene-box-selected.png").id;
+			static const Bengine::GLTexture greenBox = Bengine::ResourceManager::getTexture("Textures/scene-box-green.png");
+            static const Bengine::GLTexture greenBoxSelected = Bengine::ResourceManager::getTexture("Textures/scene-box-green-selected.png");
+            static const Bengine::GLTexture redBox = Bengine::ResourceManager::getTexture("Textures/scene-box-red.png");
+            static const Bengine::GLTexture redBoxSelected = Bengine::ResourceManager::getTexture("Textures/scene-box-red-selected.png");
+			static const Bengine::GLTexture blueBox = Bengine::ResourceManager::getTexture("Textures/scene-box-selected.png");
 
 			for (unsigned i = 0; i < dialogues.size(); i++) {
 				if (this->shownDialogueIndexes[i] == this->selectedDialogueIdx && this->settingNextDialogue) {
 					this->spriteBatch.draw(
 						destRect,
 						this->mainUvRect,
-						greenBox,
+						greenBox.id,
 						0.0f,
 						this->color
 					);
 				}
 				else {
+                    Bengine::GLTexture texture;
+
+                    // Determine box color
+                    if (dialogues[i]->boxColor == 0)
+                        texture = (this->shownDialogueIndexes[i] == this->selectedDialogueIdx) ? redBoxSelected : redBox;
+                    else if (dialogues[i]->boxColor == 2)
+                        texture = (this->shownDialogueIndexes[i] == this->selectedDialogueIdx) ? greenBoxSelected : greenBox;
+                    else
+                        texture = (this->shownDialogueIndexes[i] == this->selectedDialogueIdx) ? blueBox : sceneBox;
+
 					this->spriteBatch.draw(
 						destRect,
 						this->mainUvRect,
-						(this->shownDialogueIndexes[i] == this->selectedDialogueIdx) ? blueBox : sceneBox,
+						texture.id,
 						0.0f,
 						this->color
 					);
@@ -2989,6 +3014,24 @@ void MainProgram::drawMainScreenTexts()
 
 	// Scene names, only show if a scene isn't opened
 	if (this->selectedSceneIdx == -1) {
+        int numDialogues = 0;
+
+        // Get amount of dialogues
+        for (size_t i = 0; i < this->sceneManager->getScenes().size(); i++) {
+            numDialogues += this->sceneManager->getDialogues(i).size();
+        }
+
+        sprintf_s(buffer, "%s: %d", "Total amount of dialogues", numDialogues);
+
+        this->spriteFont->draw(
+            this->fontBatch,
+            buffer,
+            glm::vec2(220, 20),
+            glm::vec2(0.7f),
+            0.0f,
+            Bengine::ColorRGBA8(0, 0, 0, 255)
+        );
+
         // Scene list text
         sprintf_s(buffer, "%s", "Scene List");
 
@@ -3914,6 +3957,7 @@ void MainProgram::submitDialogue()
             "",
             "",
             false,
+            1,
 			"",
 			"",
 			1,
